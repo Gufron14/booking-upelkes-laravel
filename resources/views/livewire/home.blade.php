@@ -246,7 +246,6 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-
                                 <div class="feature-item d-flex">
                                     <div class="feature-icon me-3">
                                         <i class="fas fa-shield-alt fa-2x text-warning"></i>

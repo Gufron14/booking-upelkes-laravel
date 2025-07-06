@@ -87,3 +87,11 @@ html {
 .animate__delay-2s {
     animation-delay: 1s;
 }
+
+/* Nonaktifkan Spinner di Input Number*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+

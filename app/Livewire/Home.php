@@ -2,11 +2,14 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
-use App\Models\Layanan;
-use App\Models\Fasilitas;
 use App\Models\Kamar;
 use App\Models\Ruang;
+use App\Models\Layanan;
+use Livewire\Component;
+use App\Models\Fasilitas;
+use Livewire\Attributes\Title;
+
+#[Title('Upelkes Jabar')]
 
 class Home extends Component
 {

@@ -18,13 +18,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $fillable = ['nama', 'email', 'no_hp', 'alamat', 'password'];
 
-     protected $fillable = ['nama', 'email', 'no_hp', 'alamat'];
-
-     public function bookings()
-     {
-         return $this->hasMany(Booking::class, 'user_id');
-     }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'user_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -43,5 +42,22 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
+
+    /**
+     * Check if user is customer
+     */
+    public function isCustomer()
+    {
+        return $this->hasRole('customer');
+    }
+
+    /**
+     * Get full name attribute
+     */
+    public function getFullNameAttribute()
+    {
+        return $this->nama;
+    }
 }

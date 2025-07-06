@@ -5,7 +5,9 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Kamar as ModelsKamar;
 use App\Models\Layanan;
+use Livewire\Attributes\Title;
 
+#[Title('Layanan | Upelkes Jabar')]
 class Kamar extends Component
 {
     public $search = '';
