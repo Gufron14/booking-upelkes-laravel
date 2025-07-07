@@ -5,8 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Page Title' }}</title>
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
-    <link rel="stylesheet" href="../assets/css/styles.min.css" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/img/logo.png') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/styles.min.css') }}" />
+    @livewireStyles
 </head>
 
 <body>
@@ -107,7 +108,6 @@
                 </nav>
             </header> --}}
             <!--  Header End -->
-            <div class="body-wrapper-inner">
                 <div class="container-fluid">
                     <!--  Row 1 -->
                     {{ $slot }}
@@ -118,7 +118,6 @@
                                 class="pe-1 text-primary text-decoration-underline">AdminMart.com</a></p>
                     </div> --}}
                 </div>
-            </div>
         </div>
     </div>
     <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
@@ -130,6 +129,12 @@
     <script src="../assets/js/dashboard.js"></script>
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+
+        <!-- CDN Links -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+        @livewireScripts
 </body>
 
 </html>

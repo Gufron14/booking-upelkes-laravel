@@ -1,4 +1,7 @@
-<nav class="navbar navbar-expand-lg sticky-top" style="background-color: #ffbb00">
+<nav class="navbar navbar-expand-lg sticky-top top-0" style="
+background-color: #ffbb00;
+z-index: 9999;
+">
     <div class="container p-3">
         <a class="navbar-brand fw-bold" href="#">
             <img src="{{ asset('assets/img/logo.png') }}" alt="logo Upelkes" width="100" height="">

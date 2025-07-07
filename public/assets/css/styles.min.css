@@ -414,6 +414,13 @@ a > code {
   color: inherit;
 }
 
+/* Nonaktifkan Spinner di Input Number*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 kbd {
   padding: 0.1875rem 0.375rem;
   font-size: 0.875em;

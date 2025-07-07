@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin\Layanan;
 
 use App\Models\Kamar;
 use App\Models\Ruang;
@@ -8,11 +8,13 @@ use App\Models\Layanan;
 use Livewire\Component;
 use App\Models\Fasilitas;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Layout;
 
-#[Title('Upelkes Jabar')]
+#[Title('Kelola Layanan')]
+#[Layout('components.layouts.admin-layout')]
 
-class Home extends Component
-{
+class Index extends Component
+{   
     public $featuredLayanan;
     public $totalKamar;
     public $totalRuang;
@@ -22,7 +24,7 @@ class Home extends Component
     public function mount()
     {
         $this->featuredLayanan = Layanan::with(['gambar', 'fasilitas'])
-            ->take(3)
+            ->take(6)
             ->get();
         
         $this->totalKamar = Kamar::where('status', 'tersedia')->count();
@@ -37,6 +39,6 @@ class Home extends Component
 
     public function render()
     {
-        return view('livewire.home');
+        return view('livewire.admin.layanan.index');
     }
 }

@@ -59,6 +59,8 @@ class Register extends Component
                 'alamat' => $this->alamat,
             ]);
 
+            $user->assignRole('customer');
+
             session()->flash('success', 'Registrasi berhasil! Selamat datang.');
             return redirect()->route('/');
 

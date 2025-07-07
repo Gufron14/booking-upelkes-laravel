@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -40,6 +39,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Tambahkan ini:
+        // 'resepsionis' => [
+        //     'driver' => 'session',
+        //     'provider' => 'users',
+        // ],
     ],
 
     /*
@@ -111,5 +116,4 @@ return [
     */
 
     'password_timeout' => 10800,
-
 ];

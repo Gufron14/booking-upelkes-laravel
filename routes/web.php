@@ -7,9 +7,14 @@ use App\Livewire\Payment;
 use App\Livewire\Riwayat;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Admin\Customer;
 use App\Livewire\Admin\Dashboard;
 use Illuminate\Support\Facades\Auth;
+use App\Livewire\Admin\Layanan\Index;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Admin\Layanan\EditLayanan;
+use App\Livewire\Resepsionis\KelolaBooking;
+use App\Livewire\Admin\Layanan\CreateLayanan;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +47,19 @@ Route::middleware('auth')->group(function () {
     Route::get('payment/{booking}', Payment::class)->name('payment');
 });
 
-Route::get('dashboard', Dashboard::class)->name('dashboard');
+Route::middleware(['auth', 'role:admin'])->group( function () {
+
+    Route::prefix('admin')->group(function () {        
+        Route::get('dashboard', Dashboard::class)->name('dashboard');
+    
+        // ADMIN
+        Route::get('layanan', Index::class)->name('layanan');
+        Route::get('layanan/create', CreateLayanan::class)->name('layanan.create');
+        Route::get('layanan/edit', EditLayanan::class)->name('layanan.edit');
+    
+        // RESEPSIONIS
+        Route::get('booking', KelolaBooking::class)->name('kelola.booking');
+    
+        Route::get('customer', Customer::class)->name('customer');
+    });
+});

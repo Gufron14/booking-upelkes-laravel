@@ -10,7 +10,7 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="./index.html" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('dashboard') }}" aria-expanded="false">
                         <i class="ti ti-atom"></i>
                         <span class="hide-menu">Dashboard</span>
                     </a>
@@ -18,30 +18,38 @@
                 <!-- ---------------------------------- -->
                 <!-- Dashboard -->
                 <!-- ---------------------------------- -->
-                <li class="sidebar-item">
-                    <a class="sidebar-link justify-content-between" target="_blank"
-                        href="https://bootstrapdemos.adminmart.com/modernize/dist/main/index.html"
+                {{-- <li class="sidebar-item">
+                    <a class="sidebar-link justify-content-between"
+                        href="{{ route('layanan') }}"
                         aria-expanded="false">
                         <div class="d-flex align-items-center gap-3">
                             <span class="d-flex">
                                 <i class="ti ti-aperture"></i>
                             </span>
-                            <span class="hide-menu">Analytical</span>
+                            <span class="hide-menu">Layanan</span>
                         </div>
-                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="sidebar-item">
-                    <a class="sidebar-link justify-content-between" target="_blank"
-                        href="https://bootstrapdemos.adminmart.com/modernize/dist/main/index2.html"
+                    <a class="sidebar-link justify-content-between" 
+                        href="{{ route('kelola.booking') }}"
                         aria-expanded="false">
                         <div class="d-flex align-items-center gap-3">
                             <span class="d-flex">
                                 <i class="ti ti-shopping-cart"></i>
                             </span>
-                            <span class="hide-menu">eCommerce</span>
+                            <span class="hide-menu">Booking</span>
                         </div>
-                        <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+                        {{-- Jika Count Booking > 0 --}}
+
+                        @php
+                            $count = \App\Models\Booking::where('status', 'pending')->count();
+                        @endphp
+
+                        @if ($count > 0)                            
+                            <span class="hide-menu badge bg-danger  fs-1 py-1"> {{  $count }}
+                            </span>
+                        @endif
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -51,32 +59,30 @@
                             <span class="d-flex">
                                 <i class="ti ti-layout-grid"></i>
                             </span>
-                            <span class="hide-menu">Front Pages</span>
+                            <span class="hide-menu">Layanan</span>
                         </div>
                     </a>
                     <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                                href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-landingpage.html">
+                            <a class="sidebar-link justify-content-between"
+                                href="{{ route('layanan') }}">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
-                                    <span class="hide-menu">Homepage</span>
+                                    <span class="hide-menu">Daftar Layanan</span>
                                 </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                                href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-aboutpage.html">
+                            <a class="sidebar-link justify-content-between" 
+                                href="#">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
-                                    <span class="hide-menu">About Us</span>
+                                    <span class="hide-menu">Kamar</span>
                                 </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
@@ -86,60 +92,37 @@
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
-                                    <span class="hide-menu">Blog</span>
+                                    <span class="hide-menu">Ruangan</span>
                                 </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
+
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
+                            <a class="sidebar-link justify-content-between" 
                                 href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-blogdetailpage.html">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
-                                    <span class="hide-menu">Blog Details</span>
+                                    <span class="hide-menu">Fasilitas</span>
                                 </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                                href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-contactpage.html">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="round-16 d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-circle"></i>
-                                    </div>
-                                    <span class="hide-menu">Contact Us</span>
-                                </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                                href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-portfoliopage.html">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="round-16 d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-circle"></i>
-                                    </div>
-                                    <span class="hide-menu">Portfolio</span>
-                                </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                                href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-pricingpage.html">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="round-16 d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-circle"></i>
-                                    </div>
-                                    <span class="hide-menu">Pricing</span>
-                                </div>
-                                <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span>
                             </a>
                         </li>
                     </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link justify-content-between"
+                        href="{{ route('customer') }}"
+                        aria-expanded="false">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="d-flex">
+                                <i class="ti ti-users"></i>
+                            </span>
+                            <span class="hide-menu">Customer</span>
+                        </div>
+                        {{-- <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span> --}}
+                    </a>
                 </li>
 
                 <li>
