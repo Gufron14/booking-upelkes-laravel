@@ -18,8 +18,8 @@
         <!--  App Topstrip -->
         <div class="bg-dark py-3 px-4 w-100 d-lg-flex align-items-center justify-content-between">
             <div class="d-none d-sm-flex align-items-center justify-content-center gap-9 mb-3 mb-lg-0">
-                <a class="navbar-brand fw-bold fs-6 text-light fw-bold" href="#">
-                    <img src="{{ asset('assets/img/logo.png') }}" alt="logo Upelkes" width="100" height="">
+                <a class="navbar-brand fw-bold fs-6 text-light fw-bold ms-5" href="#">
+                    {{-- <img src="{{ asset('assets/img/logo.png') }}" alt="logo Upelkes" width="100" height=""> --}}
                     Upelkes Jabar
                 </a>
             </div>
@@ -27,12 +27,10 @@
             <div class="d-lg-flex align-items-center gap-3">
                 <div class="d-sm-flex align-items-center justify-content-center gap-8">
                     <div class="d-flex align-items-center justify-content-center gap-8">
-                        <a target="_blank"
-                            class="get-pro-btn rounded btn btn-primary d-flex align-items-center gap-2 fs-4 border-0 px-3 py-2"
-                            href="https://adminmart.com/product/modernize-bootstrap-5-admin-template/?ref=56#product-demo-section">
-                            <iconify-icon class="fs-5" icon="solar:crown-linear"></iconify-icon>
-                            Get Pro
-                        </a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
                     </div>
                 </div>
             </div>

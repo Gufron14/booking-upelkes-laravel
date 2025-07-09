@@ -123,7 +123,7 @@
                                                             </div>
                                                             @if($booking->payment)
                                                                 <span class="badge 
-                                                                    @if($booking->payment->status == 'paid') bg-success
+                                                                    @if($booking->payment->status == 'terverifikasi') bg-success
                                                                     @elseif($booking->payment->status == 'pending') bg-warning
                                                                     @else bg-danger
                                                                     @endif">
@@ -238,7 +238,7 @@
                         </div>
                         <h4 class="fw-bold text-muted mb-3">Belum Ada Riwayat Booking</h4>
                         <p class="text-muted mb-4">Anda belum memiliki riwayat booking. Mulai booking layanan sekarang!</p>
-                        <a href="{{ route('kamar') }}" class="btn btn-primary btn-lg px-4">
+                        <a href="{{ route('booking') }}" class="btn btn-primary btn-lg px-4">
                             <i class="fas fa-plus me-2"></i>
                             Buat Booking Pertama
                         </a>

@@ -9,12 +9,15 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Admin\Customer;
 use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\Fasilitas;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Admin\Layanan\Index;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Layanan\EditLayanan;
 use App\Livewire\Resepsionis\KelolaBooking;
 use App\Livewire\Admin\Layanan\CreateLayanan;
+use App\Livewire\Admin\Ruangan;
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +31,8 @@ use App\Livewire\Admin\Layanan\CreateLayanan;
 */
 
 Route::get('/', Home::class)->name('/');
-Route::get('kamar', Kamar::class)->name('kamar');
-Route::get('booking', Booking::class)->name('booking');
-Route::get('riwayat', Riwayat::class)->name('riwayat');
+Route::get('layanan', Kamar::class)->name('layanan');
+
 
 Route::middleware('guest')->group(function () {
     Route::get('login', Login::class)->name('login');
@@ -44,6 +46,8 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('login');
     })->name('logout');
 
+    Route::get('booking', Booking::class)->name('booking');
+    Route::get('riwayat', Riwayat::class)->name('riwayat');
     Route::get('payment/{booking}', Payment::class)->name('payment');
 });
 
@@ -53,9 +57,12 @@ Route::middleware(['auth', 'role:admin'])->group( function () {
         Route::get('dashboard', Dashboard::class)->name('dashboard');
     
         // ADMIN
-        Route::get('layanan', Index::class)->name('layanan');
+        Route::get('layanan', Index::class)->name('daftar.layanan');
         Route::get('layanan/create', CreateLayanan::class)->name('layanan.create');
         Route::get('layanan/edit', EditLayanan::class)->name('layanan.edit');
+        Route::get('kamar', \App\Livewire\Admin\Kamar::class)->name('kamar');
+        Route::get('ruangan', Ruangan::class)->name('ruangan');
+        Route::get('fasilitas', Fasilitas::class)->name('fasilitas');
     
         // RESEPSIONIS
         Route::get('booking', KelolaBooking::class)->name('kelola.booking');

@@ -105,7 +105,7 @@ class Booking extends Model
             case 'per bulan':
                 $months = $this->tanggal_checkin->diffInMonths($this->tanggal_checkout);
                 return $months * $this->layanan->tarif;
-            case 'per orang/hari' :
+            case 'per orang' :
                 return $days * $this->layanan->tarif;
             case 'per kamar/hari' :
                 return $days * $this->layanan->tarif;

@@ -118,7 +118,7 @@ class Booking extends Component
                           $q2->where('tanggal_checkin', '<=', $this->tanggal_checkin)
                              ->where('tanggal_checkout', '>=', $this->tanggal_checkout);
                       });
-                })->whereIn('status', ['confirmed', 'pending']);
+                })->whereIn('status', ['booked', 'pending']);
             })
             ->get();
 
@@ -132,7 +132,7 @@ class Booking extends Component
                           $q2->where('tanggal_checkin', '<=', $this->tanggal_checkin)
                              ->where('tanggal_checkout', '>=', $this->tanggal_checkout);
                       });
-                })->whereIn('status', ['confirmed', 'pending']);
+                })->whereIn('status', ['booked', 'pending']);
             })
             ->get();
     }

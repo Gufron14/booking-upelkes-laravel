@@ -369,7 +369,7 @@
                     <p class="lead mb-0">Dapatkan pelayanan kesehatan terbaik dengan sistem booking yang mudah dan cepat.</p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
-                    <a href="/kamar" class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-semibold">
+                    <a href="{{ route('booking') }}" class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-semibold">
                         <i class="fas fa-calendar-plus me-2"></i>
                         Booking Sekarang
                     </a>

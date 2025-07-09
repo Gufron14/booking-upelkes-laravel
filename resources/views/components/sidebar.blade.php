@@ -65,7 +65,7 @@
                     <ul aria-expanded="false" class="collapse first-level">
                         <li class="sidebar-item">
                             <a class="sidebar-link justify-content-between"
-                                href="{{ route('layanan') }}">
+                                href="{{ route('daftar.layanan') }}">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
@@ -76,7 +76,7 @@
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link justify-content-between" 
-                                href="#">
+                                href="{{ route('kamar') }}">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
@@ -86,20 +86,19 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link justify-content-between" target="_blank"
-                                href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-blogpage.html">
+                            <a class="sidebar-link justify-content-between"
+                                href="{{ route('ruangan') }}">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
                                     <span class="hide-menu">Ruangan</span>
                                 </div>
-
                             </a>
                         </li>
                         <li class="sidebar-item">
                             <a class="sidebar-link justify-content-between" 
-                                href="https://bootstrapdemos.adminmart.com/modernize/dist/main/frontend-blogdetailpage.html">
+                                href="{{ route('fasilitas') }}">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>

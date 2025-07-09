@@ -14,7 +14,7 @@ z-index: 9999;
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
                 <x-nav-link :active="request()->routeIs('/')" href="{{ route('/') }}">Beranda</x-nav-link>
-                <x-nav-link :active="request()->routeIs('kamar')" href="{{ route('kamar') }}">Layanan</x-nav-link>
+                <x-nav-link :active="request()->routeIs('layanan')" href="{{ route('layanan') }}">Layanan</x-nav-link>
                 <x-nav-link :active="request()->routeIs('booking')" href="{{ route('booking') }}">Booking</x-nav-link>
                 <x-nav-link :active="request()->routeIs('riwayat')" href="{{ route('riwayat') }}">Riwayat</x-nav-link>
                 {{-- <x-nav-link :active="request()->routeIs('')" href="">Ruangan</x-nav-link> --}}

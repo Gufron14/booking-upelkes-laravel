@@ -63,7 +63,7 @@ class KelolaBooking extends Component
                 return;
             }
 
-            $booking->update(['status' => 'confirmed']);
+            $booking->update(['status' => 'booked']);
             session()->flash('success', 'Booking berhasil dikonfirmasi.');
             
         } catch (\Exception $e) {
@@ -109,11 +109,11 @@ class KelolaBooking extends Component
     public function render()
     {
         $bookings = Booking::with(['user', 'layanan', 'kamar', 'ruang'])
-            // ->whereHas('user', function ($query) {
-            //     $query->whereHas('roles', function ($q) {
-            //         $q->where('name', 'customer');
-            //     });
-            // })
+            ->whereHas('user', function ($query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', 'customer');
+                });
+            })
             ->when($this->search, function ($query) {
                 $query->whereHas('user', function ($q) {
                     $q->where('nama', 'like', '%' . $this->search . '%')

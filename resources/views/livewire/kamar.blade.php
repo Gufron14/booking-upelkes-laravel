@@ -140,10 +140,10 @@
                                     <i class="fas fa-eye me-1"></i>
                                     Detail
                                 </button>
-                                <button class="btn btn-primary btn-sm">
+                                <a href="{{ route('booking') }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-calendar-plus me-1"></i>
                                     Booking
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

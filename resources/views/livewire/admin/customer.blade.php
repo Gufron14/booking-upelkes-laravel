@@ -23,7 +23,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->nama }}</td>
-                        <td>{{ $user->no_telepon }}</td>
+                        <td>{{ $user->no_hp }}</td>
                         <td>{{ $user->alamat }}</td>
                         <td>
                             <button class="btn btn-danger rounded-pill" wire:click="delete({{ $user->id }})">

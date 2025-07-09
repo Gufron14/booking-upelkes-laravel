@@ -101,7 +101,7 @@
                                 <td>
                                     @if($booking->status === 'pending')
                                         <span class="badge bg-warning">Pending</span>
-                                    @elseif($booking->status === 'confirmed')
+                                    @elseif($booking->status === 'booked')
                                         <span class="badge bg-success">Confirmed</span>
                                     @elseif($booking->status === 'cancelled')
                                         <span class="badge bg-danger">Cancelled</span>
