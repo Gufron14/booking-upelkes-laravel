@@ -15,7 +15,6 @@ use Carbon\Carbon;
 
 #[Title('Dashboard Upelkes Jabar')]
 #[Layout('components.layouts.admin-layout')]
-
 class Dashboard extends Component
 {
     public function render()
@@ -48,7 +47,29 @@ class Dashboard extends Component
             ->count();
 
         // Total pendapatan (dari booking yang confirmed)
-        // $totalPendapatan = Booking::confirmed()->sum('total_biaya');
+        $totalPendapatan = Booking::with('layanan')
+        ->where('status', 'booked')
+        ->get()
+        ->sum(function ($booking) {
+            $durasi = $booking->tanggal_checkin->diffInDays($booking->tanggal_checkout);
+            return $durasi * $booking->layanan->tarif;
+        });
+
+        $pendapatanPerBooking = Booking::with('layanan')
+        ->where('status', 'booked')
+        ->get()
+        ->map(function ($booking) {
+            $durasi = Carbon::parse($booking->checkin)->diffInDays(Carbon::parse($booking->checkout));
+            $total = $durasi * $booking->layanan->tarif_per_hari;
+    
+            return [
+                'booking_id' => $booking->id,
+                'total_pendapatan' => $total,
+            ];
+        });
+
+        $totalPerBooking = $pendapatanPerBooking->sum('total_pendapatan');
+    
 
         // Booking terbaru (5 terakhir)
         $recentBookings = Booking::with(['user', 'layanan'])
@@ -57,28 +78,8 @@ class Dashboard extends Component
             ->get();
 
         // Layanan paling populer
-        $popularLayanan = Layanan::withCount('bookings')
-            ->orderBy('bookings_count', 'desc')
-            ->take(5)
-            ->get();
+        $popularLayanan = Layanan::withCount('bookings')->orderBy('bookings_count', 'desc')->take(5)->get();
 
-        return view('livewire.admin.dashboard', compact(
-            'totalBookings',
-            'totalLayanan',
-            'totalKamar',
-            'totalFasilitas',
-            'totalRuang',
-            'totalCustomers',
-            'pendingBookings',
-            'confirmedBookings',
-            'cancelledBookings',
-            'kamarTersedia',
-            'kamarTidakTersedia',
-            'bookingHariIni',
-            'bookingBulanIni',
-            // 'totalPendapatan',
-            'recentBookings',
-            'popularLayanan'
-        ));
+        return view('livewire.admin.dashboard', compact('totalBookings', 'totalLayanan', 'totalKamar', 'totalFasilitas', 'totalRuang', 'totalCustomers', 'pendingBookings', 'confirmedBookings', 'cancelledBookings', 'kamarTersedia', 'kamarTidakTersedia', 'bookingHariIni', 'bookingBulanIni', 'totalPendapatan', 'recentBookings', 'popularLayanan', 'totalPerBooking'));
     }
 }

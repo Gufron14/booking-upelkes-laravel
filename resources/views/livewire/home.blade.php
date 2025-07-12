@@ -180,7 +180,7 @@
                                     </h5>
                                     <small class="text-muted">{{ $layanan->satuan }}</small>
                                 </div>
-                                <a href="/kamar" class="btn btn-primary rounded-pill px-4">
+                                <a href="{{ route('layanan') }}" class="btn btn-primary rounded-pill px-4">
                                     <i class="fas fa-arrow-right me-1"></i>
                                     Lihat Detail
                                 </a>
@@ -313,7 +313,7 @@
                                 </div>
                             </div>
                             
-                            <a href="/kamar?kategori=umum" class="btn btn-light btn-lg w-100 rounded-pill">
+                            <a href="/layanan?kategori=umum" class="btn btn-light btn-lg w-100 rounded-pill">
                                 <i class="fas fa-arrow-right me-2"></i>
                                 Lihat Layanan Umum
                             </a>
@@ -349,7 +349,7 @@
                                 </div>
                             </div>
                             
-                            <a href="/kamar?kategori=pemerintah" class="btn btn-light btn-lg w-100 rounded-pill">
+                            <a href="/layanan?kategori=pemerintah" class="btn btn-light btn-lg w-100 rounded-pill">
                                 <i class="fas fa-arrow-right me-2"></i>
                                 Lihat Layanan Pemerintah
                             </a>

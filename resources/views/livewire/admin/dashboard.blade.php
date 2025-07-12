@@ -82,7 +82,8 @@
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Total Pendapatan
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp{{ number_format($totalPendapatan) }}
+                            </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -190,7 +191,7 @@
     <!-- Tabel dan Chart -->
     <div class="row">
         <!-- Booking Terbaru -->
-        <div class="col-xl-8 col-lg-7 mb-4">
+        <div class="col-md-12 mb-4">
             <div class="card shadow">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Booking Terbaru</h6>
@@ -200,7 +201,7 @@
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-light">
-                                <tr>
+                                <tr class="align-middle">
                                     <th>Customer</th>
                                     <th>Layanan</th>
                                     <th>Check-in</th>
@@ -211,19 +212,19 @@
                             <tbody>
                                 @forelse($recentBookings as $booking)
                                 <tr>
-                                    <td>{{ $booking->user->name ?? 'N/A' }}</td>
+                                    <td>{{ $booking->user->nama ?? 'N/A' }}</td>
                                     <td>{{ $booking->layanan->nama_layanan ?? 'N/A' }}</td>
                                     <td>{{ $booking->formatted_checkin }}</td>
                                     <td>
                                         @if($booking->status == 'pending')
-                                            <span class="badge badge-warning">Pending</span>
-                                        @elseif($booking->status == 'confirmed')
-                                            <span class="badge badge-success">Confirmed</span>
+                                            <span class="badge text-bg-warning">Pending</span>
+                                        @elseif($booking->status == 'booked')
+                                            <span class="badge text-bg-success">Confirmed</span>
                                         @else
-                                            <span class="badge badge-danger">Cancelled</span>
+                                            <span class="badge text-bg-danger">Cancelled</span>
                                         @endif
                                     </td>
-                                    <td>Rp {{ number_format($booking->total_biaya, 0, ',', '.') }}</td>
+                                    <td>Rp {{ number_format($booking->calculateTotalCost(), 0, ',', '.') }}</td>
                                 </tr>
                                 @empty
                                 <tr>

@@ -15,7 +15,8 @@ use Livewire\Attributes\Layout;
 
 class Index extends Component
 {   
-    public $featuredLayanan;
+    public $search = '';
+    public $kategoriFilter = '';
     public $totalKamar;
     public $totalRuang;
     public $totalFasilitas;
@@ -23,10 +24,6 @@ class Index extends Component
 
     public function mount()
     {
-        $this->featuredLayanan = Layanan::with(['gambar', 'fasilitas'])
-            ->take(6)
-            ->get();
-        
         $this->totalKamar = Kamar::where('status', 'tersedia')->count();
         $this->totalRuang = Ruang::count();
         $this->totalFasilitas = Fasilitas::count();
@@ -35,6 +32,19 @@ class Index extends Component
             'umum' => Layanan::where('kategori', 'umum')->count(),
             'pemerintah' => Layanan::where('kategori', 'pemerintah')->count()
         ];
+    }
+
+    public function getFeaturedLayananProperty()
+    {
+        return Layanan::with(['gambar', 'fasilitas'])
+            ->when($this->search, function($query) {
+                $query->where('nama_layanan', 'like', '%' . $this->search . '%')
+                      ->orWhere('deskripsi', 'like', '%' . $this->search . '%');
+            })
+            ->when($this->kategoriFilter, function($query) {
+                $query->where('kategori', $this->kategoriFilter);
+            })
+            ->get();
     }
 
     public function render()

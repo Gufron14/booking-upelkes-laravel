@@ -242,6 +242,24 @@
                                         <td>{{ $selectedBooking->user->no_telepon ?? '-' }}</td>
                                     </tr>
                                 </table>
+
+                                <div>
+                                    <h6 class="fw-bold mb-2">Bukti Pembayaran</h6>
+                                    @if($selectedBooking->payment && $selectedBooking->payment->bukti_transfer)
+                                        <img src="{{ asset('storage/' . $selectedBooking->payment->bukti_transfer) }}" 
+                                             class="img-fluid img-thumbnail" 
+                                             alt="Bukti Pembayaran"
+                                             style="max-height: 300px; cursor: pointer;"
+                                             onclick="window.open(this.src, '_blank')">
+                                    @else
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            Bukti pembayaran belum diupload
+                                        </div>
+                                    @endif
+                                </div>
+                                
+                                
                             </div>
                             <div class="col-md-6">
                                 <h6 class="fw-bold mb-3">Informasi Booking</h6>
@@ -277,12 +295,10 @@
                                         <td>
                                             @if($selectedBooking->status === 'pending')
                                                 <span class="badge bg-warning">Pending</span>
-                                            @elseif($selectedBooking->status === 'confirmed')
+                                            @elseif($selectedBooking->status === 'booked')
                                                 <span class="badge bg-success">Confirmed</span>
                                             @elseif($selectedBooking->status === 'cancelled')
                                                 <span class="badge bg-danger">Cancelled</span>
-                                            @elseif($selectedBooking->status === 'completed')
-                                                <span class="badge bg-info">Completed</span>
                                             @endif
                                         </td>
                                     </tr>

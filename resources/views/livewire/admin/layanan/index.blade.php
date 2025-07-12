@@ -1,17 +1,46 @@
 <div>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Kelola Layanan</h2>
-
-        {{-- Searc Bar --}}
-
-        {{-- Button Tambah Layanan --}}
-        <a href="{{ route('layanan.create') }}" class="btn btn-primary rounded-pill px-4">
-            <i class="fas fa-plus me-1"></i>
-            Tambah Layanan
-        </a>
+    <div class="d-flex justify-content-between align-items-center mb-4 gap-4">
+        <div class="col">
+            <h2 class="fw-bold">Kelola Layanan</h2>
+        </div>
+        <div class="col">
+            {{-- Search Bar --}}
+            <div class="input-group">
+                <input type="text" class="form-control rounded-5" placeholder="Cari layanan" wire:model.live="search">
+            </div>
+        </div>
+        <div class="col">
+            {{-- Filter Kategori --}}
+            <select class="form-select rounded-5" wire:model.live="kategoriFilter">
+                <option value="">Semua Kategori</option>
+                <option value="umum">Umum</option>
+                <option value="pemerintah">Pemerintah</option>
+            </select>
+        </div>
+        <div class="col text-end">
+            {{-- Button Tambah Layanan --}}
+            <a href="{{ route('layanan.create') }}" class="btn btn-primary rounded-pill px-4">
+                <i class="fas fa-plus me-1"></i>
+                Tambah Layanan
+            </a>
+        </div>
     </div>
+
+    @if (session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
     <div class="row g-4">
-        @foreach ($featuredLayanan as $layanan)
+        @foreach ($this->featuredLayanan as $layanan)
             <div class="col-lg-4 col-md-6">
                 <div class="service-card card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
                     <div class="position-relative">
@@ -86,7 +115,8 @@
                                 </h5>
                                 <small class="text-muted">{{ $layanan->satuan }}</small>
                             </div>
-                            <a href="/kamar" class="btn btn-primary rounded-pill px-4">
+                            <a href="{{ route('layanan.edit', $layanan->id) }}"
+                                class="btn btn-primary rounded-pill px-4">
                                 <i class="fas fa-arrow-right me-1"></i>
                                 Edit
                             </a>
@@ -99,9 +129,8 @@
 
     <style>
         .bg-gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
     </style>
 
     <!-- Smooth Scroll Script -->

@@ -6,18 +6,20 @@ use App\Livewire\Booking;
 use App\Livewire\Payment;
 use App\Livewire\Riwayat;
 use App\Livewire\Auth\Login;
+use App\Livewire\Admin\Ruangan;
 use App\Livewire\Auth\Register;
 use App\Livewire\Admin\Customer;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Fasilitas;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Admin\Layanan\Index;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Resepsionis\Transaksi;
+use App\Livewire\Resepsionis\CetakLaporan;
 use App\Livewire\Admin\Layanan\EditLayanan;
 use App\Livewire\Resepsionis\KelolaBooking;
 use App\Livewire\Admin\Layanan\CreateLayanan;
-use App\Livewire\Admin\Ruangan;
-use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,13 +61,19 @@ Route::middleware(['auth', 'role:admin'])->group( function () {
         // ADMIN
         Route::get('layanan', Index::class)->name('daftar.layanan');
         Route::get('layanan/create', CreateLayanan::class)->name('layanan.create');
-        Route::get('layanan/edit', EditLayanan::class)->name('layanan.edit');
+        Route::get('layanan/edit/{id}', EditLayanan::class)->name('layanan.edit');
         Route::get('kamar', \App\Livewire\Admin\Kamar::class)->name('kamar');
         Route::get('ruangan', Ruangan::class)->name('ruangan');
         Route::get('fasilitas', Fasilitas::class)->name('fasilitas');
     
         // RESEPSIONIS
         Route::get('booking', KelolaBooking::class)->name('kelola.booking');
+        Route::get('transaksi', Transaksi::class)->name('transaksi');
+
+        // Tambahkan route ini
+        Route::get('cetak-laporan', CetakLaporan::class)
+        ->name('cetak-laporan');
+
     
         Route::get('customer', Customer::class)->name('customer');
     });

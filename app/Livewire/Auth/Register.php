@@ -62,7 +62,7 @@ class Register extends Component
             $user->assignRole('customer');
 
             session()->flash('success', 'Registrasi berhasil! Selamat datang.');
-            return redirect()->route('/');
+            return redirect()->route('login');
 
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan saat registrasi. Silakan coba lagi.');

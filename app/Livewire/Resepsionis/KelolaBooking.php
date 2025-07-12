@@ -91,7 +91,7 @@ class KelolaBooking extends Component
 
     public function viewBookingDetail($bookingId)
     {
-        $this->selectedBooking = Booking::with(['user', 'layanan', 'kamar', 'ruang'])->findOrFail($bookingId);
+        $this->selectedBooking = Booking::with(['user', 'layanan', 'kamar', 'ruang', 'payment'])->findOrFail($bookingId);
         $this->dispatch('show-detail-modal');
     }
 
@@ -108,7 +108,7 @@ class KelolaBooking extends Component
 
     public function render()
     {
-        $bookings = Booking::with(['user', 'layanan', 'kamar', 'ruang'])
+        $bookings = Booking::with(['user', 'layanan', 'kamar', 'ruang', 'payment'])
             ->whereHas('user', function ($query) {
                 $query->whereHas('roles', function ($q) {
                     $q->where('name', 'customer');

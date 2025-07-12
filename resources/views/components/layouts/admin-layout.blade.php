@@ -16,7 +16,7 @@
         data-sidebar-position="fixed" data-header-position="fixed">
 
         <!--  App Topstrip -->
-        <div class="bg-dark py-3 px-4 w-100 d-lg-flex align-items-center justify-content-between">
+        <div class="bg-dark py-3 px-4 w-100 d-lg-flex align-items-center justify-content-between sticky-top">
             <div class="d-none d-sm-flex align-items-center justify-content-center gap-9 mb-3 mb-lg-0">
                 <a class="navbar-brand fw-bold fs-6 text-light fw-bold ms-5" href="#">
                     {{-- <img src="{{ asset('assets/img/logo.png') }}" alt="logo Upelkes" width="100" height=""> --}}
@@ -106,7 +106,7 @@
                 </nav>
             </header> --}}
             <!--  Header End -->
-                <div class="container-fluid">
+                <div class="container p-5">
                     <!--  Row 1 -->
                     {{ $slot }}
 

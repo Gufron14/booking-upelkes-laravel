@@ -112,6 +112,20 @@
 
                 <li class="sidebar-item">
                     <a class="sidebar-link justify-content-between"
+                        href="{{ route('transaksi') }}"
+                        aria-expanded="false">
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="d-flex">
+                                <i class="ti ti-history"></i>
+                            </span>
+                            <span class="hide-menu">Transaksi</span>
+                        </div>
+                        {{-- <span class="hide-menu badge bg-secondary-subtle text-secondary fs-1 py-1">Pro</span> --}}
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link justify-content-between"
                         href="{{ route('customer') }}"
                         aria-expanded="false">
                         <div class="d-flex align-items-center gap-3">
