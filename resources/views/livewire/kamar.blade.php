@@ -18,10 +18,8 @@
                 <span class="input-group-text bg-light border-end-0">
                     <i class="fas fa-search text-muted"></i>
                 </span>
-                <input type="text" 
-                       class="form-control border-start-0 ps-0" 
-                       placeholder="Cari layanan..." 
-                       wire:model.live="search">
+                <input type="text" class="form-control border-start-0 ps-0" placeholder="Cari layanan..."
+                    wire:model.live="search">
             </div>
         </div>
         <div class="col-md-3">
@@ -40,38 +38,38 @@
                 <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden">
                     <!-- Badge Kategori -->
                     <div class="position-absolute top-0 start-0 z-3 m-3">
-                        <span class="badge {{ $layanan->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }} px-3 py-2 rounded-pill">
-                            <i class="fas {{ $layanan->kategori == 'pemerintah' ? 'fa-building' : 'fa-users' }} me-1"></i>
+                        <span
+                            class="badge {{ $layanan->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }} px-3 py-2 rounded-pill">
+                            <i
+                                class="fas {{ $layanan->kategori == 'pemerintah' ? 'fa-building' : 'fa-users' }} me-1"></i>
                             {{ ucfirst($layanan->kategori) }}
                         </span>
                     </div>
 
                     <!-- Gambar -->
                     <div class="position-relative">
-                        @if($layanan->gambar->count() > 0)
-                            <img src="{{ asset('storage/' . $layanan->gambar->first()->path) }}" 
-                                 class="card-img-top" 
-                                 alt="{{ $layanan->nama_layanan }}"
-                                 style="height: 250px; object-fit: cover;">
+                        @if ($layanan->gambar->count() > 0)
+                            <img src="{{ asset('storage/' . $layanan->gambar->first()->path) }}" class="card-img-top"
+                                alt="{{ $layanan->nama_layanan }}" style="height: 250px; object-fit: cover;">
                         @else
-                            <div class="bg-gradient-primary d-flex align-items-center justify-content-center" 
-                                 style="height: 250px;">
+                            <div class="bg-gradient-primary d-flex align-items-center justify-content-center"
+                                style="height: 250px;">
                                 <div class="text-center text-muted">
                                     <i class="fas fa-image fa-3x mb-2"></i>
                                     <p class="mb-0 text-light">{{ $layanan->nama_layanan }}</p>
                                 </div>
                             </div>
                         @endif
-                        
+
                         <!-- Overlay gradient -->
-                        <div class="position-absolute bottom-0 start-0 w-100 h-50" 
-                             style="background: linear-gradient(transparent, rgba(0,0,0,0.3));"></div>
+                        <div class="position-absolute bottom-0 start-0 w-100 h-50"
+                            style="background: linear-gradient(transparent, rgba(0,0,0,0.3));"></div>
                     </div>
 
                     <div class="card-body p-4">
                         <!-- Nama Layanan -->
                         <h5 class="card-title fw-bold text-dark mb-2">{{ $layanan->nama_layanan }}</h5>
-                        
+
                         <!-- Deskripsi -->
                         <p class="card-text text-muted mb-3" style="font-size: 0.9rem;">
                             {{ Str::limit($layanan->deskripsi, 100) }}
@@ -105,17 +103,35 @@
                             </div>
                         </div>
 
+                        @if ($layanan->fasilitas->count() > 0)
+                            <div class="mb-3">
+                                <small class="text-muted fw-semibold">Fasilitas:</small>
+                                <div class="d-flex flex-wrap gap-1 mt-1">
+                                    @foreach ($layanan->fasilitas->take(5) as $fasilitas)
+                                        <span class="badge bg-light text-dark border">
+                                            {{ $fasilitas->nama }}
+                                        </span>
+                                    @endforeach
+                                    @if ($layanan->fasilitas->count() > 5)
+                                        <span class="badge bg-secondary">
+                                            +{{ $layanan->fasilitas->count() - 3 }}
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Kamar Tersedia -->
-                        @if($layanan->kamar->count() > 0)
+                        @if ($layanan->kamar->count() > 0)
                             <div class="mb-3">
                                 <small class="text-muted fw-semibold">Kamar Tersedia:</small>
                                 <div class="d-flex flex-wrap gap-1 mt-1">
-                                    @foreach($layanan->kamar->take(5) as $kamar)
+                                    @foreach ($layanan->kamar->take(5) as $kamar)
                                         <span class="badge bg-light text-dark border">
                                             {{ $kamar->nomor_kamar }}
                                         </span>
                                     @endforeach
-                                    @if($layanan->kamar->count() > 5)
+                                    @if ($layanan->kamar->count() > 5)
                                         <span class="badge bg-secondary">
                                             +{{ $layanan->kamar->count() - 5 }} lainnya
                                         </span>
@@ -133,10 +149,9 @@
                                 <small class="text-muted">{{ $layanan->satuan }}</small>
                             </div>
                             <div class="btn-group">
-                                <button class="btn btn-outline-primary btn-sm" 
-                                        wire:click="selectLayanan({{ $layanan->id }})"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#detailModal">
+                                <button class="btn btn-outline-primary btn-sm"
+                                    wire:click="selectLayanan({{ $layanan->id }})" data-bs-toggle="modal"
+                                    data-bs-target="#detailModal">
                                     <i class="fas fa-eye me-1"></i>
                                     Detail
                                 </button>
@@ -150,7 +165,7 @@
 
                     <!-- Status Indicator -->
                     <div class="position-absolute top-0 end-0 m-3">
-                        @if($layanan->kamar->count() > 0)
+                        @if ($layanan->kamar->count() > 0)
                             <span class="badge bg-success rounded-circle p-2" title="Tersedia">
                                 <i class="fas fa-check"></i>
                             </span>
@@ -187,20 +202,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    @if($selectedLayanan)
+                    @if ($selectedLayanan)
                         @php
                             $layananDetail = $layananList->find($selectedLayanan);
                         @endphp
-                        @if($layananDetail)
+                        @if ($layananDetail)
                             <div class="row">
                                 <div class="col-md-6">
-                                    @if($layananDetail->gambar->count() > 0)
-                                        <img src="{{ asset('storage/' . $layananDetail->gambar->first()->path) }}" 
-                                             class="img-fluid rounded" 
-                                             alt="{{ $layananDetail->nama_layanan }}">
+                                    @if ($layananDetail->gambar->count() > 0)
+                                        <img src="{{ asset('storage/' . $layananDetail->gambar->first()->path) }}"
+                                            class="img-fluid rounded" alt="{{ $layananDetail->nama_layanan }}">
                                     @else
-                                        <div class="bg-light d-flex align-items-center justify-content-center rounded" 
-                                             style="height: 200px;">
+                                        <div class="bg-light d-flex align-items-center justify-content-center rounded"
+                                            style="height: 200px;">
                                             <div class="text-center text-muted">
                                                 <i class="fas fa-image fa-3x mb-2"></i>
                                                 <p class="mb-0">Tidak ada gambar</p>
@@ -211,11 +225,12 @@
                                 <div class="col-md-6">
                                     <h4 class="fw-bold">{{ $layananDetail->nama_layanan }}</h4>
                                     <p class="text-muted">{{ $layananDetail->deskripsi }}</p>
-                                    
+
                                     <div class="row g-3">
                                         <div class="col-6">
                                             <strong>Kategori:</strong><br>
-                                            <span class="badge bg-primary">{{ ucfirst($layananDetail->kategori) }}</span>
+                                            <span
+                                                class="badge bg-primary">{{ ucfirst($layananDetail->kategori) }}</span>
                                         </div>
                                         <div class="col-6">
                                             <strong>Kapasitas:</strong><br>
@@ -248,42 +263,42 @@
             transition: all 0.3s ease;
             border-radius: 15px;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
         }
-        
+
         .card-img-top {
             border-radius: 15px 15px 0 0;
         }
-        
+
         .btn-group .btn {
             border-radius: 8px;
         }
-        
+
         .btn-group .btn:not(:last-child) {
             margin-right: 5px;
         }
-        
+
         .badge {
             font-size: 0.75rem;
         }
-        
+
         .input-group-text {
             border-radius: 10px 0 0 10px;
         }
-        
-        .form-control, .form-select {
+
+        .form-control,
+        .form-select {
             border-radius: 0 10px 10px 0;
         }
-        
+
         .form-select {
             border-radius: 10px;
         }
     </style>
-    
+
     <!-- Font Awesome (jika belum ada) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </div>
-

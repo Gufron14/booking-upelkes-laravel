@@ -132,7 +132,7 @@ class CreateLayanan extends Component
             }
 
             session()->flash('success', 'Layanan berhasil ditambahkan!');
-            return redirect()->route('layanan');
+            return redirect()->route('daftar.layanan');
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         } finally {

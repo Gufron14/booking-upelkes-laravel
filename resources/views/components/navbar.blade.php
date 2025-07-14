@@ -2,10 +2,9 @@
 background-color: #ffbb00;
 z-index: 9999;
 ">
-    <div class="container p-3">
+    <div class="container p-1">
         <a class="navbar-brand fw-bold" href="#">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="logo Upelkes" width="100" height="">
-            Upelkes Jabar
+            <img src="{{ asset('assets/img/logo.png') }}" alt="logo Upelkes" width="160" height="">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

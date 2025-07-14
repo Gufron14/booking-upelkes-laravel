@@ -47,6 +47,15 @@ class Index extends Component
             ->get();
     }
 
+    // Fungsi Hapus Layanan
+    public function deleteLayanan($id)
+    {
+        $layanan = Layanan::find($id);
+        $layanan->delete();
+
+        return redirect()->route('daftar.layanan')->with('success', 'Layanan berhasil dihapus.');
+    }
+
     public function render()
     {
         return view('livewire.admin.layanan.index');

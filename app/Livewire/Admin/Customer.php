@@ -11,7 +11,15 @@ use Livewire\Attributes\Layout;
 #[Layout('components.layouts.admin-layout')]
 
 class Customer extends Component
-{
+{   
+    // Fungsi Hapus Customer
+
+    public function delete($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+    }
+
     public function render()
     {
         $users = User::whereHas('roles', function ($query) {

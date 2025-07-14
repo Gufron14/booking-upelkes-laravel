@@ -22,18 +22,25 @@
                 @forelse ($users as $user)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $user->nama }}</td>
+                        <td>
+                            <div class="d-flex flex-column">
+                                <span class="fw-semibold">{{ $user->nama }}</span>
+                                <small class="text-muted">{{ $user->email }}</small>
+                            </div>
+                        </td>
                         <td>{{ $user->no_hp }}</td>
                         <td>{{ $user->alamat }}</td>
                         <td>
-                            <button class="btn btn-danger rounded-pill" wire:click="delete({{ $user->id }})">
+                            <button class="btn btn-danger rounded-pill"
+                            wire:click="delete({{ $user->id }})"
+                            wire:confirm="Apakah Anda yakin ingin menghapus customer ini?">
                                 <i class="fas fa-trash me-1"></i>
                                 Hapus
                             </button>
                         </td>
                     @empty
-                        <td colspan="6" class="text-center">
-                            Belum ada Customer
+                        <td colspan="6" class="text-center text-muted">
+                            Belum ada Customer.
                         </td>
                     </tr>
                 @endforelse

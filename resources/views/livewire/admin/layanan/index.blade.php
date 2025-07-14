@@ -40,7 +40,7 @@
         </div>
     @endif
     <div class="row g-4">
-        @foreach ($this->featuredLayanan as $layanan)
+        @forelse ($this->featuredLayanan as $layanan)
             <div class="col-lg-4 col-md-6">
                 <div class="service-card card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
                     <div class="position-relative">
@@ -115,16 +115,28 @@
                                 </h5>
                                 <small class="text-muted">{{ $layanan->satuan }}</small>
                             </div>
-                            <a href="{{ route('layanan.edit', $layanan->id) }}"
-                                class="btn btn-primary rounded-pill px-4">
-                                <i class="fas fa-arrow-right me-1"></i>
-                                Edit
-                            </a>
+                            <div>
+                                <a href="{{ route('layanan.edit', $layanan->id) }}"
+                                    class="btn btn-primary rounded-pill">
+                                    <i class="fas fa-edit me-1"></i>
+                                    Ubah
+                                </a>
+                                <button class="btn btn-danger rounded-pill"
+                                wire:click="deleteLayanan({{ $layanan->id }})"
+                                wire:confirm="Apakah Anda yakin ingin menghapus layanan ini?">
+                                    <i class="fas fa-trash me-1"></i>
+                                    Hapus
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+        <div class="container p-5 mt-5">
+            <h4 class="text-center text-muted"> <i class="fas fa-exclamation-triangle me-2"></i> Belum ada layanan.</h4>
+        </div>
+        @endforelse
     </div>
 
     <style>

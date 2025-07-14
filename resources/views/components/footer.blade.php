@@ -15,15 +15,15 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <h6 class="fw-bold mb-3">Layanan</h6>
+                    <h6 class="fw-bold mb-3">Menu</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white-50 text-decoration-none">Kamar Rawat</a></li>
-                        <li><a href="#" class="text-white-50 text-decoration-none">Ruang Meeting</a></li>
-                        <li><a href="#" class="text-white-50 text-decoration-none">Fasilitas Umum</a></li>
-                        <li><a href="#" class="text-white-50 text-decoration-none">Layanan VIP</a></li>
+                        <li><a href="{{ route('/') }}" class="text-white-50 text-decoration-none">Beranda</a></li>
+                        <li><a href="{{ route('layanan') }}" class="text-white-50 text-decoration-none">Layanan</a></li>
+                        <li><a href="{{ route('booking') }}" class="text-white-50 text-decoration-none">Booking</a></li>
+                        <li><a href="{{ route('riwayat') }}" class="text-white-50 text-decoration-none">Riwayat</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-2">
+                {{-- <div class="col-lg-2">
                     <h6 class="fw-bold mb-3">Informasi</h6>
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white-50 text-decoration-none">Tentang Kami</a></li>
@@ -31,21 +31,21 @@
                         <li><a href="#" class="text-white-50 text-decoration-none">FAQ</a></li>
                         <li><a href="#" class="text-white-50 text-decoration-none">Kebijakan</a></li>
                     </ul>
-                </div>
+                </div> --}}
                 <div class="col-lg-4">
                     <h6 class="fw-bold mb-3">Kontak Info</h6>
                     <div class="contact-info">
                         <p class="text-white-50 mb-2">
                             <i class="fas fa-map-marker-alt me-2"></i>
-                            Jl. Kesehatan No. 123, Jakarta
+                        Jl. Pasteur No.31, Pasir Kaliki, Kec. Cicendo, Kota Bandung, Jawa Barat 40171
                         </p>
                         <p class="text-white-50 mb-2">
                             <i class="fas fa-phone me-2"></i>
-                            (021) 123-4567
+                            (022) 4238422
                         </p>
                         <p class="text-white-50 mb-2">
                             <i class="fas fa-envelope me-2"></i>
-                            info@upelkes.com
+                            upelkes@jabarprov.go.id
                         </p>
                         <p class="text-white-50 mb-0">
                             <i class="fas fa-clock me-2"></i>
@@ -57,7 +57,7 @@
             <hr class="my-4 border-white-50">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="text-white-50 mb-0">&copy; 2025 UPELKES. All rights reserved.</p>
+                    <p class="text-white-50 mb-0">&copy; 2025 UPELKES.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="text-white-50 mb-0">Made with <i class="fas fa-heart text-danger"></i> for better healthcare</p>
