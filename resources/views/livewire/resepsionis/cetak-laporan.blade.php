@@ -99,7 +99,7 @@
                         <td>{{ $booking->tanggal_checkin->format('d/m/Y') }}</td>
                         <td>{{ $booking->tanggal_checkout->format('d/m/Y') }}</td>
                         <td>{{ $booking->duration }} hari</td>
-                        <td>Rp {{ number_format($booking->calculateTotalCost(), 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($booking->calculateTotal(), 0, ',', '.') }}</td>
                         <td>Confirmed</td>
                     </tr>
                 @empty

@@ -19,7 +19,8 @@ return new class extends Migration
             $table->foreignId('ruang_id')->nullable()->constrained('ruangs')->onDelete('set null');
             $table->dateTime('tanggal_checkin');
             $table->dateTime('tanggal_checkout');
-            $table->enum('status', ['pending', 'booked', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'booked', 'cancelled', 'waiting_payment'])->default('pending');
+            $table->timestamp('payment_deadline')->nullable();
             $table->timestamps();
         });
     }

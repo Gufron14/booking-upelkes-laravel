@@ -108,7 +108,7 @@ class KelolaBooking extends Component
 
     public function render()
     {
-        $bookings = Booking::with(['user', 'layanan', 'kamar', 'ruang', 'payment'])
+        $bookings = Booking::with(['user', 'layanan', 'kamar', 'ruang', 'payment'])->where('status', '!=', 'waiting_payment')
             ->whereHas('user', function ($query) {
                 $query->whereHas('roles', function ($q) {
                     $q->where('name', 'customer');

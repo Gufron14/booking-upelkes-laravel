@@ -4,8 +4,8 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2 class="fw-bold text-primary mb-1">Daftar Kamar & Layanan</h2>
-                    <p class="text-muted mb-0">Pilih kamar sesuai kebutuhan Anda</p>
+                    <h2 class="fw-bold text-primary mb-1">Daftar Layanan</h2>
+                    <p class="text-muted mb-0">Pilih kamar atau ruangan sesuai kebutuhan Anda</p>
                 </div>
             </div>
         </div>
@@ -93,14 +93,14 @@
                                     </small>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            {{-- <div class="col-12">
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-clock text-warning me-2"></i>
                                     <small class="text-muted">
                                         Tarif <strong>{{ $layanan->satuan }}</strong>
                                     </small>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
 
                         @if ($layanan->fasilitas->count() > 0)
@@ -146,7 +146,23 @@
                                 <h4 class="text-primary fw-bold mb-0">
                                     Rp {{ number_format($layanan->tarif, 0, ',', '.') }}
                                 </h4>
-                                <small class="text-muted">{{ $layanan->satuan }}</small>
+                                <small class="text-muted">
+                                    @if ($layanan->satuan == 'per_hari')
+                                        Per Hari
+                                    @elseif ($layanan->satuan == 'per_jam')
+                                        Per Jam
+                                    @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                        Per Orang/Kunjungan
+                                    @elseif ($layanan->satuan == 'per_bulan')
+                                        Per Bulan
+                                    @elseif ($layanan->satuan == 'per_orang_hari')
+                                        Per Orang/Hari
+                                    @elseif ($layanan->satuan == 'per_kamar_hari')
+                                        Per Kamar/Hari
+                                    @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                        Per Kegiatan/Hari
+                                    @endif
+                                </small>
                             </div>
                             <div class="btn-group">
                                 <button class="btn btn-outline-primary btn-sm"
@@ -155,10 +171,12 @@
                                     <i class="fas fa-eye me-1"></i>
                                     Detail
                                 </button>
-                                <a href="{{ route('booking') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('bookingId', ['layanan_id' => $layanan->id]) }}"
+                                    class="btn btn-primary btn-sm">
                                     <i class="fas fa-calendar-plus me-1"></i>
                                     Booking
                                 </a>
+
                             </div>
                         </div>
                     </div>
@@ -195,7 +213,7 @@
 
     <!-- Modal Detail -->
     <div class="modal fade" id="detailModal" tabindex="-1" wire:ignore.self>
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0">
                     <h5 class="modal-title fw-bold">Detail Layanan</h5>
@@ -242,7 +260,21 @@
                                         </div>
                                         <div class="col-6">
                                             <strong>Satuan:</strong><br>
-                                            {{ $layananDetail->satuan }}
+                                            @if ($layanan->satuan == 'per_hari')
+                                                Per Hari
+                                            @elseif ($layanan->satuan == 'per_jam')
+                                                Per Jam
+                                            @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                                Per Orang/Kunjungan
+                                            @elseif ($layanan->satuan == 'per_bulan')
+                                                Per Bulan
+                                            @elseif ($layanan->satuan == 'per_orang_hari')
+                                                Per Orang/Hari
+                                            @elseif ($layanan->satuan == 'per_kamar_hari')
+                                                Per Kamar/Hari
+                                            @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                                Per Kegiatan/Hari
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

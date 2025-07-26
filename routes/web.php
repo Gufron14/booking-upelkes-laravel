@@ -33,7 +33,7 @@ use App\Livewire\Admin\Layanan\CreateLayanan;
 */
 
 Route::get('/', Home::class)->name('/');
-Route::get('layanan', Kamar::class)->name('layanan');
+Route::get('booking', Kamar::class)->name('booking');
 
 
 Route::middleware('guest')->group(function () {
@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('login');
     })->name('logout');
 
-    Route::get('booking', Booking::class)->name('booking');
+    Route::get('booking/{layanan_id?}', Booking::class)->name('bookingId');
     Route::get('riwayat', Riwayat::class)->name('riwayat');
     Route::get('payment/{booking}', Payment::class)->name('payment');
 });

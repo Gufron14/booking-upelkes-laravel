@@ -1,7 +1,7 @@
 <div>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Edit Layanan</h2>
-        <a href="{{ route('layanan') }}" class="btn btn-primary rounded-pill px-4">
+        <a href="{{ route('daftar.layanan') }}" class="btn btn-primary rounded-pill px-4">
             <i class="fas fa-arrow-left me-1"></i>
             Kembali
         </a>
@@ -67,50 +67,50 @@
                                 <label class="form-label">Satuan</label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="satuan" id="satuan_jam"
-                                        value="per jam" wire:model="satuan">
+                                        value="per_jam" wire:model="satuan">
                                     <label class="form-check-label" for="satuan_jam">
                                         Per Jam
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="satuan" id="satuan_hari"
-                                        value="per bulan" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_hari">
-                                        Per Bulan
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_hari"
-                                        value="per hari" wire:model="satuan">
+                                        value="per_hari" wire:model="satuan">
                                     <label class="form-check-label" for="satuan_hari">
                                         Per Hari
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_orang_hari"
-                                        value="per orang/hari" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_orang_hari">
-                                        Per Orang/hari
+                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_bulan"
+                                        value="per_bulan" wire:model="satuan">
+                                    <label class="form-check-label" for="satuan_bulan">
+                                        Per Bulan
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="satuan" id="satuan_orang_hari"
-                                        value="per kamar/hari" wire:model="satuan">
+                                        value="per_orang_hari" wire:model="satuan">
                                     <label class="form-check-label" for="satuan_orang_hari">
-                                        Per Kamar/hari
+                                        Per Orang/Hari
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_hari"
-                                        value="per hari/kegiatan" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_hari">
-                                        Per Hari/Kegiatan
+                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_kamar_hari"
+                                        value="per_kamar_hari" wire:model="satuan">
+                                    <label class="form-check-label" for="satuan_kamar_hari">
+                                        Per Kamar/Hari
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_hari"
-                                        value="per orang/kunjungan" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_hari">
+                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_kegiatan_hari"
+                                        value="per_kegiatan_hari" wire:model="satuan">
+                                    <label class="form-check-label" for="satuan_kegiatan_hari">
+                                        Per Kegiatan/Hari
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_orang_kunjungan"
+                                        value="per_orang_kunjungan" wire:model="satuan">
+                                    <label class="form-check-label" for="satuan_orang_kunjungan">
                                         Per Orang/Kunjungan
                                     </label>
                                 </div>

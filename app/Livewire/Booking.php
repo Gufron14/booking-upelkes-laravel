@@ -23,11 +23,20 @@ class Booking extends Component
     public $selectedRuang = null;
     public $tanggal_checkin = '';
     public $tanggal_checkout = '';
+    public $tanggal_kunjungan = '';
+    public $layananId;
     public $layananData = null;
     public $availableKamar = [];
     public $availableRuang = [];
     public $totalHari = 0;
+    public $totalBulan = 0;
     public $totalBiaya = 0;
+
+    public $jam_mulai = '';
+    public $jam_selesai = '';
+    public $jumlah_orang = 1;
+    public $totalJam = 0;
+
     
     // User data
     public $nama = '';
@@ -35,15 +44,48 @@ class Booking extends Component
     public $no_hp = '';
     public $alamat = '';
 
-    protected $rules = [
-        'selectedLayanan' => 'required',
-        'tanggal_checkin' => 'required|date|after_or_equal:today',
-        'tanggal_checkout' => 'required|date|after:tanggal_checkin',
-        'nama' => 'required|string|max:255',
-        'email' => 'required|email|max:255',
-        'no_hp' => 'required|string|max:20',
-        'alamat' => 'required|string|max:500',
-    ];
+    protected function rules()
+    {
+        if (!$this->layananData) {
+            return ['selectedLayanan' => 'required'];
+        }
+
+        $rules = [
+            'selectedLayanan' => 'required',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'no_hp' => 'required|string|max:20',
+            'alamat' => 'required|string|max:500',
+        ];
+
+        // Date validation based on unit type
+        if ($this->layananData->requiresSingleDate()) {
+            if ($this->layananData->satuan === Layanan::UNIT_PER_JAM) {
+                $rules['tanggal_checkin'] = 'required|date|after_or_equal:today';
+                $rules['jam_mulai'] = 'required|date_format:H:i';
+                $rules['jam_selesai'] = 'required|date_format:H:i|after:jam_mulai';
+            } elseif ($this->layananData->satuan === Layanan::UNIT_PER_ORANG_KUNJUNGAN) {
+                $rules['tanggal_kunjungan'] = 'required|date|after_or_equal:today';
+            }
+        } elseif ($this->layananData->requiresDateRange()) {
+            $rules['tanggal_checkin'] = 'required|date|after_or_equal:today';
+            $rules['tanggal_checkout'] = 'required|date|after:tanggal_checkin';
+        }
+
+        // Person count validation
+        if ($this->layananData->requiresPersonCount()) {
+            $maxCapacity = $this->layananData->kapasitas ?? 100;
+            $rules['jumlah_orang'] = "required|integer|min:1|max:{$maxCapacity}";
+        }
+
+        // Room selection validation
+        if ($this->layananData->requiresRoomSelection() && $this->layananData->kamar->count() > 0) {
+            $rules['selectedKamar'] = 'required';
+        }
+
+        return $rules;
+    }
+    
 
     protected $messages = [
         'selectedLayanan.required' => 'Pilih layanan terlebih dahulu',
@@ -73,19 +115,27 @@ class Booking extends Component
             $this->no_hp = $user->no_hp ?? '';
             $this->alamat = $user->alamat ?? '';
         }
+
+        // Initialize empty arrays for availability
+        $this->availableKamar = [];
+        $this->availableRuang = [];
     }
 
     public function selectLayanan($layananId)
     {
         $this->selectedLayanan = $layananId;
         $this->loadLayananData();
-        $this->resetSelection();
+        $this->checkAvailability();
+        $this->dispatch('update-url', layananId: $layananId);
+
+        // $this->resetSelection();
     }
 
     public function loadLayananData()
     {
         if ($this->selectedLayanan) {
             $this->layananData = Layanan::with(['kamar', 'ruang', 'gambar'])->find($this->selectedLayanan);
+            $this->checkAvailability();
         }
     }
 
@@ -103,64 +153,152 @@ class Booking extends Component
 
     public function checkAvailability()
     {
-        if (!$this->selectedLayanan || !$this->tanggal_checkin || !$this->tanggal_checkout) {
+        if (!$this->selectedLayanan || !$this->layananData) {
+            return;
+        }
+
+        // Determine date range based on satuan type
+        $startDate = null;
+        $endDate = null;
+
+        if ($this->layananData->requiresDateRange()) {
+            if (!$this->tanggal_checkin || !$this->tanggal_checkout) {
+                return;
+            }
+            $startDate = $this->tanggal_checkin;
+            $endDate = $this->tanggal_checkout;
+        } elseif ($this->layananData->satuan === 'per_jam') {
+            if (!$this->tanggal_checkin) {
+                return;
+            }
+            $startDate = $this->tanggal_checkin;
+            $endDate = $this->tanggal_checkin;
+        } elseif ($this->layananData->satuan === 'per_orang_kunjungan') {
+            if (!$this->tanggal_kunjungan) {
+                return;
+            }
+            $startDate = $this->tanggal_kunjungan;
+            $endDate = $this->tanggal_kunjungan;
+        } else {
             return;
         }
 
         // Check available kamar
         $this->availableKamar = Kamar::where('layanan_id', $this->selectedLayanan)
             ->where('status', 'tersedia')
-            ->whereDoesntHave('bookings', function($query) {
-                $query->where(function($q) {
-                    $q->whereBetween('tanggal_checkin', [$this->tanggal_checkin, $this->tanggal_checkout])
-                      ->orWhereBetween('tanggal_checkout', [$this->tanggal_checkin, $this->tanggal_checkout])
-                      ->orWhere(function($q2) {
-                          $q2->where('tanggal_checkin', '<=', $this->tanggal_checkin)
-                             ->where('tanggal_checkout', '>=', $this->tanggal_checkout);
+            ->whereDoesntHave('bookings', function($query) use ($startDate, $endDate) {
+                $query->where(function($q) use ($startDate, $endDate) {
+                    $q->whereBetween('tanggal_checkin', [$startDate, $endDate])
+                      ->orWhereBetween('tanggal_checkout', [$startDate, $endDate])
+                      ->orWhere(function($q2) use ($startDate, $endDate) {
+                          $q2->where('tanggal_checkin', '<=', $startDate)
+                             ->where('tanggal_checkout', '>=', $endDate);
                       });
                 })->whereIn('status', ['booked', 'pending']);
             })
-            ->get();
+            ->get()
+            ->toArray();
 
         // Check available ruang
         $this->availableRuang = Ruang::where('layanan_id', $this->selectedLayanan)
-            ->whereDoesntHave('bookings', function($query) {
-                $query->where(function($q) {
-                    $q->whereBetween('tanggal_checkin', [$this->tanggal_checkin, $this->tanggal_checkout])
-                      ->orWhereBetween('tanggal_checkout', [$this->tanggal_checkin, $this->tanggal_checkout])
-                      ->orWhere(function($q2) {
-                          $q2->where('tanggal_checkin', '<=', $this->tanggal_checkin)
-                             ->where('tanggal_checkout', '>=', $this->tanggal_checkout);
+            ->whereDoesntHave('bookings', function($query) use ($startDate, $endDate) {
+                $query->where(function($q) use ($startDate, $endDate) {
+                    $q->whereBetween('tanggal_checkin', [$startDate, $endDate])
+                      ->orWhereBetween('tanggal_checkout', [$startDate, $endDate])
+                      ->orWhere(function($q2) use ($startDate, $endDate) {
+                          $q2->where('tanggal_checkin', '<=', $startDate)
+                             ->where('tanggal_checkout', '>=', $endDate);
                       });
                 })->whereIn('status', ['booked', 'pending']);
             })
-            ->get();
+            ->get()
+            ->toArray();
     }
 
     public function calculateTotal()
     {
-        if (!$this->tanggal_checkin || !$this->tanggal_checkout || !$this->layananData) {
+        if (!$this->layananData) {
             return;
         }
 
-        $checkin = Carbon::parse($this->tanggal_checkin);
-        $checkout = Carbon::parse($this->tanggal_checkout);
-        
-        $this->totalHari = $checkin->diffInDays($checkout);
-        
-        // Calculate based on satuan
+        $this->totalBiaya = 0;
+        $this->totalHari = 0;
+        $this->totalBulan = 0;
+        $this->totalJam = 0;
+
         switch ($this->layananData->satuan) {
-            case 'per hari':
-                $this->totalBiaya = $this->totalHari * $this->layananData->tarif;
+            case Layanan::UNIT_PER_JAM:
+                if ($this->tanggal_checkin && $this->jam_mulai && $this->jam_selesai) {
+                    try {
+                        // Extract time part if it's a datetime object or string
+                        $jamMulaiStr = is_object($this->jam_mulai) ? $this->jam_mulai->format('H:i:s') : $this->jam_mulai;
+                        $jamSelesaiStr = is_object($this->jam_selesai) ? $this->jam_selesai->format('H:i:s') : $this->jam_selesai;
+                        
+                        // Create Carbon instances for the same date with different times
+                        $jamMulai = Carbon::parse($this->tanggal_checkin . ' ' . $jamMulaiStr);
+                        $jamSelesai = Carbon::parse($this->tanggal_checkin . ' ' . $jamSelesaiStr);
+                        
+                        $this->totalJam = $jamMulai->diffInHours($jamSelesai);
+                        $this->totalBiaya = $this->totalJam * $this->layananData->tarif;
+                    } catch (\Exception $e) {
+                        // Fallback: assume 1 hour if parsing fails
+                        $this->totalJam = 1;
+                        $this->totalBiaya = $this->layananData->tarif;
+                    }
+                }
                 break;
-            case 'per jam':
-                $totalJam = $checkin->diffInHours($checkout);
-                $this->totalBiaya = $totalJam * $this->layananData->tarif;
+
+            case Layanan::UNIT_PER_HARI:
+                if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                    $checkin = Carbon::parse($this->tanggal_checkin);
+                    $checkout = Carbon::parse($this->tanggal_checkout);
+                    $this->totalHari = $checkin->diffInDays($checkout);
+                    $this->totalBiaya = $this->totalHari * $this->layananData->tarif;
+                }
                 break;
-            case 'per bulan':
-                $totalBulan = $checkin->diffInMonths($checkout);
-                $this->totalBiaya = $totalBulan * $this->layananData->tarif;
+
+            case Layanan::UNIT_PER_BULAN:
+                if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                    $checkin = Carbon::parse($this->tanggal_checkin);
+                    $checkout = Carbon::parse($this->tanggal_checkout);
+                    $totalBulan = $checkin->diffInMonths($checkout);
+                    $this->totalBiaya = $totalBulan * $this->layananData->tarif;
+                }
                 break;
+
+            case Layanan::UNIT_PER_ORANG_HARI:
+                if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                    $checkin = Carbon::parse($this->tanggal_checkin);
+                    $checkout = Carbon::parse($this->tanggal_checkout);
+                    $this->totalHari = $checkin->diffInDays($checkout);
+                    $this->totalBiaya = $this->totalHari * $this->layananData->tarif * $this->jumlah_orang;
+                }
+                break;
+
+            case Layanan::UNIT_PER_KAMAR_HARI:
+                if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                    $checkin = Carbon::parse($this->tanggal_checkin);
+                    $checkout = Carbon::parse($this->tanggal_checkout);
+                    $this->totalHari = $checkin->diffInDays($checkout);
+                    $this->totalBiaya = $this->totalHari * $this->layananData->tarif;
+                }
+                break;
+
+            case Layanan::UNIT_PER_KEGIATAN_HARI:
+                if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                    $checkin = Carbon::parse($this->tanggal_checkin);
+                    $checkout = Carbon::parse($this->tanggal_checkout);
+                    $this->totalHari = $checkin->diffInDays($checkout);
+                    $this->totalBiaya = $this->totalHari * $this->layananData->tarif * $this->jumlah_orang;
+                }
+                break;
+
+            case Layanan::UNIT_PER_ORANG_KUNJUNGAN:
+                if ($this->tanggal_kunjungan) {
+                    $this->totalBiaya = $this->layananData->tarif * $this->jumlah_orang;
+                }
+                break;
+
             default:
                 $this->totalBiaya = $this->layananData->tarif;
         }
@@ -181,13 +319,31 @@ class Booking extends Component
     public function nextStep()
     {
         if ($this->step == 1) {
-            $this->validate([
-                'selectedLayanan' => 'required',
-                'tanggal_checkin' => 'required|date|after_or_equal:today',
-                'tanggal_checkout' => 'required|date|after:tanggal_checkin',
-            ]);
+            // Basic validation
+            $rules = ['selectedLayanan' => 'required'];
             
-            if ($this->layananData->kamar->count() > 0 && !$this->selectedKamar) {
+            // Date validation based on unit type
+            if ($this->layananData->requiresDateRange()) {
+                $rules['tanggal_checkin'] = 'required|date|after_or_equal:today';
+                $rules['tanggal_checkout'] = 'required|date|after:tanggal_checkin';
+            } elseif ($this->layananData->satuan === 'per_jam') {
+                $rules['tanggal_checkin'] = 'required|date|after_or_equal:today';
+                $rules['jam_mulai'] = 'required|date_format:H:i';
+                $rules['jam_selesai'] = 'required|date_format:H:i|after:jam_mulai';
+            } elseif ($this->layananData->satuan === 'per_orang_kunjungan') {
+                $rules['tanggal_kunjungan'] = 'required|date|after_or_equal:today';
+            }
+            
+            // Person count validation
+            if ($this->layananData->requiresPersonCount()) {
+                $maxCapacity = $this->layananData->kapasitas ?? 100;
+                $rules['jumlah_orang'] = "required|integer|min:1|max:{$maxCapacity}";
+            }
+            
+            $this->validate($rules);
+            
+            // Room selection validation
+            if ($this->layananData->requiresRoomSelection() && $this->layananData->kamar->count() > 0 && !$this->selectedKamar) {
                 session()->flash('error', 'Pilih kamar terlebih dahulu');
                 return;
             }
@@ -247,16 +403,37 @@ class Booking extends Component
                 }
             }
 
-            // Create booking
-            $booking = ModelsBooking::create([
+            // Prepare booking data
+            $bookingData = [
                 'user_id' => $user->id,
                 'layanan_id' => $this->selectedLayanan,
                 'kamar_id' => $this->selectedKamar,
                 'ruang_id' => $this->selectedRuang,
-                'tanggal_checkin' => $this->tanggal_checkin,
-                'tanggal_checkout' => $this->tanggal_checkout,
-                'status' => 'pending',
-            ]);
+                'jumlah_orang' => $this->jumlah_orang,
+                'status' => 'waiting_payment',
+                'payment_deadline' => Carbon::now()->addMinutes(1), // Set payment deadline to 1 day from now
+                // 'total_biaya' => $this->totalBiaya,
+            ];
+
+            // Set dates based on unit type
+            if ($this->layananData->requiresSingleDate()) {
+                if ($this->layananData->satuan === Layanan::UNIT_PER_JAM) {
+                    $bookingData['tanggal_checkin'] = $this->tanggal_checkin;
+                    $bookingData['tanggal_checkout'] = $this->tanggal_checkin;
+                    $bookingData['jam_mulai'] = $this->jam_mulai;
+                    $bookingData['jam_selesai'] = $this->jam_selesai;
+                } elseif ($this->layananData->satuan === Layanan::UNIT_PER_ORANG_KUNJUNGAN) {
+                    $bookingData['tanggal_checkin'] = $this->tanggal_kunjungan;
+                    $bookingData['tanggal_checkout'] = $this->tanggal_kunjungan;
+                }
+            } else {
+                $bookingData['tanggal_checkin'] = $this->tanggal_checkin;
+                $bookingData['tanggal_checkout'] = $this->tanggal_checkout;
+            }
+
+            // Create booking
+            $booking = ModelsBooking::create($bookingData);
+
 
             DB::commit();
 
@@ -269,6 +446,27 @@ class Booking extends Component
             DB::rollback();
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function updatedJamMulai()
+    {
+        $this->calculateTotal();
+    }
+
+    public function updatedJamSelesai()
+    {
+        $this->calculateTotal();
+    }
+
+    public function updatedJumlahOrang()
+    {
+        $this->calculateTotal();
+    }
+
+    public function updatedTanggalKunjungan()
+    {
+        $this->checkAvailability();
+        $this->calculateTotal();
     }
 
     public function render()

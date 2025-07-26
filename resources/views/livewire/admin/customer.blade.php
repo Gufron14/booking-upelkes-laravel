@@ -1,7 +1,7 @@
 <div>
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Daftar Customer</h2>
-        <a href="{{ route('layanan') }}" class="btn btn-primary rounded-pill px-4">
+        <a href="{{ route('daftar.layanan') }}" class="btn btn-primary rounded-pill px-4">
             <i class="fas fa-arrow-left me-1"></i>
             Kembali
         </a>

@@ -122,7 +122,7 @@
                                     </div>
                                     <div class="col-md-4 text-md-end">
                                         <h3 class="mb-0 text-primary fw-bold">
-                                            Rp {{ number_format($booking->calculateTotalCost(), 0, ',', '.') }}
+                                            Rp {{ number_format($booking->calculateTotal(), 0, ',', '.') }}
                                         </h3>
                                     </div>
                                 </div>

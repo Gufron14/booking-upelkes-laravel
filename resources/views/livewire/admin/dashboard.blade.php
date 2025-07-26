@@ -224,7 +224,7 @@
                                             <span class="badge text-bg-danger">Cancelled</span>
                                         @endif
                                     </td>
-                                    <td>Rp {{ number_format($booking->calculateTotalCost(), 0, ',', '.') }}</td>
+                                    <td>Rp {{ number_format($booking->calculateTotal(), 0, ',', '.') }}</td>
                                 </tr>
                                 @empty
                                 <tr>

@@ -27,7 +27,8 @@
             <div class="row g-3">
                 <div class="col-md-3">
                     <label for="search" class="form-label">Cari Customer/Layanan</label>
-                    <input type="text" class="form-control" id="search" wire:model.live="search" placeholder="Nama customer atau layanan...">
+                    <input type="text" class="form-control" id="search" wire:model.live="search"
+                        placeholder="Nama customer atau layanan...">
                 </div>
                 <div class="col-md-2">
                     <label for="statusFilter" class="form-label">Status</label>
@@ -87,7 +88,7 @@
                                     <div class="d-flex flex-column">
                                         <span class="fw-semibold">{{ $booking->layanan->nama_layanan }}</span>
                                         <small class="text-muted">
-                                            @if($booking->kamar)
+                                            @if ($booking->kamar)
                                                 Kamar {{ $booking->kamar->nomor_kamar }}
                                             @elseif($booking->ruang)
                                                 Ruang {{ $booking->ruang->kode_ruang }}
@@ -97,9 +98,9 @@
                                 </td>
                                 <td class="text-center">{{ $booking->formatted_checkin }}</td>
                                 <td class="text-center">{{ $booking->formatted_checkout }}</td>
-                                <td>Rp {{ number_format($booking->calculateTotalCost(), 0, ',', '.') }}</td>
+                                <td>Rp {{ number_format($booking->calculateTotal(), 0, ',', '.') }}</td>
                                 <td>
-                                    @if($booking->status === 'pending')
+                                    @if ($booking->status === 'pending')
                                         <span class="badge bg-warning">Pending</span>
                                     @elseif($booking->status === 'booked')
                                         <span class="badge bg-success">Confirmed</span>
@@ -111,22 +112,22 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                wire:click="viewBookingDetail({{ $booking->id }})" 
-                                                data-bs-toggle="modal" data-bs-target="#detailModal">
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                            wire:click="viewBookingDetail({{ $booking->id }})" data-bs-toggle="modal"
+                                            data-bs-target="#detailModal">
                                             <i class="fas fa-eye me-1"></i>Detail
                                         </button>
-                                        
-                                        @if($booking->status === 'pending')
-                                            <button type="button" class="btn btn-sm btn-success" 
-                                                    wire:click="confirmBooking({{ $booking->id }})"
-                                                    wire:confirm="Apakah Anda yakin ingin mengkonfirmasi booking ini?">
+
+                                        @if ($booking->status === 'pending')
+                                            <button type="button" class="btn btn-sm btn-success"
+                                                wire:click="confirmBooking({{ $booking->id }})"
+                                                wire:confirm="Apakah Anda yakin ingin mengkonfirmasi booking ini?">
                                                 <i class="fas fa-check me-1"></i>Konfirmasi
                                             </button>
-                                            
-                                            <button type="button" class="btn btn-sm btn-danger" 
-                                                    wire:click="cancelBooking({{ $booking->id }})"
-                                                    wire:confirm="Apakah Anda yakin ingin membatalkan booking ini?">
+
+                                            <button type="button" class="btn btn-sm btn-danger"
+                                                wire:click="cancelBooking({{ $booking->id }})"
+                                                wire:confirm="Apakah Anda yakin ingin membatalkan booking ini?">
                                                 <i class="fas fa-times me-1"></i>Batal
                                             </button>
                                         @endif
@@ -146,13 +147,13 @@
                     </tbody>
                 </table>
             </div>
-            
+
             {{-- Pagination --}}
-            @if($bookings->hasPages())
+            @if ($bookings->hasPages())
                 <div class="d-flex justify-content-between align-items-center mt-4">
                     <div class="pagination-info">
                         <span class="text-muted">
-                            Menampilkan {{ $bookings->firstItem() }} sampai {{ $bookings->lastItem() }} 
+                            Menampilkan {{ $bookings->firstItem() }} sampai {{ $bookings->lastItem() }}
                             dari {{ $bookings->total() }} booking
                         </span>
                     </div>
@@ -168,7 +169,8 @@
                                     </li>
                                 @else
                                     <li class="page-item">
-                                        <button class="page-link" wire:click="previousPage" wire:loading.attr="disabled">
+                                        <button class="page-link" wire:click="previousPage"
+                                            wire:loading.attr="disabled">
                                             <i class="fas fa-chevron-left"></i>
                                         </button>
                                     </li>
@@ -182,7 +184,8 @@
                                         </li>
                                     @else
                                         <li class="page-item">
-                                            <button class="page-link" wire:click="gotoPage({{ $page }})" wire:loading.attr="disabled">
+                                            <button class="page-link" wire:click="gotoPage({{ $page }})"
+                                                wire:loading.attr="disabled">
                                                 {{ $page }}
                                             </button>
                                         </li>
@@ -216,17 +219,20 @@
     </div>
 
     {{-- Detail Modal --}}
-    @if($selectedBooking)
-        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true" wire:ignore.self>
+    @if ($selectedBooking)
+        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel"
+            aria-hidden="true" wire:ignore.self>
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailModalLabel">Detail Booking</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" wire:click="closeDetailModal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            wire:click="closeDetailModal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
                                 <h6 class="fw-bold mb-3">Informasi Customer</h6>
                                 <table class="table table-borderless table-sm">
                                     <tr>
@@ -242,26 +248,7 @@
                                         <td>{{ $selectedBooking->user->no_telepon ?? '-' }}</td>
                                     </tr>
                                 </table>
-
-                                <div>
-                                    <h6 class="fw-bold mb-2">Bukti Pembayaran</h6>
-                                    @if($selectedBooking->payment && $selectedBooking->payment->bukti_transfer)
-                                        <img src="{{ asset('storage/' . $selectedBooking->payment->bukti_transfer) }}" 
-                                             class="img-fluid img-thumbnail" 
-                                             alt="Bukti Pembayaran"
-                                             style="max-height: 300px; cursor: pointer;"
-                                             onclick="window.open(this.src, '_blank')">
-                                    @else
-                                        <div class="alert alert-warning">
-                                            <i class="fas fa-exclamation-triangle me-2"></i>
-                                            Bukti pembayaran belum diupload
-                                        </div>
-                                    @endif
-                                </div>
-                                
-                                
                             </div>
-                            <div class="col-md-6">
                                 <h6 class="fw-bold mb-3">Informasi Booking</h6>
                                 <table class="table table-borderless table-sm">
                                     <tr>
@@ -271,7 +258,7 @@
                                     <tr>
                                         <td class="fw-semibold">Ruang/Kamar:</td>
                                         <td>
-                                            @if($selectedBooking->kamar)
+                                            @if ($selectedBooking->kamar)
                                                 Kamar {{ $selectedBooking->kamar->nomor_kamar }}
                                             @elseif($selectedBooking->ruang)
                                                 Ruang {{ $selectedBooking->ruang->kode_ruang }}
@@ -288,12 +275,13 @@
                                     </tr>
                                     <tr>
                                         <td class="fw-semibold">Total Biaya:</td>
-                                        <td class="fw-bold text-success">Rp {{ number_format($booking->calculateTotalCost(), 0, ',', '.') }}</td>
+                                        <td class="fw-bold text-success">Rp
+                                            {{ number_format($booking->calculateTotal(), 0, ',', '.') }}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-semibold">Status:</td>
                                         <td>
-                                            @if($selectedBooking->status === 'pending')
+                                            @if ($selectedBooking->status === 'pending')
                                                 <span class="badge bg-warning">Pending</span>
                                             @elseif($selectedBooking->status === 'booked')
                                                 <span class="badge bg-success">Confirmed</span>
@@ -304,9 +292,23 @@
                                     </tr>
                                 </table>
                             </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold mb-2">Bukti Pembayaran</h6>
+                                @if ($selectedBooking->payment && $selectedBooking->payment->bukti_transfer)
+                                    <img src="{{ asset('storage/' . $selectedBooking->payment->bukti_transfer) }}"
+                                        class="img-fluid img-thumbnail" alt="Bukti Pembayaran"
+                                        style="max-height: 300px; cursor: pointer;"
+                                        onclick="window.open(this.src, '_blank')">
+                                @else
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        Bukti pembayaran belum diupload
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                        
-                        @if($selectedBooking->catatan)
+
+                        @if ($selectedBooking->catatan)
                             <div class="mt-4">
                                 <h6 class="fw-bold mb-2">Catatan Customer</h6>
                                 <div class="alert alert-info">
@@ -316,23 +318,24 @@
                         @endif
                     </div>
                     <div class="modal-footer">
-                        @if($selectedBooking->status === 'pending')
-                            <button type="button" class="btn btn-success" 
-                                    wire:click="confirmBooking({{ $selectedBooking->id }})"
-                                    wire:confirm="Apakah Anda yakin ingin mengkonfirmasi booking ini?"
-                                    data-bs-dismiss="modal">
+                        @if ($selectedBooking->status === 'pending')
+                            <button type="button" class="btn btn-success"
+                                wire:click="confirmBooking({{ $selectedBooking->id }})"
+                                wire:confirm="Apakah Anda yakin ingin mengkonfirmasi booking ini?"
+                                data-bs-dismiss="modal">
                                 <i class="fas fa-check me-1"></i>Konfirmasi Booking
                             </button>
-                            
-                            <button type="button" class="btn btn-danger" 
-                                    wire:click="cancelBooking({{ $selectedBooking->id }})"
-                                    wire:confirm="Apakah Anda yakin ingin membatalkan booking ini?"
-                                    data-bs-dismiss="modal">
+
+                            <button type="button" class="btn btn-danger"
+                                wire:click="cancelBooking({{ $selectedBooking->id }})"
+                                wire:confirm="Apakah Anda yakin ingin membatalkan booking ini?"
+                                data-bs-dismiss="modal">
                                 <i class="fas fa-times me-1"></i>Batalkan Booking
                             </button>
                         @endif
-                        
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" wire:click="closeDetailModal">Tutup</button>
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            wire:click="closeDetailModal">Tutup</button>
                     </div>
                 </div>
             </div>

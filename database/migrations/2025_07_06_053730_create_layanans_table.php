@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_layanan');
             $table->enum('kategori', ['umum', 'pemerintah']);
-            $table->string('satuan'); // per hari, per jam, per orang, per kegiatan, per bulan
+            $table->string('satuan');
             $table->integer('kapasitas')->nullable();
             $table->decimal('tarif', 10, 2);
             $table->text('deskripsi')->nullable();

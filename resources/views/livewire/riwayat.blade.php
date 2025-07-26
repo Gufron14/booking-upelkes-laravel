@@ -22,7 +22,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h2 class="fw-bold text-primary mb-1">
-                            <i class="fas fa-history me-2"></i>Riwayat Booking
+                            <i class="fa-solid fa-clock-rotate-left"></i>Riwayat Booking
                         </h2>
                         <p class="text-muted mb-0">Kelola dan pantau semua booking Anda</p>
                     </div>
@@ -81,40 +81,95 @@
                                                 <div class="ms-md-3">
                                                     {{-- Service & Room Name --}}
                                                     <h5 class="fw-bold text-dark mb-2">
-                                                        {{ $booking->layanan->nama_layanan ?? 'Layanan Tidak Tersedia' }}
-                                                    </h5>
+                                                    {{ $booking->layanan->nama_layanan ?? 'Layanan Tidak Tersedia' }}
+                                                        <span class="badge bg-primary ms-2 fs-6">{{ $booking->layanan->satuan_label ?? '' }}</span>
+                                                     </h5>
                                                     
                                                     <div class="row g-3">
+                                                        @if($booking->kamar || $booking->ruang)
                                                         <div class="col-sm-6">
-                                                            <div class="d-flex align-items-center mb-2">
-                                                                <i class="fas fa-bed text-primary me-2"></i>
-                                                                <small class="text-muted">Ruangan:</small>
-                                                            </div>
-                                                            <p class="fw-semibold mb-0">
-                                                                {{ $booking->kamar->nomor_kamar ?? $booking->ruang->kode_ruang ?? 'Tidak Tersedia' }}
-                                                            </p>
-                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            @if($booking->kamar)
+                                                                    <i class="fas fa-bed text-primary me-2"></i>
+                                                                    <small class="text-muted">Kamar:</small>
+                                                            @else
+                                                                    <i class="fas fa-door-open text-primary me-2"></i>
+                                                                        <small class="text-muted">Ruang:</small>
+                                                                     @endif
+                                                                 </div>
+                                                                 <p class="fw-semibold mb-0">
+                                                                     {{ $booking->kamar->nomor_kamar ?? $booking->ruang->kode_ruang ?? 'Tidak Tersedia' }}
+                                                                 </p>
+                                                             </div>
+                                                         @endif
                                                         
                                                         <div class="col-sm-6">
-                                                            <div class="d-flex align-items-center mb-2">
-                                                                <i class="fas fa-calendar text-primary me-2"></i>
-                                                                <small class="text-muted">Periode:</small>
-                                                            </div>
-                                                            <p class="fw-semibold mb-0">
-                                                                {{ $booking->formatted_checkin }} - {{ $booking->formatted_checkout }}
-                                                            </p>
-                                                            <small class="text-muted">({{ $booking->duration }} hari)</small>
-                                                        </div>
-                                                        
-                                                        <div class="col-sm-6">
-                                                            <div class="d-flex align-items-center mb-2">
-                                                                <i class="fas fa-money-bill text-primary me-2"></i>
-                                                                <small class="text-muted">Total Biaya:</small>
-                                                            </div>
-                                                            <p class="fw-bold text-success mb-0 fs-5">
-                                                                Rp {{ number_format($booking->total_biaya ?: $booking->calculateTotalCost(), 0, ',', '.') }}
-                                                            </p>
-                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2">
+                                                        <i class="fas fa-calendar text-primary me-2"></i>
+                                                        <small class="text-muted">
+                                                                @if($booking->layanan->satuan === 'per_jam')
+                                                                    Tanggal & Waktu:
+                                                            @elseif($booking->layanan->satuan === 'per_orang_kunjungan')
+                                                                    Tanggal Kunjungan:
+                                                                @else
+                                                                        Periode:
+                                                                     @endif
+                                                                 </small>
+                                                             </div>
+                                                             @if($booking->layanan->satuan === 'per_jam')
+                                                                 <p class="fw-semibold mb-0">
+                                                                     {{ $booking->formatted_checkin }}
+                                                                 </p>
+                                                                 @if($booking->jam_mulai && $booking->jam_selesai)
+                                                                     <small class="text-muted">
+                                                                         {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}
+                                                                         @php
+                                                                             try {
+                                                                                 $jamMulaiStr = is_object($booking->jam_mulai) ? $booking->jam_mulai->format('H:i') : $booking->jam_mulai;
+                                                                                 $jamSelesaiStr = is_object($booking->jam_selesai) ? $booking->jam_selesai->format('H:i') : $booking->jam_selesai;
+                                                                                 $jamMulai = \Carbon\Carbon::parse($booking->tanggal_checkin . ' ' . $jamMulaiStr);
+                                                                                 $jamSelesai = \Carbon\Carbon::parse($booking->tanggal_checkin . ' ' . $jamSelesaiStr);
+                                                                                 $totalJam = $jamMulai->diffInHours($jamSelesai);
+                                                                                 echo "({$totalJam} jam)";
+                                                                             } catch (\Exception $e) {
+                                                                                 echo "(Gagal Parsing Jam)";
+                                                                             }
+                                                                         @endphp
+                                                                     </small>
+                                                                 @endif
+                                                             @elseif($booking->layanan->satuan === 'per_orang_kunjungan')
+                                                                 <p class="fw-semibold mb-0">
+                                                                     {{ $booking->formatted_checkin }}
+                                                                 </p>
+                                                             @else
+                                                                 <p class="fw-semibold mb-0">
+                                                                     {{ $booking->formatted_checkin }} - {{ $booking->formatted_checkout }}
+                                                                 </p>
+                                                                 <small class="text-muted">({{ $booking->duration }} hari)</small>
+                                                             @endif
+                                                             </div>
+
+                                                             {{-- Person Count for applicable satuan types --}}
+                                                             @if($booking->layanan->requiresPersonCount() && $booking->jumlah_orang)
+                                                             <div class="col-sm-6">
+                                                             <div class="d-flex align-items-center mb-2">
+                                                                     <i class="fas fa-users text-primary me-2"></i>
+                                                                     <small class="text-muted">Jumlah Orang:</small>
+                                                             </div>
+                                                                 <p class="fw-semibold mb-0">{{ $booking->jumlah_orang }} orang</p>
+                                                                 </div>
+                                                         @endif
+                                                         
+                                                         <div class="col-sm-6">
+                                                             <div class="d-flex align-items-center mb-2">
+                                                                 <i class="fas fa-money-bill text-primary me-2"></i>
+                                                                 <small class="text-muted">Total Biaya:</small>
+                                                             </div>
+                                                             <p class="fw-bold text-success mb-0 fs-5">
+                                                                 Rp {{ number_format($booking->total_biaya ?: $booking->calculateTotal(), 0, ',', '.') }}
+                                                             </p>
+                                                             <small class="text-muted">{{ $booking->layanan->satuan_label ?? '' }}</small>
+                                                         </div>
                                                         
                                                         <div class="col-sm-6">
                                                             <div class="d-flex align-items-center mb-2">
@@ -154,24 +209,42 @@
                                     <div class="col-lg-4">
                                         <div class="text-lg-end mt-3 mt-lg-0">
                                             <div class="d-flex flex-column gap-2">
-                                                {{-- Payment Button --}}
-                                                @if($booking->status == 'pending' && (!$booking->payment || $booking->payment->status != 'terverifikasi'))
-                                                    <a href="{{ route('payment', $booking->id) }}" 
-                                                       class="btn btn-success btn-lg fw-semibold">
-                                                        <i class="fas fa-credit-card me-2"></i>
-                                                        Bayar Sekarang
-                                                    </a>
-                                                @endif
-
-                                                {{-- Cancel Button --}}
-                                                @if($booking->canBeCancelled())
-                                                    <button wire:click="cancelBooking({{ $booking->id }})" 
-                                                            class="btn btn-outline-danger fw-semibold"
-                                                            onclick="return confirm('Apakah Anda yakin ingin membatalkan booking ini?')">
-                                                        <i class="fas fa-times me-2"></i>
-                                                        Batalkan
-                                                    </button>
-                                                @endif
+{{-- Payment Button --}}
+@if($booking->status == 'waiting_payment' && (!$booking->payment || $booking->payment->status != 'terverifikasi'))
+    <a href="{{ route('payment', $booking->id) }}" 
+       class="btn btn-success btn-lg fw-semibold d-flex align-items-center justify-content-center position-relative"
+       id="btn-bayar-{{ $booking->id }}">
+        <i class="fas fa-credit-card me-2"></i>
+        Bayar Sekarang&nbsp;
+        (<span id="countdown-{{ $booking->id }}"></span>)
+    </a>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if($booking->payment_deadline)
+                let deadline{{ $booking->id }} = @json(\Carbon\Carbon::parse($booking->payment_deadline)->format('Y-m-d H:i:s'));
+                let countDownDate{{ $booking->id }} = new Date(deadline{{ $booking->id }}.replace(/-/g, '/')).getTime();
+                let btnBayar{{ $booking->id }} = document.getElementById('btn-bayar-{{ $booking->id }}');
+                let timer{{ $booking->id }} = document.getElementById('countdown-{{ $booking->id }}');
+                let x{{ $booking->id }} = setInterval(function() {
+                    let now = new Date().getTime();
+                    let distance = countDownDate{{ $booking->id }} - now;
+                    if (distance > 0) {
+                        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        timer{{ $booking->id }}.innerHTML = minutes + 'm ' + seconds + 's';
+                        btnBayar{{ $booking->id }}.classList.remove('disabled');
+                    } else {
+                        timer{{ $booking->id }}.innerHTML = 'Expired';
+                        btnBayar{{ $booking->id }}.classList.add('disabled');
+                        btnBayar{{ $booking->id }}.setAttribute('tabindex', '-1');
+                        btnBayar{{ $booking->id }}.setAttribute('aria-disabled', 'true');
+                        clearInterval(x{{ $booking->id }});
+                    }
+                }, 1000);
+            @endif
+        });
+    </script>
+@endif
 
                                                 {{-- Booking Date Info --}}
                                                 <div class="mt-2">
@@ -219,7 +292,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="p-3">
-                                        <h3 class="fw-bold text-primary">Rp {{ number_format($bookings->where('status', '!=', 'cancelled')->sum('total_biaya'), 0, ',', '.') }}</h3>
+                                        <h3 class="fw-bold text-primary">Rp {{ number_format($bookings->where('status', '!=', 'cancelled')->sum($booking->calculateTotal()), 0, ',', '.') }}</h3>
                                         <p class="text-muted mb-0">Total Biaya</p>
                                     </div>
                                 </div>

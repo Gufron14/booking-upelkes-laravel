@@ -178,12 +178,28 @@
                                     <h5 class="text-primary fw-bold mb-0">
                                         Rp {{ number_format($layanan->tarif, 0, ',', '.') }}
                                     </h5>
-                                    <small class="text-muted">{{ $layanan->satuan }}</small>
+                                                                    <small class="text-muted">
+                                    @if ($layanan->satuan == 'per_hari')
+                                        Per Hari
+                                    @elseif ($layanan->satuan == 'per_jam')
+                                        Per Jam
+                                    @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                        Per Orang/Kunjungan
+                                    @elseif ($layanan->satuan == 'per_bulan')
+                                        Per Bulan
+                                    @elseif ($layanan->satuan == 'per_orang_hari')
+                                        Per Orang/Hari
+                                    @elseif ($layanan->satuan == 'per_kamar_hari')
+                                        Per Kamar/Hari
+                                    @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                        Per Kegiatan/Hari
+                                    @endif
+                                </small>
                                 </div>
-                                <a href="{{ route('layanan') }}" class="btn btn-primary rounded-pill px-4">
+                                {{-- <a href="{{ route('layanan') }}" class="btn btn-primary rounded-pill px-4">
                                     <i class="fas fa-arrow-right me-1"></i>
                                     Lihat Detail
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </div>
@@ -313,10 +329,10 @@
                                 </div>
                             </div>
                             
-                            <a href="/layanan?kategori=umum" class="btn btn-light btn-lg w-100 rounded-pill">
+                            {{-- <a href="/layanan?kategori=umum" class="btn btn-light btn-lg w-100 rounded-pill">
                                 <i class="fas fa-arrow-right me-2"></i>
                                 Lihat Layanan Umum
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>
@@ -349,10 +365,10 @@
                                 </div>
                             </div>
                             
-                            <a href="/layanan?kategori=pemerintah" class="btn btn-light btn-lg w-100 rounded-pill">
+                            {{-- <a href="/layanan?kategori=pemerintah" class="btn btn-light btn-lg w-100 rounded-pill">
                                 <i class="fas fa-arrow-right me-2"></i>
                                 Lihat Layanan Pemerintah
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>

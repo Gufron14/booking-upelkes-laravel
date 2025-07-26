@@ -48,88 +48,138 @@
     @if ($step == 1)
         <div class="row">
             <div class="col-lg-8">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Pilih Layanan</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            @foreach ($layananList as $layanan)
-                                <div class="col-md-6">
-                                    <div class="service-option {{ $selectedLayanan == $layanan->id ? 'selected' : '' }}"
-                                        wire:click="selectLayanan({{ $layanan->id }})">
-                                        <div class="d-flex align-items-center">
-                                            @if ($layanan->gambar->count() > 0)
-                                                <img src="{{ asset('storage/' . $layanan->gambar->first()->path) }}"
-                                                    class="service-thumb me-3" alt="{{ $layanan->nama_layanan }}">
-                                            @else
-                                                <div
-                                                    class="service-thumb bg-light d-flex align-items-center justify-content-center me-3">
-                                                    <i class="fas fa-image text-muted"></i>
-                                                </div>
-                                            @endif
-                                            <div class="flex-grow-1">
-                                                <h6 class="mb-1">{{ $layanan->nama_layanan }}</h6>
-                                                <small class="text-muted">{{ $layanan->kategori }}</small>
-                                                <div class="fw-bold text-primary">
-                                                    Rp
-                                                    {{ number_format($layanan->tarif, 0, ',', '.') }}/{{ $layanan->satuan }}
-                                                </div>
-                                            </div>
-                                            @if ($selectedLayanan == $layanan->id)
-                                                <i class="fas fa-check-circle text-success fa-lg"></i>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Date Selection -->
                 @if ($selectedLayanan)
-                    <div class="card border-0 shadow-sm mt-4">
+                    <div class="card border-0 shadow-sm">
                         <div class="card-header bg-success text-white">
                             <h5 class="mb-0"><i class="fas fa-calendar me-2"></i>Pilih Tanggal</h5>
                         </div>
                         <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Tanggal Check-in</label>
-                                    <input type="date"
-                                        class="form-control @error('tanggal_checkin') is-invalid @enderror"
-                                        wire:model.live="tanggal_checkin" min="{{ date('Y-m-d') }}">
-                                    @error('tanggal_checkin')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                            {{-- Date fields based on unit type --}}
+                            @if ($layananData->requiresDateRange())
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Tanggal Check-in</label>
+                                        <input type="date"
+                                            class="form-control @error('tanggal_checkin') is-invalid @enderror"
+                                            wire:model.live="tanggal_checkin" min="{{ date('Y-m-d') }}">
+                                        @error('tanggal_checkin')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Tanggal Check-out</label>
+                                        <input type="date"
+                                            class="form-control @error('tanggal_checkout') is-invalid @enderror"
+                                            wire:model.live="tanggal_checkout"
+                                            min="{{ $tanggal_checkin ?: date('Y-m-d', strtotime('+1 day')) }}">
+                                        @error('tanggal_checkout')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Tanggal Check-out</label>
-                                    <input type="date"
-                                        class="form-control @error('tanggal_checkout') is-invalid @enderror"
-                                        wire:model.live="tanggal_checkout"
-                                        min="{{ $tanggal_checkin ?: date('Y-m-d', strtotime('+1 day')) }}">
-                                    @error('tanggal_checkout')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                            @elseif ($layananData->satuan === 'per_jam')
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-semibold">Tanggal</label>
+                                        <input type="date"
+                                            class="form-control @error('tanggal_checkin') is-invalid @enderror"
+                                            wire:model.live="tanggal_checkin" min="{{ date('Y-m-d') }}">
+                                        @error('tanggal_checkin')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
+                            @elseif ($layananData->satuan === 'per_orang_kunjungan')
+                                <div class="row g-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label fw-semibold">Tanggal Kunjungan</label>
+                                        <input type="date"
+                                            class="form-control @error('tanggal_kunjungan') is-invalid @enderror"
+                                            wire:model.live="tanggal_kunjungan" min="{{ date('Y-m-d') }}">
+                                        @error('tanggal_kunjungan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
 
-                            @if ($tanggal_checkin && $tanggal_checkout)
+                            {{-- Time selection for per jam --}}
+                            @if ($layananData->requiresTimeSelection() && $tanggal_checkin)
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Jam Mulai</label>
+                                        <input type="time"
+                                            class="form-control @error('jam_mulai') is-invalid @enderror"
+                                            wire:model.live="jam_mulai">
+                                        @error('jam_mulai')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Jam Selesai</label>
+                                        <input type="time"
+                                            class="form-control @error('jam_selesai') is-invalid @enderror"
+                                            wire:model.live="jam_selesai">
+                                        @error('jam_selesai')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Person count input --}}
+                            @if ($layananData->requiresPersonCount())
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Jumlah Orang</label>
+                                        <input type="number"
+                                            class="form-control @error('jumlah_orang') is-invalid @enderror"
+                                            wire:model.live="jumlah_orang" min="1"
+                                            max="{{ $layananData->kapasitas ?? 100 }}">
+                                        @error('jumlah_orang')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        @if ($layananData->kapasitas)
+                                            <small class="text-muted">Maksimal {{ $layananData->kapasitas }}
+                                                orang</small>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Summary info --}}
+                            @if (($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) || 
+                                 ($layananData->requiresTimeSelection() && $tanggal_checkin && $jam_mulai && $jam_selesai) ||
+                                 ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
                                 <div class="alert alert-info mt-3">
                                     <i class="fas fa-info-circle me-2"></i>
-                                    <strong>Durasi:</strong> {{ $totalHari }} hari
+                                    @if ($layananData->satuan === 'per_jam' && $jam_mulai && $jam_selesai)
+                                        <strong>Durasi:</strong> {{ $totalJam }} jam
+                                    @elseif ($layananData->satuan === 'per_orang_kunjungan')
+                                        <strong>Tanggal:</strong> {{ date('d M Y', strtotime($tanggal_kunjungan)) }}
+                                    @elseif ($layananData->satuan === 'per_bulan')
+                                        <strong>Durasi:</strong> {{ $totalBulan }} bulan
+                                    @else
+                                        <strong>Durasi:</strong> {{ $totalHari }} hari
+                                    @endif
+                                    @if ($layananData->requiresPersonCount())
+                                        <br><strong>Jumlah Orang:</strong> {{ $jumlah_orang }} orang
+                                    @endif
                                     <br>
                                     <strong>Estimasi Biaya:</strong> Rp {{ number_format($totalBiaya, 0, ',', '.') }}
                                 </div>
                             @endif
+
                         </div>
                     </div>
 
                     <!-- Room/Space Selection -->
-                    @if ($tanggal_checkin && $tanggal_checkout)
-                        @if ($availableKamar->count() > 0)
+                    @if (($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) || 
+                         ($layananData->requiresTimeSelection() && $tanggal_checkin) ||
+                         ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
+                        @if (count($availableKamar) > 0 && $layananData->requiresRoomSelection())
                             <div class="card border-0 shadow-sm mt-4">
                                 <div class="card-header bg-warning text-dark">
                                     <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Pilih Kamar</h5>
@@ -138,13 +188,13 @@
                                     <div class="row g-3">
                                         @foreach ($availableKamar as $kamar)
                                             <div class="col-md-4">
-                                                <div class="room-option {{ $selectedKamar == $kamar->id ? 'selected' : '' }}"
-                                                    wire:click="selectKamar({{ $kamar->id }})">
+                                                <div class="room-option {{ $selectedKamar == $kamar['id'] ? 'selected' : '' }}"
+                                                    wire:click="selectKamar({{ $kamar['id'] }})">
                                                     <div class="text-center">
                                                         <i class="fas fa-bed fa-2x mb-2"></i>
-                                                        <h6>Kamar {{ $kamar->nomor_kamar }}</h6>
-                                                        <small class="text-muted">{{ $kamar->status }}</small>
-                                                        @if ($selectedKamar == $kamar->id)
+                                                        <h6>Kamar {{ $kamar['nomor_kamar'] }}</h6>
+                                                        <small class="text-muted">{{ $kamar['status'] }}</small>
+                                                        @if ($selectedKamar == $kamar['id'])
                                                             <div class="mt-2">
                                                                 <i class="fas fa-check-circle text-success"></i>
                                                             </div>
@@ -158,7 +208,7 @@
                             </div>
                         @endif
 
-                        @if ($availableRuang->count() > 0 && !$selectedKamar)
+                        @if (count($availableRuang) > 0 && !$selectedKamar)
                             <div class="card border-0 shadow-sm mt-4">
                                 <div class="card-header bg-info text-white">
                                     <h5 class="mb-0"><i class="fas fa-door-open me-2"></i>Pilih Ruang</h5>
@@ -167,12 +217,12 @@
                                     <div class="row g-3">
                                         @foreach ($availableRuang as $ruang)
                                             <div class="col-md-4">
-                                                <div class="room-option {{ $selectedRuang == $ruang->id ? 'selected' : '' }}"
-                                                    wire:click="selectRuang({{ $ruang->id }})">
+                                                <div class="room-option {{ $selectedRuang == $ruang['id'] ? 'selected' : '' }}"
+                                                    wire:click="selectRuang({{ $ruang['id'] }})">
                                                     <div class="text-center">
                                                         <i class="fas fa-door-open fa-2x mb-2"></i>
-                                                        <h6>{{ $ruang->kode_ruang }}</h6>
-                                                        @if ($selectedRuang == $ruang->id)
+                                                        <h6>{{ $ruang['kode_ruang'] }}</h6>
+                                                        @if ($selectedRuang == $ruang['id'])
                                                             <div class="mt-2">
                                                                 <i class="fas fa-check-circle text-success"></i>
                                                             </div>
@@ -201,45 +251,92 @@
                                 <h6 class="fw-bold">{{ $layananData->nama_layanan }}</h6>
                                 <p class="text-muted small">{{ $layananData->deskripsi }}</p>
 
-                                @if ($tanggal_checkin && $tanggal_checkout)
-                                    <hr>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span>Check-in:</span>
-                                        <span
-                                            class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span>Check-out:</span>
-                                        <span
-                                            class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span>Durasi:</span>
-                                        <span class="fw-semibold">{{ $totalHari }} hari</span>
-                                    </div>
+                                @php
+                                    $showSummary = false;
+                                    
+                                    if ($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) {
+                                        $showSummary = true;
+                                    } elseif ($layananData->satuan === 'per_jam' && $tanggal_checkin && $jam_mulai && $jam_selesai) {
+                                        $showSummary = true;
+                                    } elseif ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan) {
+                                        $showSummary = true;
+                                    }
+                                @endphp
 
+                                @if ($showSummary)
+                                    <hr>
+                                    
+                                    {{-- Date information based on satuan type --}}
+                                    @if ($layananData->satuan === 'per_jam')
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Tanggal:</span>
+                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Waktu:</span>
+                                            <span class="fw-semibold">{{ $jam_mulai }} - {{ $jam_selesai }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Durasi:</span>
+                                            <span class="fw-semibold">{{ $totalJam }} jam</span>
+                                        </div>
+                                    @elseif ($layananData->satuan === 'per_orang_kunjungan')
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Tanggal Kunjungan:</span>
+                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_kunjungan)) }}</span>
+                                        </div>
+                                    @else
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Check-in:</span>
+                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Check-out:</span>
+                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Durasi:</span>
+                                            <span class="fw-semibold">{{ $totalHari }} hari</span>
+                                        </div>
+                                    @endif
+
+                                    {{-- Person count for applicable satuan types --}}
+                                    @if ($layananData->requiresPersonCount())
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Jumlah Orang:</span>
+                                            <span class="fw-semibold">{{ $jumlah_orang }} orang</span>
+                                        </div>
+                                    @endif
+
+                                    {{-- Room selection --}}
                                     @if ($selectedKamar)
+                                        @php
+                                            $selectedKamarData = collect($availableKamar)->firstWhere('id', $selectedKamar);
+                                        @endphp
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Kamar:</span>
-                                            <span
-                                                class="fw-semibold">{{ $availableKamar->find($selectedKamar)->nomor_kamar ?? '' }}</span>
+                                            <span class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</span>
                                         </div>
                                     @endif
 
                                     @if ($selectedRuang)
+                                        @php
+                                            $selectedRuangData = collect($availableRuang)->firstWhere('id', $selectedRuang);
+                                        @endphp
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Ruang:</span>
-                                            <span
-                                                class="fw-semibold">{{ $availableRuang->find($selectedRuang)->kode_ruang ?? '' }}</span>
+                                            <span class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</span>
                                         </div>
                                     @endif
 
                                     <hr>
                                     <div class="d-flex justify-content-between">
                                         <span class="fw-bold">Total:</span>
-                                        <span class="fw-bold text-primary">Rp
-                                            {{ number_format($totalBiaya, 0, ',', '.') }}</span>
+                                        <span class="fw-bold text-primary">Rp {{ number_format($totalBiaya, 0, ',', '.') }}</span>
                                     </div>
+                                    <small class="text-muted">
+                                        {{ $layananData->satuan_label }}
+                                    </small>
                                 @endif
                             </div>
                         </div>
@@ -250,8 +347,33 @@
 
         <!-- Navigation Buttons -->
         <div class="d-flex justify-content-end mt-4">
+            @php
+                $canProceed = $selectedLayanan;
+                
+                if ($layananData) {
+                    // Check date requirements based on satuan type
+                    if ($layananData->requiresDateRange()) {
+                        $canProceed = $canProceed && $tanggal_checkin && $tanggal_checkout;
+                    } elseif ($layananData->satuan === 'per_jam') {
+                        $canProceed = $canProceed && $tanggal_checkin && $jam_mulai && $jam_selesai;
+                    } elseif ($layananData->satuan === 'per_orang_kunjungan') {
+                        $canProceed = $canProceed && $tanggal_kunjungan;
+                    }
+                    
+                    // Check room selection requirement
+                    if ($layananData->requiresRoomSelection() && count($layananData->kamar) > 0) {
+                        $canProceed = $canProceed && $selectedKamar;
+                    }
+                    
+                    // Check person count requirement
+                    if ($layananData->requiresPersonCount()) {
+                        $canProceed = $canProceed && $jumlah_orang > 0;
+                    }
+                }
+            @endphp
+            
             <button type="button" class="btn btn-primary btn-lg px-4" wire:click="nextStep"
-                @if (!$selectedLayanan || !$tanggal_checkin || !$tanggal_checkout) disabled @endif>
+                @if (!$canProceed) disabled @endif>
                 Lanjutkan <i class="fas fa-arrow-right ms-2"></i>
             </button>
         </div>
@@ -352,17 +474,21 @@
                                         <td class="fw-semibold">{{ $totalHari }} hari</td>
                                     </tr>
                                     @if ($selectedKamar)
+                                        @php
+                                            $selectedKamarData = collect($availableKamar)->firstWhere('id', $selectedKamar);
+                                        @endphp
                                         <tr>
                                             <td>Kamar:</td>
-                                            <td class="fw-semibold">
-                                                {{ $availableKamar->find($selectedKamar)->nomor_kamar ?? '' }}</td>
+                                            <td class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</td>
                                         </tr>
                                     @endif
                                     @if ($selectedRuang)
+                                        @php
+                                            $selectedRuangData = collect($availableRuang)->firstWhere('id', $selectedRuang);
+                                        @endphp
                                         <tr>
                                             <td>Ruang:</td>
-                                            <td class="fw-semibold">
-                                                {{ $availableRuang->find($selectedRuang)->kode_ruang ?? '' }}</td>
+                                            <td class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</td>
                                         </tr>
                                     @endif
                                 </table>
@@ -566,6 +692,17 @@
             }
         }
     </style>
+
+    @push('scripts')
+<script>
+    window.addEventListener('update-url', event => {
+        const layananId = event.detail.layananId;
+        const newUrl = `/booking/${layananId}`;
+        window.history.pushState({}, '', newUrl);
+    });
+</script>
+@endpush
+
 
     <!-- Loading Overlay -->
     {{-- <div wire:loading class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
