@@ -20,10 +20,10 @@ z-index: 9999;
             </ul>
             @auth
                 <div class="dropdown d-inline">
-                    <div class="fw-bold dropdown-toggle d-flex align-items-center text-light" type="button"
+                    <button class="btn btn-outline-light fw-bold dropdown-toggle d-flex align-items-center" type="button"
                         id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         {{ Auth::user()->nama }}
-                    </div>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li>
                             <a class="dropdown-item" href="{{ route('profil') }}">
