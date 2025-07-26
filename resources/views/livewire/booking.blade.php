@@ -150,9 +150,10 @@
                             @endif
 
                             {{-- Summary info --}}
-                            @if (($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) || 
-                                 ($layananData->requiresTimeSelection() && $tanggal_checkin && $jam_mulai && $jam_selesai) ||
-                                 ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
+                            @if (
+                                ($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) ||
+                                    ($layananData->requiresTimeSelection() && $tanggal_checkin && $jam_mulai && $jam_selesai) ||
+                                    ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
                                 <div class="alert alert-info mt-3">
                                     <i class="fas fa-info-circle me-2"></i>
                                     @if ($layananData->satuan === 'per_jam' && $jam_mulai && $jam_selesai)
@@ -176,9 +177,10 @@
                     </div>
 
                     <!-- Room/Space Selection -->
-                    @if (($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) || 
-                         ($layananData->requiresTimeSelection() && $tanggal_checkin) ||
-                         ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
+                    @if (
+                        ($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) ||
+                            ($layananData->requiresTimeSelection() && $tanggal_checkin) ||
+                            ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
                         @if (count($availableKamar) > 0 && $layananData->requiresRoomSelection())
                             <div class="card border-0 shadow-sm mt-4">
                                 <div class="card-header bg-warning text-dark">
@@ -253,10 +255,15 @@
 
                                 @php
                                     $showSummary = false;
-                                    
+
                                     if ($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) {
                                         $showSummary = true;
-                                    } elseif ($layananData->satuan === 'per_jam' && $tanggal_checkin && $jam_mulai && $jam_selesai) {
+                                    } elseif (
+                                        $layananData->satuan === 'per_jam' &&
+                                        $tanggal_checkin &&
+                                        $jam_mulai &&
+                                        $jam_selesai
+                                    ) {
                                         $showSummary = true;
                                     } elseif ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan) {
                                         $showSummary = true;
@@ -265,16 +272,18 @@
 
                                 @if ($showSummary)
                                     <hr>
-                                    
+
                                     {{-- Date information based on satuan type --}}
                                     @if ($layananData->satuan === 'per_jam')
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Tanggal:</span>
-                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</span>
+                                            <span
+                                                class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Waktu:</span>
-                                            <span class="fw-semibold">{{ $jam_mulai }} - {{ $jam_selesai }}</span>
+                                            <span class="fw-semibold">{{ $jam_mulai }} -
+                                                {{ $jam_selesai }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Durasi:</span>
@@ -283,16 +292,19 @@
                                     @elseif ($layananData->satuan === 'per_orang_kunjungan')
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Tanggal Kunjungan:</span>
-                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_kunjungan)) }}</span>
+                                            <span
+                                                class="fw-semibold">{{ date('d M Y', strtotime($tanggal_kunjungan)) }}</span>
                                         </div>
                                     @else
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Check-in:</span>
-                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</span>
+                                            <span
+                                                class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Check-out:</span>
-                                            <span class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}</span>
+                                            <span
+                                                class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Durasi:</span>
@@ -311,28 +323,37 @@
                                     {{-- Room selection --}}
                                     @if ($selectedKamar)
                                         @php
-                                            $selectedKamarData = collect($availableKamar)->firstWhere('id', $selectedKamar);
+                                            $selectedKamarData = collect($availableKamar)->firstWhere(
+                                                'id',
+                                                $selectedKamar,
+                                            );
                                         @endphp
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Kamar:</span>
-                                            <span class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</span>
+                                            <span
+                                                class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</span>
                                         </div>
                                     @endif
 
                                     @if ($selectedRuang)
                                         @php
-                                            $selectedRuangData = collect($availableRuang)->firstWhere('id', $selectedRuang);
+                                            $selectedRuangData = collect($availableRuang)->firstWhere(
+                                                'id',
+                                                $selectedRuang,
+                                            );
                                         @endphp
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Ruang:</span>
-                                            <span class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</span>
+                                            <span
+                                                class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</span>
                                         </div>
                                     @endif
 
                                     <hr>
                                     <div class="d-flex justify-content-between">
                                         <span class="fw-bold">Total:</span>
-                                        <span class="fw-bold text-primary">Rp {{ number_format($totalBiaya, 0, ',', '.') }}</span>
+                                        <span class="fw-bold text-primary">Rp
+                                            {{ number_format($totalBiaya, 0, ',', '.') }}</span>
                                     </div>
                                     <small class="text-muted">
                                         {{ $layananData->satuan_label }}
@@ -349,7 +370,7 @@
         <div class="d-flex justify-content-end mt-4">
             @php
                 $canProceed = $selectedLayanan;
-                
+
                 if ($layananData) {
                     // Check date requirements based on satuan type
                     if ($layananData->requiresDateRange()) {
@@ -359,19 +380,19 @@
                     } elseif ($layananData->satuan === 'per_orang_kunjungan') {
                         $canProceed = $canProceed && $tanggal_kunjungan;
                     }
-                    
+
                     // Check room selection requirement
                     if ($layananData->requiresRoomSelection() && count($layananData->kamar) > 0) {
                         $canProceed = $canProceed && $selectedKamar;
                     }
-                    
+
                     // Check person count requirement
                     if ($layananData->requiresPersonCount()) {
                         $canProceed = $canProceed && $jumlah_orang > 0;
                     }
                 }
             @endphp
-            
+
             <button type="button" class="btn btn-primary btn-lg px-4" wire:click="nextStep"
                 @if (!$canProceed) disabled @endif>
                 Lanjutkan <i class="fas fa-arrow-right ms-2"></i>
@@ -475,7 +496,10 @@
                                     </tr>
                                     @if ($selectedKamar)
                                         @php
-                                            $selectedKamarData = collect($availableKamar)->firstWhere('id', $selectedKamar);
+                                            $selectedKamarData = collect($availableKamar)->firstWhere(
+                                                'id',
+                                                $selectedKamar,
+                                            );
                                         @endphp
                                         <tr>
                                             <td>Kamar:</td>
@@ -484,7 +508,10 @@
                                     @endif
                                     @if ($selectedRuang)
                                         @php
-                                            $selectedRuangData = collect($availableRuang)->firstWhere('id', $selectedRuang);
+                                            $selectedRuangData = collect($availableRuang)->firstWhere(
+                                                'id',
+                                                $selectedRuang,
+                                            );
                                         @endphp
                                         <tr>
                                             <td>Ruang:</td>
@@ -528,14 +555,29 @@
                                             {{ number_format($totalBiaya, 0, ',', '.') }}</h4>
                                     </div>
                                     <small class="text-muted">
-                                        {{ $layananData->tarif }} x {{ $totalHari }} {{ $layananData->satuan }}
+                                        {{ $layananData->tarif }} x {{ $totalHari }}
+                                        @if ($layananData->satuan == 'per_hari')
+                                            Hari
+                                        @elseif ($layananData->satuan == 'per_jam')
+                                            Jam
+                                        @elseif ($layananData->satuan == 'per_orang_kunjungan')
+                                            Orang/Kunjungan
+                                        @elseif ($layananData->satuan == 'per_bulan')
+                                            Bulan
+                                        @elseif ($layananData->satuan == 'per_orang_hari')
+                                            Orang/Hari
+                                        @elseif ($layananData->satuan == 'per_kamar_hari')
+                                            Kamar/Hari
+                                        @elseif ($layananData->satuan == 'per_kegiatan_hari')
+                                            Kegiatan/Hari
+                                        @endif
                                     </small>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Terms and Conditions -->
-                        <div class="mt-4">
+                        {{-- <div class="mt-4">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="terms" required>
                                 <label class="form-check-label" for="terms">
@@ -543,7 +585,7 @@
                                     yang berlaku
                                 </label>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -694,14 +736,14 @@
     </style>
 
     @push('scripts')
-<script>
-    window.addEventListener('update-url', event => {
-        const layananId = event.detail.layananId;
-        const newUrl = `/booking/${layananId}`;
-        window.history.pushState({}, '', newUrl);
-    });
-</script>
-@endpush
+        <script>
+            window.addEventListener('update-url', event => {
+                const layananId = event.detail.layananId;
+                const newUrl = `/booking/${layananId}`;
+                window.history.pushState({}, '', newUrl);
+            });
+        </script>
+    @endpush
 
 
     <!-- Loading Overlay -->

@@ -148,7 +148,21 @@
                                 <div class="col-6">
                                     <small class="text-muted d-flex align-items-center">
                                         <i class="fas fa-clock text-warning me-2"></i>
-                                        {{ $layanan->satuan }}
+                                                                            @if ($layanan->satuan == 'per_hari')
+                                        Per Hari
+                                    @elseif ($layanan->satuan == 'per_jam')
+                                        Per Jam
+                                    @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                        Per Orang/Kunjungan
+                                    @elseif ($layanan->satuan == 'per_bulan')
+                                        Per Bulan
+                                    @elseif ($layanan->satuan == 'per_orang_hari')
+                                        Per Orang/Hari
+                                    @elseif ($layanan->satuan == 'per_kamar_hari')
+                                        Per Kamar/Hari
+                                    @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                        Per Kegiatan/Hari
+                                    @endif
                                     </small>
                                 </div>
                             </div>
@@ -208,7 +222,7 @@
             </div>
             
             <div class="text-center mt-5">
-                <a href="/kamar" class="btn btn-outline-primary btn-lg px-5 py-3 rounded-pill">
+                <a href="{{ route('booking') }}" class="btn btn-outline-primary btn-lg px-5 py-3 rounded-pill">
                     <i class="fas fa-th-large me-2"></i>
                     Lihat Semua Layanan
                 </a>

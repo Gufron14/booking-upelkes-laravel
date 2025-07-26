@@ -89,7 +89,11 @@
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-door-open text-success me-2"></i>
                                     <small class="text-muted">
-                                        <strong>{{ $layanan->kamar->count() }}</strong> kamar
+                                       @if ($layanan->kamar->count() > 0)
+                                            <strong>{{ $layanan->kamar->count() }}</strong> Kamar
+                                       @else
+                                           <strong>{{ $layanan->ruang->count() }}</strong> Ruangan
+                                       @endif
                                     </small>
                                 </div>
                             </div>
@@ -139,6 +143,23 @@
                                 </div>
                             </div>
                         @endif
+                        @if ($layanan->ruang->count() > 0)
+                            <div class="mb-3">
+                                <small class="text-muted fw-semibold">Kode Ruangan:</small>
+                                <div class="d-flex flex-wrap gap-1 mt-1">
+                                    @foreach ($layanan->ruang->take(5) as $ruang)
+                                        <span class="badge bg-light text-dark border">
+                                            {{ $ruang->kode_ruang }}
+                                        </span>
+                                    @endforeach
+                                    @if ($layanan->ruang->count() > 5)
+                                        <span class="badge bg-secondary">
+                                            +{{ $layanan->ruang->count() - 5 }} lainnya
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
 
                         <!-- Harga dan Action -->
                         <div class="d-flex justify-content-between align-items-center">
@@ -171,11 +192,13 @@
                                     <i class="fas fa-eye me-1"></i>
                                     Detail
                                 </button>
-                                <a href="{{ route('bookingId', ['layanan_id' => $layanan->id]) }}"
-                                    class="btn btn-primary btn-sm">
-                                    <i class="fas fa-calendar-plus me-1"></i>
-                                    Booking
-                                </a>
+                                @if ($layanan->kamar->count() > 0 || $layanan->ruang->count() > 0)                                    
+                                    <a href="{{ route('bookingId', ['layanan_id' => $layanan->id]) }}"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="fas fa-calendar-plus me-1"></i>
+                                        Booking
+                                    </a>
+                                @endif
 
                             </div>
                         </div>
