@@ -18,16 +18,31 @@ z-index: 9999;
                 <x-nav-link :active="request()->routeIs('riwayat')" href="{{ route('riwayat') }}">Riwayat</x-nav-link>
                 {{-- <x-nav-link :active="request()->routeIs('')" href="">Ruangan</x-nav-link> --}}
             </ul>
-
             @auth
-                {{-- Form Logout --}}
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-danger fw-bold">Logout</button>
-                </form>
+                <div class="dropdown d-inline">
+                    <div class="fw-bold dropdown-toggle d-flex align-items-center text-light" type="button"
+                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ Auth::user()->nama }}
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('profil') }}">
+                                <i class="bi bi-person-lines-fill me-2"></i> Profil
+                            </a>
+                        </li>
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger" wire:confirm="Anda yakin ingin keluar?">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             @endauth
 
-            @guest                
+            @guest
                 <div class="d-flex gap-2">
                     <a href="{{ route('register') }}" class="btn btn-outline-light fw-bold">Daftar</a>
                     <a href="{{ route('login') }}" class="btn btn-light fw-bold">Login</a>

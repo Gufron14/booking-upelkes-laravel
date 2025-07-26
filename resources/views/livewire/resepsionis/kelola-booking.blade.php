@@ -25,12 +25,12 @@
     <div class="card mb-4">
         <div class="card-body">
             <div class="row g-3">
-                <div class="col-md-3">
-                    <label for="search" class="form-label">Cari Customer/Layanan</label>
+                <div class="col">
+                    <label for="search" class="form-label">Cari</label>
                     <input type="text" class="form-control" id="search" wire:model.live="search"
                         placeholder="Nama customer atau layanan...">
                 </div>
-                <div class="col-md-2">
+                <div class="col">
                     <label for="statusFilter" class="form-label">Status</label>
                     <select class="form-select" id="statusFilter" wire:model.live="statusFilter">
                         <option value="">Semua Status</option>
@@ -40,15 +40,15 @@
                         <option value="completed">Completed</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col">
                     <label for="dateFrom" class="form-label">Tanggal Dari</label>
                     <input type="date" class="form-control" id="dateFrom" wire:model.live="dateFrom">
                 </div>
-                <div class="col-md-2">
+                <div class="col">
                     <label for="dateTo" class="form-label">Tanggal Sampai</label>
                     <input type="date" class="form-control" id="dateTo" wire:model.live="dateTo">
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
+                <div class="col d-flex align-items-end">
                     <button type="button" class="btn btn-outline-secondary" wire:click="resetFilters">
                         <i class="fas fa-refresh me-1"></i>Reset Filter
                     </button>

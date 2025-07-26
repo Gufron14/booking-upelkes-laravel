@@ -2,6 +2,7 @@
 
 use App\Livewire\Home;
 use App\Livewire\Kamar;
+use App\Livewire\Profil;
 use App\Livewire\Booking;
 use App\Livewire\Payment;
 use App\Livewire\Riwayat;
@@ -51,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('booking/{layanan_id?}', Booking::class)->name('bookingId');
     Route::get('riwayat', Riwayat::class)->name('riwayat');
     Route::get('payment/{booking}', Payment::class)->name('payment');
+
+    Route::get('profil', Profil::class)->name('profil');
 });
 
 Route::middleware(['auth', 'role:admin'])->group( function () {
