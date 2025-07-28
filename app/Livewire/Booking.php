@@ -25,6 +25,7 @@ class Booking extends Component
     public $tanggal_checkout = '';
     public $tanggal_kunjungan = '';
     public $layananId;
+    public $layanan;
     public $layananData = null;
     public $availableKamar = [];
     public $availableRuang = [];
@@ -119,6 +120,21 @@ class Booking extends Component
         // Initialize empty arrays for availability
         $this->availableKamar = [];
         $this->availableRuang = [];
+
+                $this->layananId = $layanan_id;
+        $this->layanan = Layanan::findOrFail($layanan_id);
+        $this->loadAvailableRoomsAndSpaces();
+    }
+
+        public function loadAvailableRoomsAndSpaces()
+    {
+        if ($this->layanan->kamar()->exists()) {
+            $this->availableKamar = $this->layanan->kamar()->where('status', 'tersedia')->get();
+        }
+
+        if ($this->layanan->ruang()->exists()) {
+            $this->availableRuang = $this->layanan->ruang()->where('status', 'tersedia')->get();
+        }
     }
 
     public function selectLayanan($layananId)
@@ -131,6 +147,8 @@ class Booking extends Component
         // $this->resetSelection();
     }
 
+    
+
     public function loadLayananData()
     {
         if ($this->selectedLayanan) {
@@ -138,6 +156,8 @@ class Booking extends Component
             $this->checkAvailability();
         }
     }
+
+    
 
     public function updatedTanggalCheckin()
     {
@@ -196,8 +216,7 @@ class Booking extends Component
                       });
                 })->whereIn('status', ['booked', 'pending']);
             })
-            ->get()
-            ->toArray();
+            ->get();
 
         // Check available ruang
         $this->availableRuang = Ruang::where('layanan_id', $this->selectedLayanan)
@@ -343,15 +362,15 @@ class Booking extends Component
             $this->validate($rules);
             
             // Room selection validation
-            if ($this->layananData->requiresRoomSelection() && $this->layananData->kamar->count() > 0 && !$this->selectedKamar) {
-                session()->flash('error', 'Pilih kamar terlebih dahulu');
-                return;
-            }
-            
-            if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->selectedKamar) {
-                session()->flash('error', 'Pilih ruang terlebih dahulu');
-                return;
-            }
+if ($this->layananData->requiresRoomSelection() && $this->layananData->kamar->count() > 0 && !$this->selectedKamar) {
+    session()->flash('error', 'Pilih kamar terlebih dahulu');
+    return;
+}
+
+if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->selectedKamar) {
+    session()->flash('error', 'Pilih ruang terlebih dahulu');
+    return;
+}
         }
 
         $this->step++;

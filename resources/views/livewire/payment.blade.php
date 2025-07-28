@@ -217,15 +217,15 @@
                         <div class="bank-info mb-3 p-3 bg-light rounded">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="fas fa-university text-primary me-2"></i>
-                                <strong>Bank BCA</strong>
+                                <strong>Bank BJB</strong>
                             </div>
                             <div class="ms-4">
-                                <div>No. Rek: <strong>1234567890</strong></div>
-                                <div>A.n: <strong>UPELKES</strong></div>
+                                <div>No. Rek: <strong>0139280245001</strong></div>
+                                <div>A.n: <strong>BPP UPTD PELATIHAN KESEHATAN</strong></div>
                             </div>
                         </div>
 
-                        <div class="bank-info mb-3 p-3 bg-light rounded">
+                        {{-- <div class="bank-info mb-3 p-3 bg-light rounded">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="fas fa-university text-success me-2"></i>
                                 <strong>Bank Mandiri</strong>
@@ -234,7 +234,7 @@
                                 <div>No. Rek: <strong>0987654321</strong></div>
                                 <div>A.n: <strong>UPELKES</strong></div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <hr>
 

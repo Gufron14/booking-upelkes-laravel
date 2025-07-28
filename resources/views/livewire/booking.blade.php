@@ -177,67 +177,46 @@
                     </div>
 
                     <!-- Room/Space Selection -->
-                    @if (
-                        ($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) ||
-                            ($layananData->requiresTimeSelection() && $tanggal_checkin) ||
-                            ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
-                        @if (count($availableKamar) > 0 && $layananData->requiresRoomSelection())
-                            <div class="card border-0 shadow-sm mt-4">
-                                <div class="card-header bg-warning text-dark">
-                                    <h5 class="mb-0"><i class="fas fa-bed me-2"></i>Pilih Kamar</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row g-3">
-                                        @foreach ($availableKamar as $kamar)
-                                            <div class="col-md-4">
-                                                <div class="room-option {{ $selectedKamar == $kamar['id'] ? 'selected' : '' }}"
-                                                    wire:click="selectKamar({{ $kamar['id'] }})">
-                                                    <div class="text-center">
-                                                        <i class="fas fa-bed fa-2x mb-2"></i>
-                                                        <h6>Kamar {{ $kamar['nomor_kamar'] }}</h6>
-                                                        <small class="text-muted">{{ $kamar['status'] }}</small>
-                                                        @if ($selectedKamar == $kamar['id'])
-                                                            <div class="mt-2">
-                                                                <i class="fas fa-check-circle text-success"></i>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
+@if (count($availableKamar) > 0 || count($availableRuang) > 0)
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-door-open me-2"></i>Pilih Kamar/Ruang</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+@foreach ($availableKamar as $kamar)
+    <div class="col-md-4">
+        <div 
+            wire:click="selectKamar({{ $kamar->id }})" 
+            style="cursor:pointer; border: 2px solid {{ $selectedKamar == $kamar->id ? 'blue' : 'transparent' }}; padding: 10px; border-radius: 5px;"
+        >
+            <div class="text-center">
+                <i class="fas fa-bed fa-2x mb-2"></i>
+                <h6>Kamar {{ $kamar->nomor_kamar }}</h6>
+                <small class="text-muted">{{ $kamar->status }}</small>
+            </div>
+        </div>
+    </div>
+@endforeach
 
-                        @if (count($availableRuang) > 0 && !$selectedKamar)
-                            <div class="card border-0 shadow-sm mt-4">
-                                <div class="card-header bg-info text-white">
-                                    <h5 class="mb-0"><i class="fas fa-door-open me-2"></i>Pilih Ruang</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row g-3">
-                                        @foreach ($availableRuang as $ruang)
-                                            <div class="col-md-4">
-                                                <div class="room-option {{ $selectedRuang == $ruang['id'] ? 'selected' : '' }}"
-                                                    wire:click="selectRuang({{ $ruang['id'] }})">
-                                                    <div class="text-center">
-                                                        <i class="fas fa-door-open fa-2x mb-2"></i>
-                                                        <h6>{{ $ruang['kode_ruang'] }}</h6>
-                                                        @if ($selectedRuang == $ruang['id'])
-                                                            <div class="mt-2">
-                                                                <i class="fas fa-check-circle text-success"></i>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @endif
+@foreach ($availableRuang as $ruang)
+    <div class="col-md-4">
+        <div 
+            wire:click="selectRuang({{ $ruang->id }})" 
+            style="cursor:pointer; border: 2px solid {{ $selectedRuang == $ruang->id ? 'blue' : 'transparent' }}; padding: 10px; border-radius: 5px;"
+        >
+            <div class="text-center">
+                <i class="fas fa-door-open fa-2x mb-2"></i>
+                <h6>{{ $ruang->kode_ruang }}</h6>
+                <small class="text-muted">{{ $ruang->status }}</small>
+            </div>
+        </div>
+    </div>
+@endforeach
+            </div>
+        </div>
+    </div>
+@endif
                 @endif
             </div>
 

@@ -132,7 +132,7 @@
                                                                                  $totalJam = $jamMulai->diffInHours($jamSelesai);
                                                                                  echo "({$totalJam} jam)";
                                                                              } catch (\Exception $e) {
-                                                                                 echo "(Gagal Parsing Jam)";
+                                                                                 echo "";
                                                                              }
                                                                          @endphp
                                                                      </small>
