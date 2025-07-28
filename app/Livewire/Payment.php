@@ -40,7 +40,7 @@ class Payment extends Component
         // Cek deadline pembayaran
         if ($this->booking->status !== 'waiting_payment' || now()->greaterThan($this->booking->payment_deadline)) {
             session()->flash('error', 'Waktu pembayaran telah habis atau pembayaran sudah diproses.');
-            return redirect()->route('booking.history');
+            return redirect()->route('riwayat');
         }
     }
 
