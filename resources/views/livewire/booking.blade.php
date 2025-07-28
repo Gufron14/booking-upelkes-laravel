@@ -407,7 +407,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Nomor HP *</label>
-                                <input type="text" class="form-control @error('no_hp') is-invalid @enderror"
+                                <input type="number" class="form-control @error('no_hp') is-invalid @enderror"
                                     wire:model="no_hp" placeholder="Masukkan nomor HP">
                                 @error('no_hp')
                                     <div class="invalid-feedback">{{ $message }}</div>

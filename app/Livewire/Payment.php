@@ -51,7 +51,7 @@ class Payment extends Component
         // Cek deadline sebelum upload
         if (now()->greaterThan($this->booking->payment_deadline)) {
             session()->flash('error', 'Waktu pembayaran telah habis.');
-            return redirect()->route('booking');
+            return redirect()->route('');
         }
 
         try {

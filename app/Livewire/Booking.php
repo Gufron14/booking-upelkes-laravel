@@ -430,7 +430,7 @@ if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->s
                 'ruang_id' => $this->selectedRuang,
                 'jumlah_orang' => $this->jumlah_orang,
                 'status' => 'waiting_payment',
-                'payment_deadline' => Carbon::now()->addMinutes(1), // Set payment deadline to 1 day from now
+                'payment_deadline' => Carbon::now()->addMinutes(5), // Set payment deadline to 1 day from now
                 // 'total_biaya' => $this->totalBiaya,
             ];
 

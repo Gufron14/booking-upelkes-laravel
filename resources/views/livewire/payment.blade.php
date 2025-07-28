@@ -191,7 +191,34 @@
                                     <span wire:loading.remove>
                                         <i class="fas fa-upload me-2"></i>
                                         Upload Bukti Pembayaran
+                                                (<span id="countdown-{{ $booking->id }}"></span>)
                                     </span>
+                                        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if($booking->payment_deadline)
+                let deadline{{ $booking->id }} = @json(\Carbon\Carbon::parse($booking->payment_deadline)->format('Y-m-d H:i:s'));
+                let countDownDate{{ $booking->id }} = new Date(deadline{{ $booking->id }}.replace(/-/g, '/')).getTime();
+                let btnBayar{{ $booking->id }} = document.getElementById('btn-bayar-{{ $booking->id }}');
+                let timer{{ $booking->id }} = document.getElementById('countdown-{{ $booking->id }}');
+                let x{{ $booking->id }} = setInterval(function() {
+                    let now = new Date().getTime();
+                    let distance = countDownDate{{ $booking->id }} - now;
+                    if (distance > 0) {
+                        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        timer{{ $booking->id }}.innerHTML = minutes + 'm ' + seconds + 's';
+                        btnBayar{{ $booking->id }}.classList.remove('disabled');
+                    } else {
+                        timer{{ $booking->id }}.innerHTML = 'Expired';
+                        btnBayar{{ $booking->id }}.classList.add('disabled');
+                        btnBayar{{ $booking->id }}.setAttribute('tabindex', '-1');
+                        btnBayar{{ $booking->id }}.setAttribute('aria-disabled', 'true');
+                        clearInterval(x{{ $booking->id }});
+                    }
+                }, 1000);
+            @endif
+        });
+    </script>
                                     <span wire:loading>
                                         <i class="fas fa-spinner fa-spin me-2"></i>
                                         Mengupload...
