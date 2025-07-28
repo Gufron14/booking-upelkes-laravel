@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             UserSeeder::class,
             FasilitasSeeder::class,
-            LayananSeeder::class,
-            FasilitasLayananSeeder::class,
-            KamarSeeder::class,
-            RuangSeeder::class,
+            // LayananSeeder::class,
+            // FasilitasLayananSeeder::class,
+            // KamarSeeder::class,
+            // RuangSeeder::class,
         ]);
     }
 }
