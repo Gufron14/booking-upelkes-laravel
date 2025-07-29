@@ -50,8 +50,8 @@ class CreateLayanan extends Component
         'jenis' => 'required|in:kamar,ruangan',
         'satuan' => 'required|string',
         'selectedFasilitas' => 'array',
-        'nomor_kamar' => 'required_if:jenis,kamar|string|max:255',
-        'kode_ruang' => 'required_if:jenis,ruangan|string|max:255',
+        // 'nomor_kamar' => 'required_if:jenis,kamar|string|max:255',
+        // 'kode_ruang' => 'required_if:jenis,ruangan|string|max:255',
     ];
 
     protected $messages = [
@@ -113,18 +113,18 @@ class CreateLayanan extends Component
             }
 
             // Create Kamar or Ruang based on jenis
-            if ($this->jenis === 'kamar') {
-                Kamar::create([
-                    'layanan_id' => $layanan->id,
-                    'nomor_kamar' => $this->nomor_kamar,
-                    'status' => 'tersedia',
-                ]);
-            } elseif ($this->jenis === 'ruangan') {
-                Ruang::create([
-                    'layanan_id' => $layanan->id,
-                    'kode_ruang' => $this->kode_ruang,
-                ]);
-            }
+            // if ($this->jenis === 'kamar') {
+            //     Kamar::create([
+            //         'layanan_id' => $layanan->id,
+            //         'nomor_kamar' => $this->nomor_kamar,
+            //         'status' => 'tersedia',
+            //     ]);
+            // } elseif ($this->jenis === 'ruangan') {
+            //     Ruang::create([
+            //         'layanan_id' => $layanan->id,
+            //         'kode_ruang' => $this->kode_ruang,
+            //     ]);
+            // }
 
             // Attach selected fasilitas using pivot table
             if (!empty($this->selectedFasilitas)) {

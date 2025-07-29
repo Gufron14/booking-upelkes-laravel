@@ -245,7 +245,7 @@
                                     </tr>
                                     <tr>
                                         <td class="fw-semibold">No. Telepon:</td>
-                                        <td>{{ $selectedBooking->user->no_telepon ?? '-' }}</td>
+                                        <td>{{ $selectedBooking->user->no_hp ?? '-' }}</td>
                                     </tr>
                                 </table>
                             </div>

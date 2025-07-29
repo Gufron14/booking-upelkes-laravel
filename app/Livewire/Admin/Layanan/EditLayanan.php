@@ -58,8 +58,8 @@ class EditLayanan extends Component
         'jenis' => 'required|in:kamar,ruangan',
         'satuan' => 'required|string',
         'selectedFasilitas' => 'array',
-        'nomor_kamar' => 'required_if:jenis,kamar|string|max:255',
-        'kode_ruang' => 'required_if:jenis,ruangan|string|max:255',
+        // 'nomor_kamar' => 'required_if:jenis,kamar|string|max:255',
+        // 'kode_ruang' => 'required_if:jenis,ruangan|string|max:255',
     ];
 
     protected $messages = [
@@ -89,13 +89,13 @@ class EditLayanan extends Component
         $this->satuan = $this->layanan->satuan;
         
         // Determine jenis and populate related fields
-        if ($this->layanan->kamar->isNotEmpty()) {
-            $this->jenis = 'kamar';
-            $this->nomor_kamar = $this->layanan->kamar->first()->nomor_kamar;
-        } elseif ($this->layanan->ruang->isNotEmpty()) {
-            $this->jenis = 'ruangan';
-            $this->kode_ruang = $this->layanan->ruang->first()->kode_ruang;
-        }
+        // if ($this->layanan->kamar->isNotEmpty()) {
+        //     $this->jenis = 'kamar';
+        //     $this->nomor_kamar = $this->layanan->kamar->first()->nomor_kamar;
+        // } elseif ($this->layanan->ruang->isNotEmpty()) {
+        //     $this->jenis = 'ruangan';
+        //     $this->kode_ruang = $this->layanan->ruang->first()->kode_ruang;
+        // }
 
         
         // Load selected fasilitas
@@ -158,32 +158,32 @@ class EditLayanan extends Component
             }
 
             // Update Kamar or Ruang based on jenis
-            if ($this->jenis === 'kamar') {
-                // Delete ruang if exists
-                if ($this->layanan->ruang->isNotEmpty()) {
-                    $this->layanan->ruang->first()->delete();
-                }
+            // if ($this->jenis === 'kamar') {
+            //     // Delete ruang if exists
+            //     if ($this->layanan->ruang->isNotEmpty()) {
+            //         $this->layanan->ruang->first()->delete();
+            //     }
                 
-                // Update or create kamar
-                Kamar::updateOrCreate(
-                    ['layanan_id' => $this->layanan->id],
-                    [
-                        'nomor_kamar' => $this->nomor_kamar,
-                        'status' => 'tersedia',
-                    ]
-                );
-            } elseif ($this->jenis === 'ruangan') {
-                // Delete kamar if exists
-                if ($this->layanan->kamar->isNotEmpty()) {
-                    $this->layanan->kamar->first()->delete();
-                }
+            //     // Update or create kamar
+            //     Kamar::updateOrCreate(
+            //         ['layanan_id' => $this->layanan->id],
+            //         [
+            //             'nomor_kamar' => $this->nomor_kamar,
+            //             'status' => 'tersedia',
+            //         ]
+            //     );
+            // } elseif ($this->jenis === 'ruangan') {
+            //     // Delete kamar if exists
+            //     if ($this->layanan->kamar->isNotEmpty()) {
+            //         $this->layanan->kamar->first()->delete();
+            //     }
                 
-                // Update or create ruang
-                Ruang::updateOrCreate(
-                    ['layanan_id' => $this->layanan->id],
-                    ['kode_ruang' => $this->kode_ruang]
-                );
-            }
+            //     // Update or create ruang
+            //     Ruang::updateOrCreate(
+            //         ['layanan_id' => $this->layanan->id],
+            //         ['kode_ruang' => $this->kode_ruang]
+            //     );
+            // }
 
 
             // Sync selected fasilitas

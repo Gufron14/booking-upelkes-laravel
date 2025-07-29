@@ -150,7 +150,7 @@
                             @endif
 
                             {{-- Summary info --}}
-                            @if (
+                            {{-- @if (
                                 ($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) ||
                                     ($layananData->requiresTimeSelection() && $tanggal_checkin && $jam_mulai && $jam_selesai) ||
                                     ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
@@ -171,52 +171,48 @@
                                     <br>
                                     <strong>Estimasi Biaya:</strong> Rp {{ number_format($totalBiaya, 0, ',', '.') }}
                                 </div>
-                            @endif
+                            @endif --}}
 
                         </div>
                     </div>
 
                     <!-- Room/Space Selection -->
-@if (count($availableKamar) > 0 || count($availableRuang) > 0)
-    <div class="card border-0 shadow-sm mt-4">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-door-open me-2"></i>Pilih Kamar/Ruang</h5>
-        </div>
-        <div class="card-body">
-            <div class="row g-3">
-@foreach ($availableKamar as $kamar)
-    <div class="col-md-4">
-        <div 
-            wire:click="selectKamar({{ $kamar->id }})" 
-            style="cursor:pointer; border: 2px solid {{ $selectedKamar == $kamar->id ? 'blue' : 'transparent' }}; padding: 10px; border-radius: 5px;"
-        >
-            <div class="text-center">
-                <i class="fas fa-bed fa-2x mb-2"></i>
-                <h6>Kamar {{ $kamar->nomor_kamar }}</h6>
-                <small class="text-muted">{{ $kamar->status }}</small>
-            </div>
-        </div>
-    </div>
-@endforeach
+                    @if (count($availableKamar) > 0 || count($availableRuang) > 0)
+                        <div class="card border-0 shadow-sm mt-4">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="fas fa-door-open me-2"></i>Pilih Kamar/Ruang</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    @foreach ($availableKamar as $kamar)
+                                        <div class="col-md-4">
+                                            <div wire:click="selectKamar({{ $kamar->id }})"
+                                                style="cursor:pointer; border: 2px solid {{ $selectedKamar == $kamar->id ? 'blue' : 'transparent' }}; padding: 10px; border-radius: 5px;">
+                                                <div class="text-center">
+                                                    <i class="fas fa-bed fa-2x mb-2"></i>
+                                                    <h6>Kamar {{ $kamar->nomor_kamar }}</h6>
+                                                    <small class="text-muted">{{ $kamar->status }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
 
-@foreach ($availableRuang as $ruang)
-    <div class="col-md-4">
-        <div 
-            wire:click="selectRuang({{ $ruang->id }})" 
-            style="cursor:pointer; border: 2px solid {{ $selectedRuang == $ruang->id ? 'blue' : 'transparent' }}; padding: 10px; border-radius: 5px;"
-        >
-            <div class="text-center">
-                <i class="fas fa-door-open fa-2x mb-2"></i>
-                <h6>{{ $ruang->kode_ruang }}</h6>
-                <small class="text-muted">{{ $ruang->status }}</small>
-            </div>
-        </div>
-    </div>
-@endforeach
-            </div>
-        </div>
-    </div>
-@endif
+                                    @foreach ($availableRuang as $ruang)
+                                        <div class="col-md-4">
+                                            <div wire:click="selectRuang({{ $ruang['id'] }})"
+                                                style="cursor:pointer; border: 2px solid {{ $selectedRuang == $ruang['id'] ? 'blue' : 'transparent' }}; padding: 10px; border-radius: 5px;">
+                                                <div class="text-center">
+                                                    <i class="fas fa-door-open fa-2x mb-2"></i>
+                                                    <h6>{{ $ruang['kode_ruang'] }}</h6>
+                                                    {{-- <small class="text-muted">{{ $ruang['status'] }}</small> --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             </div>
 
@@ -373,9 +369,15 @@
             @endphp
 
             <button type="button" class="btn btn-primary btn-lg px-4" wire:click="nextStep"
-                @if (!$canProceed) disabled @endif>
+                {{ !$canProceed || !$selectedLayanan ? 'disabled' : '' }}>
                 Lanjutkan <i class="fas fa-arrow-right ms-2"></i>
             </button>
+        </div>
+    @endif
+    @if (session()->has('error'))
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
@@ -448,19 +450,35 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <h6 class="fw-bold mb-3">Detail Layanan</h6>
-                                <table class="table table-borderless">
+<div class="col-md-6">
+                            <h6 class="fw-bold mb-3">Detail Layanan</h6>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td>Layanan:</td>
+                                    <td class="fw-semibold">{{ $layananData->nama_layanan }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Kategori:</td>
+                                    <td><span class="badge bg-primary">{{ ucfirst($layananData->kategori) }}</span></td>
+                                </tr>
+
+                                @if ($layananData->satuan === \App\Models\Layanan::UNIT_PER_JAM)
                                     <tr>
-                                        <td>Layanan:</td>
-                                        <td class="fw-semibold">{{ $layananData->nama_layanan }}</td>
+                                        <td>Tanggal:</td>
+                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Kategori:</td>
-                                        <td><span
-                                                class="badge bg-primary">{{ ucfirst($layananData->kategori) }}</span>
-                                        </td>
+                                        <td>Waktu:</td>
+                                        <td class="fw-semibold">{{ $jam_mulai }} - {{ $jam_selesai }}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Durasi:</td>
+                                        <td class="fw-semibold">{{ $totalJam }} jam</td>
+                                    </tr>
+                                @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_HARI ||
+                                        $layananData->satuan === \App\Models\Layanan::UNIT_PER_KAMAR_HARI ||
+                                        $layananData->satuan === \App\Models\Layanan::UNIT_PER_KEGIATAN_HARI ||
+                                        $layananData->satuan === \App\Models\Layanan::UNIT_PER_ORANG_HARI)
                                     <tr>
                                         <td>Check-in:</td>
                                         <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</td>
@@ -473,32 +491,55 @@
                                         <td>Durasi:</td>
                                         <td class="fw-semibold">{{ $totalHari }} hari</td>
                                     </tr>
-                                    @if ($selectedKamar)
-                                        @php
-                                            $selectedKamarData = collect($availableKamar)->firstWhere(
-                                                'id',
-                                                $selectedKamar,
-                                            );
-                                        @endphp
-                                        <tr>
-                                            <td>Kamar:</td>
-                                            <td class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</td>
-                                        </tr>
-                                    @endif
-                                    @if ($selectedRuang)
-                                        @php
-                                            $selectedRuangData = collect($availableRuang)->firstWhere(
-                                                'id',
-                                                $selectedRuang,
-                                            );
-                                        @endphp
-                                        <tr>
-                                            <td>Ruang:</td>
-                                            <td class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</td>
-                                        </tr>
-                                    @endif
-                                </table>
-                            </div>
+                                @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_BULAN)
+                                    <tr>
+                                        <td>Check-in:</td>
+                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Check-out:</td>
+                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Durasi:</td>
+                                        <td class="fw-semibold">{{ $totalBulan }} bulan</td>
+                                    </tr>
+                                @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_ORANG_KUNJUNGAN)
+                                    <tr>
+                                        <td>Tanggal Kunjungan:</td>
+                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_kunjungan)) }}</td>
+                                    </tr>
+                                @endif
+
+                                @if ($layananData->requiresPersonCount())
+                                    <tr>
+                                        <td>Jumlah Orang:</td>
+                                        <td class="fw-semibold">{{ $jumlah_orang }} orang</td>
+                                    </tr>
+                                @endif
+
+                                @if ($selectedKamar)
+                                    @php
+                                        $selectedKamarData = collect($availableKamar)->firstWhere('id', $selectedKamar);
+                                    @endphp
+                                    <tr>
+                                        <td>Kamar:</td>
+                                        <td class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</td>
+                                    </tr>
+                                @endif
+
+                                @if ($selectedRuang)
+                                    @php
+                                        $selectedRuangData = collect($availableRuang)->firstWhere('id', $selectedRuang);
+                                    @endphp
+                                    <tr>
+                                        <td>Ruang:</td>
+                                        <td class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</td>
+                                    </tr>
+                                @endif
+                            </table>
+                        </div>
+
                             <div class="col-md-6">
                                 <h6 class="fw-bold mb-3">Data Pemesan</h6>
                                 <table class="table table-borderless">
@@ -534,21 +575,17 @@
                                             {{ number_format($totalBiaya, 0, ',', '.') }}</h4>
                                     </div>
                                     <small class="text-muted">
-                                        {{ $layananData->tarif }} x {{ $totalHari }}
-                                        @if ($layananData->satuan == 'per_hari')
-                                            Hari
-                                        @elseif ($layananData->satuan == 'per_jam')
-                                            Jam
-                                        @elseif ($layananData->satuan == 'per_orang_kunjungan')
-                                            Orang/Kunjungan
+                                        {{ $layananData->tarif }} x
+                                        @if ($layananData->satuan == 'per_hari' || $layananData->satuan == 'per_kamar_hari' || $layananData->satuan == 'per_kegiatan_hari' || $layananData->satuan == 'per_orang_hari')
+                                            {{ $totalHari }} Hari
                                         @elseif ($layananData->satuan == 'per_bulan')
-                                            Bulan
-                                        @elseif ($layananData->satuan == 'per_orang_hari')
-                                            Orang/Hari
-                                        @elseif ($layananData->satuan == 'per_kamar_hari')
-                                            Kamar/Hari
-                                        @elseif ($layananData->satuan == 'per_kegiatan_hari')
-                                            Kegiatan/Hari
+                                            {{ $totalBulan }} Bulan
+                                        @elseif ($layananData->satuan == 'per_jam')
+                                            {{ $totalJam }} Jam
+                                        @elseif ($layananData->satuan == 'per_orang_kunjungan')
+                                            1 Orang/Kunjungan
+                                        @else
+                                            {{ $totalHari }} Hari
                                         @endif
                                     </small>
                                 </div>
@@ -723,17 +760,5 @@
             });
         </script>
     @endpush
-
-
-    <!-- Loading Overlay -->
-    {{-- <div wire:loading class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-        style="background: rgba(0,0,0,0.5); z-index: 9999;">
-        <div class="text-center text-white">
-            <div class="spinner-border mb-3" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p>Memproses booking...</p>
-        </div>
-    </div> --}}
 
 </div>

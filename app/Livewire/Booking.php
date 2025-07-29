@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Title;
 
 #[Title('Booking Ruangan | Upelkes Jabar')]
-
 class Booking extends Component
 {
     public $step = 1;
@@ -38,7 +37,6 @@ class Booking extends Component
     public $jumlah_orang = 1;
     public $totalJam = 0;
 
-    
     // User data
     public $nama = '';
     public $email = '';
@@ -86,7 +84,6 @@ class Booking extends Component
 
         return $rules;
     }
-    
 
     protected $messages = [
         'selectedLayanan.required' => 'Pilih layanan terlebih dahulu',
@@ -121,19 +118,19 @@ class Booking extends Component
         $this->availableKamar = [];
         $this->availableRuang = [];
 
-                $this->layananId = $layanan_id;
+        $this->layananId = $layanan_id;
         $this->layanan = Layanan::findOrFail($layanan_id);
         $this->loadAvailableRoomsAndSpaces();
     }
 
-        public function loadAvailableRoomsAndSpaces()
+    public function loadAvailableRoomsAndSpaces()
     {
         if ($this->layanan->kamar()->exists()) {
             $this->availableKamar = $this->layanan->kamar()->where('status', 'tersedia')->get();
         }
 
         if ($this->layanan->ruang()->exists()) {
-            $this->availableRuang = $this->layanan->ruang()->where('status', 'tersedia')->get();
+            $this->availableRuang = $this->layanan->ruang()->get();
         }
     }
 
@@ -147,8 +144,6 @@ class Booking extends Component
         // $this->resetSelection();
     }
 
-    
-
     public function loadLayananData()
     {
         if ($this->selectedLayanan) {
@@ -156,8 +151,6 @@ class Booking extends Component
             $this->checkAvailability();
         }
     }
-
-    
 
     public function updatedTanggalCheckin()
     {
@@ -206,29 +199,31 @@ class Booking extends Component
         // Check available kamar
         $this->availableKamar = Kamar::where('layanan_id', $this->selectedLayanan)
             ->where('status', 'tersedia')
-            ->whereDoesntHave('bookings', function($query) use ($startDate, $endDate) {
-                $query->where(function($q) use ($startDate, $endDate) {
-                    $q->whereBetween('tanggal_checkin', [$startDate, $endDate])
-                      ->orWhereBetween('tanggal_checkout', [$startDate, $endDate])
-                      ->orWhere(function($q2) use ($startDate, $endDate) {
-                          $q2->where('tanggal_checkin', '<=', $startDate)
-                             ->where('tanggal_checkout', '>=', $endDate);
-                      });
-                })->whereIn('status', ['booked', 'pending']);
+            ->whereDoesntHave('bookings', function ($query) use ($startDate, $endDate) {
+                $query
+                    ->where(function ($q) use ($startDate, $endDate) {
+                        $q->whereBetween('tanggal_checkin', [$startDate, $endDate])
+                            ->orWhereBetween('tanggal_checkout', [$startDate, $endDate])
+                            ->orWhere(function ($q2) use ($startDate, $endDate) {
+                                $q2->where('tanggal_checkin', '<=', $startDate)->where('tanggal_checkout', '>=', $endDate);
+                            });
+                    })
+                    ->whereIn('status', ['booked', 'pending']);
             })
             ->get();
 
         // Check available ruang
         $this->availableRuang = Ruang::where('layanan_id', $this->selectedLayanan)
-            ->whereDoesntHave('bookings', function($query) use ($startDate, $endDate) {
-                $query->where(function($q) use ($startDate, $endDate) {
-                    $q->whereBetween('tanggal_checkin', [$startDate, $endDate])
-                      ->orWhereBetween('tanggal_checkout', [$startDate, $endDate])
-                      ->orWhere(function($q2) use ($startDate, $endDate) {
-                          $q2->where('tanggal_checkin', '<=', $startDate)
-                             ->where('tanggal_checkout', '>=', $endDate);
-                      });
-                })->whereIn('status', ['booked', 'pending']);
+            ->whereDoesntHave('bookings', function ($query) use ($startDate, $endDate) {
+                $query
+                    ->where(function ($q) use ($startDate, $endDate) {
+                        $q->whereBetween('tanggal_checkin', [$startDate, $endDate])
+                            ->orWhereBetween('tanggal_checkout', [$startDate, $endDate])
+                            ->orWhere(function ($q2) use ($startDate, $endDate) {
+                                $q2->where('tanggal_checkin', '<=', $startDate)->where('tanggal_checkout', '>=', $endDate);
+                            });
+                    })
+                    ->whereIn('status', ['booked', 'pending']);
             })
             ->get()
             ->toArray();
@@ -252,11 +247,11 @@ class Booking extends Component
                         // Extract time part if it's a datetime object or string
                         $jamMulaiStr = is_object($this->jam_mulai) ? $this->jam_mulai->format('H:i:s') : $this->jam_mulai;
                         $jamSelesaiStr = is_object($this->jam_selesai) ? $this->jam_selesai->format('H:i:s') : $this->jam_selesai;
-                        
+
                         // Create Carbon instances for the same date with different times
                         $jamMulai = Carbon::parse($this->tanggal_checkin . ' ' . $jamMulaiStr);
                         $jamSelesai = Carbon::parse($this->tanggal_checkin . ' ' . $jamSelesaiStr);
-                        
+
                         $this->totalJam = $jamMulai->diffInHours($jamSelesai);
                         $this->totalBiaya = $this->totalJam * $this->layananData->tarif;
                     } catch (\Exception $e) {
@@ -340,7 +335,7 @@ class Booking extends Component
         if ($this->step == 1) {
             // Basic validation
             $rules = ['selectedLayanan' => 'required'];
-            
+
             // Date validation based on unit type
             if ($this->layananData->requiresDateRange()) {
                 $rules['tanggal_checkin'] = 'required|date|after_or_equal:today';
@@ -352,25 +347,27 @@ class Booking extends Component
             } elseif ($this->layananData->satuan === 'per_orang_kunjungan') {
                 $rules['tanggal_kunjungan'] = 'required|date|after_or_equal:today';
             }
-            
+
             // Person count validation
             if ($this->layananData->requiresPersonCount()) {
                 $maxCapacity = $this->layananData->kapasitas ?? 100;
                 $rules['jumlah_orang'] = "required|integer|min:1|max:{$maxCapacity}";
             }
-            
-            $this->validate($rules);
-            
-            // Room selection validation
-if ($this->layananData->requiresRoomSelection() && $this->layananData->kamar->count() > 0 && !$this->selectedKamar) {
-    session()->flash('error', 'Pilih kamar terlebih dahulu');
-    return;
-}
 
-if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->selectedKamar) {
-    session()->flash('error', 'Pilih ruang terlebih dahulu');
-    return;
-}
+            $this->validate($rules);
+
+            // Room selection validation
+            if ($this->layananData && $this->layananData->requiresRoomSelection()) {
+                if (empty($this->selectedKamar) && empty($this->selectedRuang)) {
+                    $this->addError('room_selection', 'Anda harus memilih kamar atau ruang terlebih dahulu.');
+                    return; // Prevent moving to next step
+                }
+            }
+
+            if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->selectedKamar) {
+                session()->flash('error', 'Pilih ruang terlebih dahulu');
+                return;
+            }
         }
 
         $this->step++;
@@ -430,7 +427,7 @@ if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->s
                 'ruang_id' => $this->selectedRuang,
                 'jumlah_orang' => $this->jumlah_orang,
                 'status' => 'waiting_payment',
-                'payment_deadline' => Carbon::now()->addMinutes(5), // Set payment deadline to 1 day from now
+                'payment_deadline' => Carbon::now()->addHours(1), // Set payment deadline to 1 day from now
                 // 'total_biaya' => $this->totalBiaya,
             ];
 
@@ -453,14 +450,12 @@ if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->s
             // Create booking
             $booking = ModelsBooking::create($bookingData);
 
-
             DB::commit();
 
             session()->flash('success', 'Booking berhasil dibuat!');
-            
+
             // Redirect to payment page with Livewire component
             return $this->redirect('/payment/' . $booking->id, navigate: true);
-
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -490,10 +485,15 @@ if ($this->layananData->ruang->count() > 0 && !$this->selectedRuang && !$this->s
 
     public function render()
     {
-        $layananList = Layanan::with(['gambar', 'kamar', 'ruang'])->get();
-        
+        $layananList = Layanan::with(['gambar', 'kamar', 'ruang'])
+            ->whereHas('kamar', function ($query) {
+                $query->where('status', 'tersedia');
+            })
+            ->orWhereHas('ruang')
+            ->get();
+
         return view('livewire.booking', [
-            'layananList' => $layananList
+            'layananList' => $layananList,
         ]);
     }
 }

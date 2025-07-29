@@ -42,6 +42,12 @@ class Riwayat extends Component
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // Hitung Total Biaya Satuan/Durasi x Harga Tarif Layanan
+        foreach ($bookings as $booking) {
+            $booking->total_biaya = $booking->calculateTotal($booking);
+            $booking->duration = $booking->tanggal_checkin->diffInDays($booking->tanggal_checkout);
+        }
+
         return view('livewire.riwayat', compact('bookings'));
     }
 }

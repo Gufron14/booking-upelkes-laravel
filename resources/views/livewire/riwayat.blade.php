@@ -166,7 +166,7 @@
                                                                  <small class="text-muted">Total Biaya:</small>
                                                              </div>
                                                              <p class="fw-bold text-success mb-0 fs-5">
-                                                                 Rp {{ number_format($booking->total_biaya ?: $booking->calculateTotal(), 0, ',', '.') }}
+                                                                 Rp {{ number_format($booking->total_biaya, 0, ',', '.') }}
                                                              </p>
                                                              <small class="text-muted">{{ $booking->layanan->satuan_label ?? '' }}</small>
                                                          </div>
@@ -272,30 +272,30 @@
                                 <i class="fas fa-chart-bar me-2"></i>Ringkasan Booking
                             </h5>
                             <div class="row text-center">
-                                <div class="col-md-3">
+                                <div class="col">
                                     <div class="p-3">
                                         <h3 class="fw-bold text-warning">{{ $bookings->where('status', 'pending')->count() }}</h3>
                                         <p class="text-muted mb-0">Pending</p>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col">
                                     <div class="p-3">
-                                        <h3 class="fw-bold text-success">{{ $bookings->where('status', 'confirmed')->count() }}</h3>
+                                        <h3 class="fw-bold text-success">{{ $bookings->where('status', 'booked')->count() }}</h3>
                                         <p class="text-muted mb-0">Confirmed</p>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col">
                                     <div class="p-3">
                                         <h3 class="fw-bold text-danger">{{ $bookings->where('status', 'cancelled')->count() }}</h3>
                                         <p class="text-muted mb-0">Cancelled</p>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <div class="p-3">
                                         <h3 class="fw-bold text-primary">Rp {{ number_format($bookings->where('status', '!=', 'cancelled')->sum($booking->calculateTotal()), 0, ',', '.') }}</h3>
                                         <p class="text-muted mb-0">Total Biaya</p>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

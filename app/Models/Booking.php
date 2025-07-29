@@ -65,7 +65,48 @@ class Booking extends Model
     // Methods
     public function getDurationAttribute()
     {
-        return $this->tanggal_checkin->diffInDays($this->tanggal_checkout);
+        if (!$this->layanan) {
+            return 0;
+        }
+
+        switch ($this->layanan->satuan) {
+            case \App\Models\Layanan::UNIT_PER_JAM:
+                if ($this->jam_mulai && $this->jam_selesai && $this->tanggal_checkin) {
+                    try {
+                        $start = Carbon::parse("{$this->tanggal_checkin} {$this->jam_mulai}");
+                        $end = Carbon::parse("{$this->tanggal_checkin} {$this->jam_selesai}");
+                        if ($end->lessThanOrEqualTo($start)) {
+                            $end->addDay();
+                        }
+                        return $start->diffInHours($end);
+                    } catch (\Exception $e) {
+                        return 0;
+                    }
+                }
+                return 0;
+
+            case \App\Models\Layanan::UNIT_PER_HARI:
+            case \App\Models\Layanan::UNIT_PER_ORANG_HARI:
+            case \App\Models\Layanan::UNIT_PER_KAMAR_HARI:
+            case \App\Models\Layanan::UNIT_PER_KEGIATAN_HARI:
+                if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                    return max(1, $this->tanggal_checkin->diffInDays($this->tanggal_checkout));
+                }
+                return 0;
+
+            default:
+                return 0;
+        }
+    }
+
+    public function getTotalBulanAttribute()
+    {
+        if ($this->layanan && $this->layanan->satuan === \App\Models\Layanan::UNIT_PER_BULAN) {
+            if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                return max(1, $this->tanggal_checkin->diffInMonths($this->tanggal_checkout));
+            }
+        }
+        return 0;
     }
 
     public function getFormattedCheckinAttribute()
@@ -83,71 +124,70 @@ class Booking extends Model
         return $this->status === 'waiting_payment' && $this->tanggal_checkin->isFuture();
     }
 
-public function calculateTotal()
-{
-    if (!$this->layanan) {
-        return 0;
-    }
+    public function calculateTotal()
+    {
+        if (!$this->layanan) {
+            return 0;
+        }
 
-    $layanan = $this->layanan;
+        $layanan = $this->layanan;
 
-    try {
-        $checkin = Carbon::parse($this->tanggal_checkin);
-        $checkout = Carbon::parse($this->tanggal_checkout);
-    } catch (\Exception $e) {
-        return 0;
-    }
+        try {
+            $checkin = Carbon::parse($this->tanggal_checkin);
+            $checkout = Carbon::parse($this->tanggal_checkout);
+        } catch (\Exception $e) {
+            return 0;
+        }
 
-    // Konversi tarif ke float, hilangkan pemisah ribuan/koma desimal jika perlu
-    $tarif = floatval(preg_replace('/[^\d.]/', '', $layanan->tarif ?? 0));
+        // Konversi tarif ke float, hilangkan pemisah ribuan/koma desimal jika perlu
+        $tarif = floatval(preg_replace('/[^\d.]/', '', $layanan->tarif ?? 0));
 
-    switch ($layanan->satuan) {
-        case Layanan::UNIT_PER_JAM:
-            if ($this->jam_mulai && $this->jam_selesai) {
-                try {
-                    $jamMulai = Carbon::parse("{$this->tanggal_checkin} {$this->jam_mulai}");
-                    $jamSelesai = Carbon::parse("{$this->tanggal_checkin} {$this->jam_selesai}");
+        switch ($layanan->satuan) {
+            case Layanan::UNIT_PER_JAM:
+                if ($this->jam_mulai && $this->jam_selesai) {
+                    try {
+                        $jamMulai = Carbon::parse("{$this->tanggal_checkin} {$this->jam_mulai}");
+                        $jamSelesai = Carbon::parse("{$this->tanggal_checkin} {$this->jam_selesai}");
 
-                    if ($jamSelesai->lessThanOrEqualTo($jamMulai)) {
-                        $jamSelesai->addDay();
+                        if ($jamSelesai->lessThanOrEqualTo($jamMulai)) {
+                            $jamSelesai->addDay();
+                        }
+
+                        $totalJam = $jamMulai->diffInHours($jamSelesai);
+                        return $totalJam * $tarif;
+                    } catch (\Exception $e) {
+                        return $tarif;
                     }
-
-                    $totalJam = $jamMulai->diffInHours($jamSelesai);
-                    return $totalJam * $tarif;
-                } catch (\Exception $e) {
-                    return $tarif;
                 }
-            }
-            break;
+                break;
 
-        case Layanan::UNIT_PER_HARI:
-            $totalHari = $checkin->diffInDays($checkout);
-            return max(1, $totalHari) * $tarif;
+            case Layanan::UNIT_PER_HARI:
+                $totalHari = $checkin->diffInDays($checkout);
+                return max(1, $totalHari) * $tarif;
 
-        case Layanan::UNIT_PER_BULAN:
-            $totalBulan = $checkin->diffInMonths($checkout);
-            return max(1, $totalBulan) * $tarif;
+            case Layanan::UNIT_PER_BULAN:
+                $totalBulan = $checkin->diffInMonths($checkout);
+                return max(1, $totalBulan) * $tarif;
 
-        case Layanan::UNIT_PER_ORANG_HARI:
-            $totalHari = $checkin->diffInDays($checkout);
-            return max(1, $totalHari) * $tarif * $this->jumlah_orang;
+            case Layanan::UNIT_PER_ORANG_HARI:
+                $totalHari = $checkin->diffInDays($checkout);
+                return max(1, $totalHari) * $tarif * $this->jumlah_orang;
 
-        case Layanan::UNIT_PER_KAMAR_HARI:
-            $totalHari = $checkin->diffInDays($checkout);
-            return max(1, $totalHari) * $tarif;
+            case Layanan::UNIT_PER_KAMAR_HARI:
+                $totalHari = $checkin->diffInDays($checkout);
+                return max(1, $totalHari) * $tarif;
 
-        case Layanan::UNIT_PER_KEGIATAN_HARI:
-            $totalHari = $checkin->diffInDays($checkout);
-            return max(1, $totalHari) * $tarif * $this->jumlah_orang;
+            case Layanan::UNIT_PER_KEGIATAN_HARI:
+                $totalHari = $checkin->diffInDays($checkout);
+                return max(1, $totalHari) * $tarif * $this->jumlah_orang;
 
-        case Layanan::UNIT_PER_ORANG_KUNJUNGAN:
-            return $tarif * $this->jumlah_orang;
+            case Layanan::UNIT_PER_ORANG_KUNJUNGAN:
+                return $tarif * $this->jumlah_orang;
 
-        default:
-            return $tarif;
+            default:
+                return $tarif;
+        }
+
+        return 0;
     }
-
-    return 0;
-}
-
 }

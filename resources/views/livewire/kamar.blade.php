@@ -210,6 +210,10 @@
                             <span class="badge bg-success rounded-circle p-2" title="Tersedia">
                                 <i class="fas fa-check"></i>
                             </span>
+                        @elseif ($layanan->ruang->count() > 0)
+                            <span class="badge bg-success rounded-circle p-2" title="Tersedia">
+                                <i class="fas fa-check"></i>
+                            </span>
                         @else
                             <span class="badge bg-danger rounded-circle p-2" title="Tidak Tersedia">
                                 <i class="fas fa-times"></i>
@@ -282,7 +286,7 @@
                                             Rp {{ number_format($layananDetail->tarif, 0, ',', '.') }}
                                         </div>
                                         <div class="col-6">
-                                            <strong>Satuan:</strong><br>
+                                            <strong>Durasi:</strong><br>
                                             @if ($layanan->satuan == 'per_hari')
                                                 Per Hari
                                             @elseif ($layanan->satuan == 'per_jam')
@@ -307,7 +311,7 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <button type="button" class="btn btn-primary">Booking Sekarang</button>
+                    <a href="{{ route('bookingId', ['layanan_id' => $layanan->id]) }}" class="btn btn-primary">Booking Sekarang</a>
                 </div>
             </div>
         </div>

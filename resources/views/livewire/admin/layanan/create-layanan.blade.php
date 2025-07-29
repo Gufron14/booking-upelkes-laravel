@@ -173,8 +173,7 @@
                         {{-- Jika Jenis yang dipilih adalah Ruangan, Tampilkan Kode Ruangan --}}
 
                         {{-- Conditional Input based on Jenis --}}
-                        <div class="mb-3">
-                            {{-- Jika Jenis yang dipilih adalah Kamar, Tampilkan Nomor Kamar --}}
+                        {{-- <div class="mb-3">
                             @if ($jenis === 'kamar')
                                 <div class="form-floating">
                                     <input type="text"
@@ -187,7 +186,6 @@
                                 </div>
                             @endif
 
-                            {{-- Jika Jenis yang dipilih adalah Ruangan, Tampilkan Kode Ruangan --}}
                             @if ($jenis === 'ruangan')
                                 <div class="form-floating">
                                     <input type="text"
@@ -199,7 +197,7 @@
                                     @enderror
                                 </div>
                             @endif
-                        </div>
+                        </div> --}}
 
 
                         <div class="form-floating mb-3">
