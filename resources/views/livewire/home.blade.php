@@ -12,21 +12,21 @@
                             <span class="text-warning">UPELKES</span>
                         </h1>
                         <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">
-                            Sistem booking layanan kesehatan terpadu dengan fasilitas modern dan pelayanan terbaik untuk kebutuhan Anda.
+                           UPTD Pelatihan Kesehatan Dinas Kesehatan Provinsi Jawa Barat (Upelkes Jabar) berfokus pada peningkatan kompetensi tenaga kesehatan berbasis tradisional komplementer yang telah Terakreditasi A oleh Kemenkes RI dan BPOM RI, berpredikat WBK, serta ramah untuk disabilitas
                         </p>
                         <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s">
                             <a href="#layanan" class="btn btn-warning btn-lg px-4 py-3 rounded-pill fw-semibold">
                                 <i class="fas fa-search me-2"></i>
-                                Jelajahi Layanan
+                                Jelajahi
                             </a>
                             <a href="#tentang" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold">
                                 <i class="fas fa-info-circle me-2"></i>
-                                Pelajari Lebih
+                                Syarat & Ketentuan
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                {{-- <div class="col-lg-6">
                     <div class="hero-image text-center animate__animated animate__fadeInRight animate__delay-1s">
                         <div class="position-relative">
                             <div class="bg-white bg-opacity-10 rounded-4 p-4 backdrop-blur">
@@ -36,7 +36,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         
@@ -53,7 +53,7 @@
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="text-center p-4 bg-white rounded-4 h-100">
                         <div class="stat-icon mb-3">
                             <i class="fas fa-bed fa-3x text-primary"></i>
                         </div>
@@ -62,16 +62,16 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="text-center p-4 bg-white rounded-4 h-100">
                         <div class="stat-icon mb-3">
                             <i class="fas fa-door-open fa-3x text-success"></i>
                         </div>
                         <h3 class="fw-bold text-success mb-1">{{ $totalRuang }}</h3>
-                        <p class="text-muted mb-0">Ruang Fasilitas</p>
+                        <p class="text-muted mb-0">Ruang Kegiatan</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="text-center p-4 bg-white rounded-4 h-100">
                         <div class="stat-icon mb-3">
                             <i class="fas fa-cogs fa-3x text-warning"></i>
                         </div>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-card text-center p-4 bg-white rounded-4 shadow-sm h-100">
+                    <div class="text-center p-4 bg-white rounded-4 h-100">
                         <div class="stat-icon mb-3">
                             <i class="fas fa-users fa-3x text-info"></i>
                         </div>
@@ -97,8 +97,8 @@
         <div class="container">
             <div class="row mb-5">
                 <div class="col-12 text-center">
-                    <h2 class="display-5 fw-bold text-dark mb-3">Layanan Unggulan</h2>
-                    <p class="lead text-muted">Pilihan layanan terbaik dengan fasilitas modern</p>
+                    <h2 class="display-5 fw-bold text-dark mb-3">Tipe Kamar & Ruangan</h2>
+                    <p class="lead text-muted">Pilihan terbaik dengan fasilitas modern</p>
                     <div class="divider mx-auto bg-primary" style="width: 80px; height: 4px; border-radius: 2px;"></div>
                 </div>
             </div>
@@ -222,9 +222,13 @@
             </div>
             
             <div class="text-center mt-5">
-                <a href="{{ route('booking') }}" class="btn btn-outline-primary btn-lg px-5 py-3 rounded-pill">
+                <a href="{{ route('kamarShow') }}" class="btn btn-outline-primary px-5 py-3 rounded-pill">
                     <i class="fas fa-th-large me-2"></i>
-                    Lihat Semua Layanan
+                    Lihat Semua Tipe Kamar
+                </a>
+                <a href="{{ route('ruanganShow') }}" class="btn btn-outline-primary px-5 py-3 rounded-pill">
+                    <i class="fas fa-th-large me-2"></i>
+                    Lihat Semua Ruangan
                 </a>
             </div>
         </div>
@@ -238,10 +242,10 @@
                     <div class="about-content">
                         <h2 class="display-5 fw-bold text-dark mb-4">Tentang UPELKES</h2>
                         <p class="lead text-muted mb-4">
-                            Unit Pelayanan Kesehatan (UPELKES) adalah fasilitas kesehatan modern yang menyediakan berbagai layanan kesehatan berkualitas tinggi dengan teknologi terdepan.
+                            UPTD Pelatihan Kesehatan Dinas Kesehatan Provinsi Jawa Barat (Upelkes Jabar) berfokus pada peningkatan kompetensi tenaga kesehatan berbasis tradisional komplementer yang telah Terakreditasi A oleh Kemenkes RI dan BPOM RI, berpredikat WBK, serta ramah untuk disabilitas
                         </p>
                         
-                        <div class="row g-4">
+                        {{-- <div class="row g-4">
                             <div class="col-md-6">
                                 <div class="feature-item d-flex">
                                     <div class="feature-icon me-3">
@@ -286,18 +290,14 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-image text-center">
                         <div class="position-relative">
-                            <div class="bg-primary bg-opacity-10 rounded-4 p-5">
-                                <i class="fas fa-heartbeat fa-8x text-primary mb-4"></i>
-                                <h4 class="fw-bold text-primary">Kesehatan Anda Prioritas Kami</h4>
-                                <p class="text-muted">Melayani dengan sepenuh hati</p>
-                            </div>
-                        </div>
+                                <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noH1HMyhLtdgUH6Q10vHJmkZcDaj2LXgVnAhUzpzwrbLcPWp3uTEO9WK9LEkx3bDi9eIcUmBG8b3hCauawXAme9xesLhDuJ625WhoAz-6VGqgLC6ysrYi4De0bThO9HtPvlNA2o=s1360-w1360-h1020-rw" alt="" width="100%" class="img-fluid rounded-4">
+                       </div>
                     </div>
                 </div>
             </div>
@@ -305,7 +305,7 @@
     </section>
 
     <!-- Categories Section -->
-    <section class="py-5">
+    {{-- <section class="py-5">
         <div class="container">
             <div class="row mb-5">
                 <div class="col-12 text-center">
@@ -343,10 +343,10 @@
                                 </div>
                             </div>
                             
-                            {{-- <a href="/layanan?kategori=umum" class="btn btn-light btn-lg w-100 rounded-pill">
+                            <a href="/layanan?kategori=umum" class="btn btn-light btn-lg w-100 rounded-pill">
                                 <i class="fas fa-arrow-right me-2"></i>
                                 Lihat Layanan Umum
-                            </a> --}}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -379,31 +379,31 @@
                                 </div>
                             </div>
                             
-                            {{-- <a href="/layanan?kategori=pemerintah" class="btn btn-light btn-lg w-100 rounded-pill">
+                            <a href="/layanan?kategori=pemerintah" class="btn btn-light btn-lg w-100 rounded-pill">
                                 <i class="fas fa-arrow-right me-2"></i>
                                 Lihat Layanan Pemerintah
-                            </a> --}}
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- CTA Section -->
     <section class="py-5 bg-primary text-white">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8">
-                    <h2 class="display-6 fw-bold mb-3">Siap untuk Booking Layanan?</h2>
-                    <p class="lead mb-0">Dapatkan pelayanan kesehatan terbaik dengan sistem booking yang mudah dan cepat.</p>
+                    <h2 class="display-6 fw-bold mb-3">Siap untuk Booking?</h2>
+                    <p class="lead mb-0">Ikuti serunya kegiatan hanya di Uplekes.</p>
                 </div>
-                <div class="col-lg-4 text-lg-end">
+                {{-- <div class="col-lg-4 text-lg-end">
                     <a href="{{ route('booking') }}" class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-semibold">
                         <i class="fas fa-calendar-plus me-2"></i>
                         Booking Sekarang
                     </a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>

@@ -26,95 +26,99 @@
             <form wire:submit.prevent="save">
                 <div class="d-flex gap-3">
                     <div class="col-md-6">
-                        <div class="d-flex gap-5">
-                            <div>
-                                <label class="form-label">Kategori</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="kategori"
-                                        id="kategori_pemerintah" value="pemerintah" wire:model="kategori">
-                                    <label class="form-check-label" for="kategori_pemerintah">
-                                        Pemerintah
-                                    </label>
+                        <div class="d-flex gap-5 mb-4">
+                            <div class="col">
+                                <div class="mb-4">
+                                    <label class="form-label">Kategori</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="kategori"
+                                            id="kategori_pemerintah" value="pemerintah" wire:model="kategori">
+                                        <label class="form-check-label" for="kategori_pemerintah">
+                                            Pemerintah
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="kategori"
+                                            id="kategori_umum" value="umum" wire:model="kategori" disabled>
+                                        <label class="form-check-label" for="kategori_umum">
+                                            Umum
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="kategori" id="kategori_umum"
-                                        value="umum" wire:model="kategori">
-                                    <label class="form-check-label" for="kategori_umum">
-                                        Umum
-                                    </label>
+                                <div>
+                                    <label class="form-label">Jenis</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="jenis" id="jenis_kamar"
+                                            value="kamar" wire:model="jenis">
+                                        <label class="form-check-label" for="jenis_kamar">
+                                            Kamar
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="jenis" id="jenis_ruangan"
+                                            value="ruangan" wire:model="jenis">
+                                        <label class="form-check-label" for="jenis_ruangan">
+                                            Ruangan
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <label class="form-label">Jenis</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="jenis" id="jenis_kamar"
-                                        value="kamar" wire:model="jenis">
-                                    <label class="form-check-label" for="jenis_kamar">
-                                        Kamar
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="jenis" id="jenis_ruangan"
-                                        value="ruangan" wire:model="jenis">
-                                    <label class="form-check-label" for="jenis_ruangan">
-                                        Ruangan
-                                    </label>
+                            <div class="col-7">
+                                <div>
+                                    <label class="form-label">Satuan</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="satuan" id="satuan_jam"
+                                            value="per_jam" wire:model="satuan">
+                                        <label class="form-check-label" for="satuan_jam">
+                                            Per Jam
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="satuan" id="satuan_hari"
+                                            value="per_hari" wire:model="satuan">
+                                        <label class="form-check-label" for="satuan_hari">
+                                            Per Hari
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="satuan" id="satuan_bulan"
+                                            value="per_bulan" wire:model="satuan">
+                                        <label class="form-check-label" for="satuan_bulan">
+                                            Per Bulan
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="satuan" id="satuan_orang_hari"
+                                            value="per_orang_hari" wire:model="satuan">
+                                        <label class="form-check-label" for="satuan_orang_hari">
+                                            Per Orang/Hari
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="satuan"
+                                            id="satuan_kamar_hari" value="per_kamar_hari" wire:model="satuan">
+                                        <label class="form-check-label" for="satuan_kamar_hari">
+                                            Per Kamar/Hari
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="satuan"
+                                            id="satuan_kegiatan_hari" value="per_kegiatan_hari" wire:model="satuan">
+                                        <label class="form-check-label" for="satuan_kegiatan_hari">
+                                            Per Kegiatan/Hari
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="satuan"
+                                            id="satuan_orang_kunjungan" value="per_orang_kunjungan" wire:model="satuan">
+                                        <label class="form-check-label" for="satuan_orang_kunjungan">
+                                            Per Orang/Kunjungan
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <label class="form-label">Satuan</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_jam"
-                                        value="per_jam" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_jam">
-                                        Per Jam
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_hari"
-                                        value="per_hari" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_hari">
-                                        Per Hari
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_bulan"
-                                        value="per_bulan" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_bulan">
-                                        Per Bulan
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_orang_hari"
-                                        value="per_orang_hari" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_orang_hari">
-                                        Per Orang/Hari
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_kamar_hari"
-                                        value="per_kamar_hari" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_kamar_hari">
-                                        Per Kamar/Hari
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_kegiatan_hari"
-                                        value="per_kegiatan_hari" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_kegiatan_hari">
-                                        Per Kegiatan/Hari
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="satuan" id="satuan_orang_kunjungan"
-                                        value="per_orang_kunjungan" wire:model="satuan">
-                                    <label class="form-check-label" for="satuan_orang_kunjungan">
-                                        Per Orang/Kunjungan
-                                    </label>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="d-flex gap-5">

@@ -30,28 +30,32 @@
                         </div>
                     </a>
                 </li> --}}
-                <li class="sidebar-item">
-                    <a class="sidebar-link justify-content-between" 
-                        href="{{ route('kelola.booking') }}"
-                        aria-expanded="false">
-                        <div class="d-flex align-items-center gap-3">
-                            <span class="d-flex">
-                                <i class="ti ti-shopping-cart"></i>
-                            </span>
-                            <span class="hide-menu">Booking</span>
-                        </div>
-                        {{-- Jika Count Booking > 0 --}}
+                {{-- Khusus Admin --}}
+                @role('resepsionis')
+                    <li class="sidebar-item">
+                        <a class="sidebar-link justify-content-between" 
+                            href="{{ route('kelola.booking') }}"
+                            aria-expanded="false">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="d-flex">
+                                    <i class="ti ti-shopping-cart"></i>
+                                </span>
+                                <span class="hide-menu">Booking</span>
+                            </div>
+                            {{-- Jika Count Booking > 0 --}}
 
-                        @php
-                            $count = \App\Models\Booking::where('status', 'pending')->count();
-                        @endphp
+                            @php
+                                $count = \App\Models\Booking::where('status', 'pending')->count();
+                            @endphp
 
-                        @if ($count > 0)                            
-                            <span class="hide-menu badge bg-danger  fs-1 py-1"> {{  $count }}
-                            </span>
-                        @endif
-                    </a>
-                </li>
+                            @if ($count > 0)                            
+                                <span class="hide-menu badge bg-danger  fs-1 py-1"> {{  $count }}
+                                </span>
+                            @endif
+                        </a>
+                    </li>
+                @endrole
+
                 <li class="sidebar-item">
                     <a class="sidebar-link justify-content-between has-arrow" href="javascript:void(0)"
                         aria-expanded="false">

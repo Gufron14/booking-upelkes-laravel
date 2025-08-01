@@ -17,7 +17,7 @@
     <!-- Summary Cards -->
     <div class="row mb-4">
         <div class="col-md-6">
-            <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card border-left-primary h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card border-left-success shadow h-100 py-2">
+            <div class="card border-left-success h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Filter Section -->
-    <div class="card shadow mb-4">
+    <div class="card mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Filter Laporan</h6>
         </div>
@@ -118,7 +118,7 @@
     </div>
 
     <!-- Data Table -->
-    <div class="card shadow mb-4">
+    <div class="card mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Data Transaksi</h6>
             <div class="d-flex align-items-center">

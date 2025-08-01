@@ -24,8 +24,8 @@ class UserSeeder extends Seeder
         
                 // Resepsionis
                 $resepsionis = User::create([
-                    'nama' => 'Resepsionis Satu',
-                    'email' => 'resepsionis@example.com',
+                    'nama' => 'Kepala UPTD',
+                    'email' => 'kepalauptd@upelkes.com',
                     'password' => Hash::make('password'),
                 ]);
                 $resepsionis->assignRole('resepsionis');

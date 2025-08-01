@@ -4,7 +4,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2 class="mb-1">Dashboard Admin</h2>
+                    <h2 class="mb-1">Dashboard</h2>
                     <p class="text-muted mb-0">Selamat datang di sistem booking Upelkes Jabar</p>
                 </div>
                 <div class="text-end">
@@ -23,7 +23,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Total Bookings
+                                Bookings
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalBookings) }}</div>
                         </div>
@@ -42,7 +42,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Total Customers
+                                Customers
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalCustomers) }}</div>
                         </div>
@@ -61,7 +61,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Total Layanan
+                                Layanan
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalLayanan) }}</div>
                         </div>
@@ -80,7 +80,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Total Pendapatan
+                                Pendapatan Bulan Ini
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">Rp{{ number_format($totalPendapatan) }}
                             </div>
@@ -96,44 +96,36 @@
 
     <!-- Statistik Booking dan Fasilitas -->
     <div class="row mb-4">
-        <!-- Status Booking -->
-        <div class="col-xl-4 col-lg-6 mb-4">
+        <!-- Kalender Booking -->
+        <div class="mb-4">
             <div class="card shadow h-100">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Status Booking</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Kalender Booking</h6>
                 </div>
                 <div class="card-body">
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-sm">Pending</span>
-                            <span class="badge badge-warning">{{ $pendingBookings }}</span>
-                        </div>
-                        <div class="progress mt-1" style="height: 8px;">
-                            <div class="progress-bar bg-warning" style="width: {{ $totalBookings > 0 ? ($pendingBookings / $totalBookings) * 100 : 0 }}%"></div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-sm">Confirmed</span>
-                            <span class="badge badge-success">{{ $confirmedBookings }}</span>
-                        </div>
-                        <div class="progress mt-1" style="height: 8px;">
-                            <div class="progress-bar bg-success" style="width: {{ $totalBookings > 0 ? ($confirmedBookings / $totalBookings) * 100 : 0 }}%"></div>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between">
-                            <span class="text-sm">Cancelled</span>
-                            <span class="badge badge-danger">{{ $cancelledBookings }}</span>
-                        </div>
-                        <div class="progress mt-1" style="height: 8px;">
-                            <div class="progress-bar bg-danger" style="width: {{ $totalBookings > 0 ? ($cancelledBookings / $totalBookings) * 100 : 0 }}%"></div>
-                        </div>
-                    </div>
+                    <div id='calendar'></div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Wait for calendar function to be available
+                            if (typeof window.initBookingCalendar === 'function') {
+                                window.initBookingCalendar({!! json_encode($calendarBookings) !!});
+                            } else {
+                                // Fallback: wait a bit and try again
+                                setTimeout(() => {
+                                    if (typeof window.initBookingCalendar === 'function') {
+                                        window.initBookingCalendar({!! json_encode($calendarBookings) !!});
+                                    }
+                                }, 500);
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>
 
+    </div>
+
+    <div class="row mb-4">
         <!-- Statistik Fasilitas -->
         <div class="col-xl-4 col-lg-6 mb-4">
             <div class="card shadow h-100">
@@ -145,12 +137,12 @@
                         <div class="col-6 mb-3">
                             <div class="border-right">
                                 <h4 class="font-weight-bold text-primary">{{ $totalKamar }}</h4>
-                                <small class="text-muted">Total Kamar</small>
+                                <small class="text-muted">Kamar</small>
                             </div>
                         </div>
                         <div class="col-6 mb-3">
                             <h4 class="font-weight-bold text-info">{{ $totalRuang }}</h4>
-                            <small class="text-muted">Total Ruang</small>
+                            <small class="text-muted">Ruang</small>
                         </div>
                         <div class="col-6">
                             <div class="border-right">
@@ -160,13 +152,12 @@
                         </div>
                         <div class="col-6">
                             <h4 class="font-weight-bold text-secondary">{{ $totalFasilitas }}</h4>
-                            <small class="text-muted">Total Fasilitas</small>
+                            <small class="text-muted">Fasilitas</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- Statistik Periode -->
         <div class="col-xl-4 col-lg-12 mb-4">
             <div class="card shadow h-100">
@@ -187,6 +178,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Tabel dan Chart -->
     <div class="row">

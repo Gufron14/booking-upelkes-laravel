@@ -34,7 +34,8 @@ use App\Livewire\Admin\Layanan\CreateLayanan;
 */
 
 Route::get('/', Home::class)->name('/');
-Route::get('booking', Kamar::class)->name('booking');
+Route::get('kamar', \App\Livewire\Kamar::class)->name('kamarShow');
+Route::get('ruangan', \App\Livewire\Ruangan::class)->name('ruanganShow');
 
 
 Route::middleware('guest')->group(function () {
@@ -56,7 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('profil', Profil::class)->name('profil');
 });
 
-Route::middleware(['auth', 'role:admin'])->group( function () {
+Route::middleware(['auth', 'role:admin|resepsionis'])->group( function () {
 
     Route::prefix('admin')->group(function () {        
         Route::get('dashboard', Dashboard::class)->name('dashboard');

@@ -4,7 +4,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2 class="fw-bold text-primary mb-1">Daftar Layanan</h2>
+                    <h2 class="fw-bold text-primary mb-1">Daftar kamar</h2>
                     <p class="text-muted mb-0">Pilih kamar atau ruangan sesuai kebutuhan Anda</p>
                 </div>
             </div>
@@ -18,45 +18,45 @@
                 <span class="input-group-text bg-light border-end-0">
                     <i class="fas fa-search text-muted"></i>
                 </span>
-                <input type="text" class="form-control border-start-0 ps-0" placeholder="Cari layanan..."
+                <input type="text" class="form-control border-start-0 ps-0" placeholder="Cari kamar..."
                     wire:model.live="search">
             </div>
         </div>
-        <div class="col-md-3">
+        {{-- <div class="col-md-3">
             <select class="form-select" wire:model.live="kategori">
                 <option value="">Semua Kategori</option>
                 <option value="umum">Umum</option>
                 <option value="pemerintah">Pemerintah</option>
             </select>
-        </div>
+        </div> --}}
     </div>
 
     <!-- Cards Section -->
     <div class="row g-4">
-        @forelse($layananList as $layanan)
+        @forelse($kamarList as $kamar)
             <div class="col-lg-4 col-md-6">
                 <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden">
                     <!-- Badge Kategori -->
                     <div class="position-absolute top-0 start-0 z-3 m-3">
                         <span
-                            class="badge {{ $layanan->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }} px-3 py-2 rounded-pill">
-                            <i
-                                class="fas {{ $layanan->kategori == 'pemerintah' ? 'fa-building' : 'fa-users' }} me-1"></i>
-                            {{ ucfirst($layanan->kategori) }}
+                            class="badge {{ $kamar->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }} px-3 py-2 rounded-pill">
+                            <i class="fas {{ $kamar->kategori == 'pemerintah' ? 'fa-building' : 'fa-users' }} me-1"></i>
+                            {{ ucfirst($kamar->kategori) }}
                         </span>
                     </div>
 
                     <!-- Gambar -->
                     <div class="position-relative">
-                        @if ($layanan->gambar->count() > 0)
-                            <img src="{{ asset('storage/' . $layanan->gambar->first()->path) }}" class="card-img-top"
-                                alt="{{ $layanan->nama_layanan }}" style="height: 250px; object-fit: cover;">
+                        @if ($kamar->layanan->gambar->count() > 0)
+                            <img src="{{ asset('storage/' . $kamar->layanan->gambar->first()->path) }}"
+                                class="card-img-top" alt="{{ $kamar->layanan->nama }}"
+                                style="height: 250px; object-fit: cover;">
                         @else
                             <div class="bg-gradient-primary d-flex align-items-center justify-content-center"
                                 style="height: 250px;">
                                 <div class="text-center text-muted">
                                     <i class="fas fa-image fa-3x mb-2"></i>
-                                    <p class="mb-0 text-light">{{ $layanan->nama_layanan }}</p>
+                                    <p class="mb-0 text-light">{{ $kamar->layanan->nama }}</p>
                                 </div>
                             </div>
                         @endif
@@ -67,12 +67,12 @@
                     </div>
 
                     <div class="card-body p-4">
-                        <!-- Nama Layanan -->
-                        <h5 class="card-title fw-bold text-dark mb-2">{{ $layanan->nama_layanan }}</h5>
+                        <!-- Nama kamar -->
+                        <h5 class="card-title fw-bold text-dark mb-2">{{ $kamar->layanan->nama_layanan }}</h5>
 
                         <!-- Deskripsi -->
                         <p class="card-text text-muted mb-3" style="font-size: 0.9rem;">
-                            {{ Str::limit($layanan->deskripsi, 100) }}
+                            {{ Str::limit($kamar->deskripsi, 100) }}
                         </p>
 
                         <!-- Info Grid -->
@@ -81,7 +81,7 @@
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-users text-primary me-2"></i>
                                     <small class="text-muted">
-                                        <strong>{{ $layanan->kapasitas ?? 'N/A' }}</strong> orang
+                                        <strong>{{ $kamar->layanan->kapasitas ?? 'N/A' }}</strong> orang
                                     </small>
                                 </div>
                             </div>
@@ -89,36 +89,24 @@
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-door-open text-success me-2"></i>
                                     <small class="text-muted">
-                                       @if ($layanan->kamar->count() > 0)
-                                            <strong>{{ $layanan->kamar->count() }}</strong> Kamar
-                                       @else
-                                           <strong>{{ $layanan->ruang->count() }}</strong> Ruangan
-                                       @endif
+                                        <strong>1</strong> Kamar
                                     </small>
                                 </div>
                             </div>
-                            {{-- <div class="col-12">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-clock text-warning me-2"></i>
-                                    <small class="text-muted">
-                                        Tarif <strong>{{ $layanan->satuan }}</strong>
-                                    </small>
-                                </div>
-                            </div> --}}
                         </div>
 
-                        @if ($layanan->fasilitas->count() > 0)
+                        @if ($kamar->layanan->fasilitas->count() > 0)
                             <div class="mb-3">
                                 <small class="text-muted fw-semibold">Fasilitas:</small>
                                 <div class="d-flex flex-wrap gap-1 mt-1">
-                                    @foreach ($layanan->fasilitas->take(5) as $fasilitas)
+                                    @foreach ($kamar->layanan->fasilitas->take(5) as $fasilitas)
                                         <span class="badge bg-light text-dark border">
                                             {{ $fasilitas->nama }}
                                         </span>
                                     @endforeach
-                                    @if ($layanan->fasilitas->count() > 5)
+                                    @if ($kamar->layanan->fasilitas->count() > 5)
                                         <span class="badge bg-secondary">
-                                            +{{ $layanan->fasilitas->count() - 3 }}
+                                            +{{ $kamar->layanan->fasilitas->count() - 3 }}
                                         </span>
                                     @endif
                                 </div>
@@ -126,35 +114,18 @@
                         @endif
 
                         <!-- Kamar Tersedia -->
-                        @if ($layanan->kamar->count() > 0)
+                        @if ($kamar->count() > 0)
                             <div class="mb-3">
                                 <small class="text-muted fw-semibold">Kamar Tersedia:</small>
                                 <div class="d-flex flex-wrap gap-1 mt-1">
-                                    @foreach ($layanan->kamar->take(5) as $kamar)
+                                    @foreach ($kamar->layanan->take(5) as $item)
                                         <span class="badge bg-light text-dark border">
-                                            {{ $kamar->nomor_kamar }}
+                                            {{ $item->nomor_kamar }}
                                         </span>
                                     @endforeach
-                                    @if ($layanan->kamar->count() > 5)
+                                    @if ($kamar->layanan->count() > 5)
                                         <span class="badge bg-secondary">
-                                            +{{ $layanan->kamar->count() - 5 }} lainnya
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        @endif
-                        @if ($layanan->ruang->count() > 0)
-                            <div class="mb-3">
-                                <small class="text-muted fw-semibold">Kode Ruangan:</small>
-                                <div class="d-flex flex-wrap gap-1 mt-1">
-                                    @foreach ($layanan->ruang->take(5) as $ruang)
-                                        <span class="badge bg-light text-dark border">
-                                            {{ $ruang->kode_ruang }}
-                                        </span>
-                                    @endforeach
-                                    @if ($layanan->ruang->count() > 5)
-                                        <span class="badge bg-secondary">
-                                            +{{ $layanan->ruang->count() - 5 }} lainnya
+                                            +{{ $kamar->layanan->count() - 5 }} lainnya
                                         </span>
                                     @endif
                                 </div>
@@ -165,40 +136,40 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h4 class="text-primary fw-bold mb-0">
-                                    Rp {{ number_format($layanan->tarif, 0, ',', '.') }}
+                                    Rp {{ number_format($kamar->layanan->tarif, 0, ',', '.') }}
                                 </h4>
                                 <small class="text-muted">
-                                    @if ($layanan->satuan == 'per_hari')
+                                    @if ($kamar->layanan->satuan == 'per_hari')
                                         Per Hari
-                                    @elseif ($layanan->satuan == 'per_jam')
+                                    @elseif ($kamar->layanan->satuan == 'per_jam')
                                         Per Jam
-                                    @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                    @elseif ($kamar->layanan->satuan == 'per_orang_kunjungan')
                                         Per Orang/Kunjungan
-                                    @elseif ($layanan->satuan == 'per_bulan')
+                                    @elseif ($kamar->layanan->satuan == 'per_bulan')
                                         Per Bulan
-                                    @elseif ($layanan->satuan == 'per_orang_hari')
+                                    @elseif ($kamar->layanan->satuan == 'per_orang_hari')
                                         Per Orang/Hari
-                                    @elseif ($layanan->satuan == 'per_kamar_hari')
+                                    @elseif ($kamar->layanan->satuan == 'per_kamar_hari')
                                         Per Kamar/Hari
-                                    @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                    @elseif ($kamar->layanan->satuan == 'per_kegiatan_hari')
                                         Per Kegiatan/Hari
                                     @endif
                                 </small>
                             </div>
                             <div class="btn-group">
                                 <button class="btn btn-outline-primary btn-sm"
-                                    wire:click="selectLayanan({{ $layanan->id }})" data-bs-toggle="modal"
+                                    wire:click="selectkamar({{ $kamar->id }})" data-bs-toggle="modal"
                                     data-bs-target="#detailModal">
                                     <i class="fas fa-eye me-1"></i>
                                     Detail
                                 </button>
-                                @if ($layanan->kamar->count() > 0 || $layanan->ruang->count() > 0)                                    
-                                    <a href="{{ route('bookingId', ['layanan_id' => $layanan->id]) }}"
+                                {{-- @if ($kamar->kamar->count() > 0 || $kamar->ruang->count() > 0)                                    
+                                    <a href="{{ route('bookingId', ['kamar_id' => $kamar->id]) }}"
                                         class="btn btn-primary btn-sm">
                                         <i class="fas fa-calendar-plus me-1"></i>
                                         Booking
                                     </a>
-                                @endif
+                                @endif --}}
 
                             </div>
                         </div>
@@ -206,19 +177,9 @@
 
                     <!-- Status Indicator -->
                     <div class="position-absolute top-0 end-0 m-3">
-                        @if ($layanan->kamar->count() > 0)
-                            <span class="badge bg-success rounded-circle p-2" title="Tersedia">
-                                <i class="fas fa-check"></i>
-                            </span>
-                        @elseif ($layanan->ruang->count() > 0)
-                            <span class="badge bg-success rounded-circle p-2" title="Tersedia">
-                                <i class="fas fa-check"></i>
-                            </span>
-                        @else
-                            <span class="badge bg-danger rounded-circle p-2" title="Tidak Tersedia">
-                                <i class="fas fa-times"></i>
-                            </span>
-                        @endif
+                        <span class="badge bg-success rounded-circle p-2" title="Tersedia">
+                            <i class="fas fa-check"></i>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -228,7 +189,7 @@
                     <div class="mb-4">
                         <i class="fas fa-search fa-4x text-muted"></i>
                     </div>
-                    <h4 class="text-muted">Tidak ada layanan ditemukan</h4>
+                    <h4 class="text-muted">Tidak ada kamar ditemukan</h4>
                     <p class="text-muted">Coba ubah kata kunci pencarian atau filter Anda</p>
                     <button class="btn btn-primary" wire:click="$set('search', '')" wire:click="$set('kategori', '')">
                         Reset Filter
@@ -243,20 +204,20 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Detail Layanan</h5>
+                    <h5 class="modal-title fw-bold">Detail kamar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    @if ($selectedLayanan)
+                    @if ($selectedkamar)
                         @php
-                            $layananDetail = $layananList->find($selectedLayanan);
+                            $kamarDetail = $kamarList->find($selectedkamar);
                         @endphp
-                        @if ($layananDetail)
+                        @if ($kamarDetail)
                             <div class="row">
                                 <div class="col-md-6">
-                                    @if ($layananDetail->gambar->count() > 0)
-                                        <img src="{{ asset('storage/' . $layananDetail->gambar->first()->path) }}"
-                                            class="img-fluid rounded" alt="{{ $layananDetail->nama_layanan }}">
+                                    @if ($kamarDetail->layanan->gambar->count() > 0)
+                                        <img src="{{ asset('storage/' . $kamarDetail->layanan->gambar->first()->path) }}"
+                                            class="img-fluid rounded" alt="{{ $kamarDetail->nomor_kamar }}">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center rounded"
                                             style="height: 200px;">
@@ -268,38 +229,38 @@
                                     @endif
                                 </div>
                                 <div class="col-md-6">
-                                    <h4 class="fw-bold">{{ $layananDetail->nama_layanan }}</h4>
-                                    <p class="text-muted">{{ $layananDetail->deskripsi }}</p>
+                                    <h4 class="fw-bold">Kamar {{ $kamarDetail->nomor_kamar }}</h4>
+                                    {{-- <p class="text-muted">{{ $kamarDetail->deskripsi }}</p> --}}
 
                                     <div class="row g-3">
                                         <div class="col-6">
                                             <strong>Kategori:</strong><br>
                                             <span
-                                                class="badge bg-primary">{{ ucfirst($layananDetail->kategori) }}</span>
+                                                class="badge bg-primary">{{ ucfirst($kamarDetail->layanan->kategori) }}</span>
                                         </div>
                                         <div class="col-6">
                                             <strong>Kapasitas:</strong><br>
-                                            {{ $layananDetail->kapasitas ?? 'N/A' }} orang
+                                            {{ $kamarDetail->layanan->kapasitas ?? 'N/A' }} orang
                                         </div>
                                         <div class="col-6">
                                             <strong>Tarif:</strong><br>
-                                            Rp {{ number_format($layananDetail->tarif, 0, ',', '.') }}
+                                            Rp {{ number_format($kamarDetail->layanan->tarif, 0, ',', '.') }}
                                         </div>
                                         <div class="col-6">
                                             <strong>Durasi:</strong><br>
-                                            @if ($layanan->satuan == 'per_hari')
+                                            @if ($kamar->layanan->satuan == 'per_hari')
                                                 Per Hari
-                                            @elseif ($layanan->satuan == 'per_jam')
+                                            @elseif ($kamar->layanan->satuan == 'per_jam')
                                                 Per Jam
-                                            @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                            @elseif ($kamar->layanan->satuan == 'per_orang_kunjungan')
                                                 Per Orang/Kunjungan
-                                            @elseif ($layanan->satuan == 'per_bulan')
+                                            @elseif ($kamar->layanan->satuan == 'per_bulan')
                                                 Per Bulan
-                                            @elseif ($layanan->satuan == 'per_orang_hari')
+                                            @elseif ($kamar->layanan->satuan == 'per_orang_hari')
                                                 Per Orang/Hari
-                                            @elseif ($layanan->satuan == 'per_kamar_hari')
+                                            @elseif ($kamar->layanan->satuan == 'per_kamar_hari')
                                                 Per Kamar/Hari
-                                            @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                            @elseif ($kamar->layanan->satuan == 'per_kegiatan_hari')
                                                 Per Kegiatan/Hari
                                             @endif
                                         </div>
@@ -311,7 +272,8 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <a href="{{ route('bookingId', ['layanan_id' => $layanan->id]) }}" class="btn btn-primary">Booking Sekarang</a>
+                    <a href="{{ route('bookingId', ['layanan_id' => $kamar->layanan->id]) }}" class="btn btn-primary">Booking
+                        Sekarang</a>
                 </div>
             </div>
         </div>

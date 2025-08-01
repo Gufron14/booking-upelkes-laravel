@@ -25,7 +25,7 @@ class CreateLayanan extends Component
     public $kapasitas = '';
     public $deskripsi = '';
     public $gambar;
-    public $kategori = 'umum';
+    public $kategori = 'pemerintah'; // Default to pemerintah
     public $jenis = 'ruangan';
     public $satuan = 'per_jam';
     public $selectedFasilitas = [];

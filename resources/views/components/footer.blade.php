@@ -1,5 +1,5 @@
     <!-- Footer -->
-    <footer class="bg-dark text-white py-5 mt-5">
+    <footer class="bg-dark text-white mt-5">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4">
@@ -19,7 +19,8 @@
                     <ul class="list-unstyled">
                         <li><a href="{{ route('/') }}" class="text-white-50 text-decoration-none">Beranda</a></li>
                         {{-- <li><a href="{{ route('layanan') }}" class="text-white-50 text-decoration-none">Layanan</a></li> --}}
-                        <li><a href="{{ route('booking') }}" class="text-white-50 text-decoration-none">Booking</a></li>
+                        <li><a href="{{ route('kamarShow') }}" class="text-white-50 text-decoration-none">Kamar</a></li>
+                        <li><a href="{{ route('ruanganShow') }}" class="text-white-50 text-decoration-none">Ruangan</a></li>
                         <li><a href="{{ route('riwayat') }}" class="text-white-50 text-decoration-none">Riwayat</a></li>
                     </ul>
                 </div>
