@@ -310,11 +310,11 @@
                             <i class="fas fa-calendar-times text-muted" style="font-size: 4rem;"></i>
                         </div>
                         <h4 class="fw-bold text-muted mb-3">Belum Ada Riwayat Booking</h4>
-                        <p class="text-muted mb-4">Anda belum memiliki riwayat booking. Mulai booking layanan sekarang!</p>
-                        <a href="{{ route('booking') }}" class="btn btn-primary btn-lg px-4">
+                        <p class="text-muted mb-4">Anda belum memiliki riwayat booking.</p>
+                        {{-- <a href="{{ route('/') }}" class="btn btn-primary btn-lg px-4">
                             <i class="fas fa-plus me-2"></i>
                             Buat Booking Pertama
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
             </div>
