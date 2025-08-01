@@ -5,21 +5,21 @@
         
         <div class="container position-relative z-2 d-flex align-items-center" style="min-height: 100vh;">
             <div class="row w-100 align-items-center">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="hero-content text-white">
                         <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInUp">
-                            Selamat Datang di <br>
-                            <span class="text-warning">UPELKES</span>
+                            Selamat Datang di Sistem<br>
+                            <span class="text-warning">Booking UPELKES Jabar</span>
                         </h1>
                         <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">
-                           UPTD Pelatihan Kesehatan Dinas Kesehatan Provinsi Jawa Barat (Upelkes Jabar) berfokus pada peningkatan kompetensi tenaga kesehatan berbasis tradisional komplementer yang telah Terakreditasi A oleh Kemenkes RI dan BPOM RI, berpredikat WBK, serta ramah untuk disabilitas
+                           Nikmati kemudahan pemesanan kamar dan ruangan untuk kebutuhan pelatihan, penginapan, dan kegiatan lainnya di Upelkes Jawa Barat.
                         </p>
                         <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s">
                             <a href="#layanan" class="btn btn-warning btn-lg px-4 py-3 rounded-pill fw-semibold">
                                 <i class="fas fa-search me-2"></i>
                                 Jelajahi
                             </a>
-                            <a href="#tentang" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                            <a href="{{ route('sk') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold">
                                 <i class="fas fa-info-circle me-2"></i>
                                 Syarat & Ketentuan
                             </a>
@@ -396,7 +396,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-8">
                     <h2 class="display-6 fw-bold mb-3">Siap untuk Booking?</h2>
-                    <p class="lead mb-0">Ikuti serunya kegiatan hanya di Uplekes.</p>
+                    <p class="lead mb-0">Temukan berbagai fasilitas pendukung untuk kenyamanan dan kelancaran kegiatan Anda.</p>
                 </div>
                 {{-- <div class="col-lg-4 text-lg-end">
                     <a href="{{ route('booking') }}" class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-semibold">

@@ -33,6 +33,11 @@ use App\Livewire\Admin\Layanan\CreateLayanan;
 |
 */
 
+// Welcome route
+Route::get('syarat-ketentuan', function () {
+    return view('livewire.welcome');
+})->name('sk');
+
 Route::get('/', Home::class)->name('/');
 Route::get('kamar', \App\Livewire\Kamar::class)->name('kamarShow');
 Route::get('ruangan', \App\Livewire\Ruangan::class)->name('ruanganShow');

@@ -14,7 +14,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap"
         rel="stylesheet">
-
+        
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    
     <!-- Font Awesome 5 Free -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
         integrity="sha384-jLKHWMZt4E+8W2JjKhF1vZ8g0ikToez0GbdUjksYB6tFh3HGcKqekF5gJjFZ9X3N" crossorigin="anonymous">
@@ -25,7 +27,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
 
 
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
 
     <title>{{ $title ?? 'Page Title' }}</title>
 </head>
