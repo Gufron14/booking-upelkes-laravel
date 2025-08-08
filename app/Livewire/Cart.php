@@ -15,7 +15,13 @@ class Cart extends Component
 
     public function mount()
     {
-        $this->carts = ModelCart::with(['user', 'booking'])
+        $this->carts = ModelCart::with([
+            'user', 
+            'booking',
+            'layanan.gambar',
+            'kamar.gambarRuangs',
+            'ruang.gambarRuangs'
+        ])
             ->where('user_id', auth()->id())
             ->get();
     }
@@ -25,9 +31,16 @@ class Cart extends Component
         $cart = ModelCart::find($cartId);
         if ($cart) {
             $cart->delete();
-            $this->carts = $this->carts->filter(function ($item) use ($cartId) {
-                return $item->id != $cartId;
-            });
+            // Reload data from database to ensure proper relationships
+            $this->carts = ModelCart::with([
+                'user', 
+                'booking',
+                'layanan.gambar',
+                'kamar.gambarRuangs',
+                'ruang.gambarRuangs'
+            ])
+                ->where('user_id', auth()->id())
+                ->get();
             session()->flash('message', 'Item berhasil dihapus dari keranjang');
         }
     }

@@ -9,6 +9,7 @@ use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payment as PaymentModel;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 
 #[Title('Pembayaran')]
 class Payment extends Component
@@ -20,14 +21,23 @@ class Payment extends Component
     public $metode_pembayaran = 'transfer';
     public $keterangan = '';
 
-    protected $rules = [
-        'bukti_transfer' => 'required_if:metode_pembayaran,transfer|image|max:2048',
-        'metode_pembayaran' => 'required|in:transfer,cash',
-        'keterangan' => 'nullable|string|max:500',
-    ];
+    protected function rules()
+    {
+        $rules = [
+            'metode_pembayaran' => 'required|in:transfer,cash',
+            'keterangan' => 'nullable|string|max:500',
+        ];
+
+        // Hanya wajib upload bukti transfer jika metode pembayaran adalah transfer
+        if ($this->metode_pembayaran === 'transfer') {
+            $rules['bukti_transfer'] = 'required|image|max:2048';
+        }
+
+        return $rules;
+    }
 
     protected $messages = [
-        'bukti_transfer.required' => 'Bukti transfer harus diupload',
+        'bukti_transfer.required' => 'Bukti transfer harus diupload untuk metode transfer bank',
         'bukti_transfer.image' => 'File harus berupa gambar',
         'bukti_transfer.max' => 'Ukuran file maksimal 2MB',
         'metode_pembayaran.required' => 'Pilih metode pembayaran',
@@ -51,28 +61,40 @@ class Payment extends Component
         // Cek deadline sebelum upload
         if (now()->greaterThan($this->booking->payment_deadline)) {
             session()->flash('error', 'Waktu pembayaran telah habis.');
-            return redirect()->route('');
+            return redirect()->route('riwayat');
         }
 
         try {
             DB::beginTransaction();
 
-            $buktiPath = $this->bukti_transfer->store('bukti-transfer', 'public');
+            $paymentData = [
+                'tanggal_bayar' => now(),
+                'jumlah_bayar' => $this->booking->calculateTotal(),
+                'metode_pembayaran' => $this->metode_pembayaran,
+                'keterangan' => $this->keterangan,
+            ];
+
+            // Jika metode transfer, upload bukti dan set status waiting verification
+            if ($this->metode_pembayaran === 'transfer') {
+                $buktiPath = $this->bukti_transfer->store('bukti-transfer', 'public');
+                $paymentData['bukti_transfer'] = $buktiPath;
+                $paymentData['status'] = 'pending'; // Menunggu verifikasi admin
+                $bookingStatus = 'pending';
+                $successMessage = 'Bukti pembayaran berhasil diupload! Menunggu verifikasi admin.';
+            } else {
+                // Jika metode cash, langsung approve
+                $paymentData['status'] = 'terverifikasi';
+                $bookingStatus = 'booked'; // Langsung approved untuk cash
+                $successMessage = 'Pembayaran cash berhasil dikonfirmasi! Booking Anda telah disetujui.';
+            }
 
             $payment = PaymentModel::updateOrCreate(
                 ['booking_id' => $this->booking->id],
-                [
-                    'bukti_transfer' => $buktiPath,
-                    'tanggal_bayar' => now(),
-                    'status' => 'terverifikasi',
-                    'jumlah_bayar' => $this->booking->calculateTotal(),
-                    'metode_pembayaran' => $this->metode_pembayaran,
-                    'keterangan' => $this->keterangan,
-                ],
+                $paymentData
             );
 
-            // Update status booking jadi 'pending' (atau 'waiting_verification')
-            $this->booking->update(['status' => 'pending']);
+            // Update status booking
+            $this->booking->update(['status' => $bookingStatus]);
 
             $user = $this->booking->user;
 
@@ -81,7 +103,7 @@ class Payment extends Component
 
             DB::commit();
 
-            session()->flash('success', 'Bukti pembayaran berhasil diupload! Menunggu verifikasi admin.');
+            session()->flash('success', $successMessage);
             return redirect()->route('riwayat');
         } catch (\Exception $e) {
             DB::rollback();
@@ -91,7 +113,7 @@ class Payment extends Component
 
     protected function sendBookingNotification($booking, $user)
     {
-        $adminEmail = env('ADMIN_EMAIL', 'gupron.nurjalil14@gmail.com');
+        $adminEmail = env('ADMIN_EMAIL', 'dekaaprianti1@gmail.com');
         $bookingUrl = url('/booking/' . $booking->id);
 
         $details = [
@@ -105,7 +127,7 @@ class Payment extends Component
             'booking_url' => $bookingUrl,
         ];
 
-        \Mail::to($adminEmail)->send(new \App\Mail\BookingNotification($details));
+        Mail::to($adminEmail)->send(new \App\Mail\BookingNotification($details));
     }
 
     public function render()

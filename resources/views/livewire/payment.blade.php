@@ -197,7 +197,14 @@
             <!-- Payment Form -->
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-credit-card me-2"></i>Upload Bukti Pembayaran</h5>
+                    <h5 class="mb-0">
+                        <i class="fas fa-credit-card me-2"></i>
+                        @if($metode_pembayaran === 'cash')
+                            Konfirmasi Pembayaran Cash
+                        @else
+                            Upload Bukti Pembayaran
+                        @endif
+                    </h5>
                 </div>
                 <div class="card-body">
                     <form wire:submit.prevent="submitPayment">
@@ -205,7 +212,7 @@
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Metode Pembayaran *</label>
                                 <select class="form-select @error('metode_pembayaran') is-invalid @enderror"
-                                    wire:model="metode_pembayaran">
+                                    wire:model.live="metode_pembayaran">
                                     <option value="" disabled>Pilih Metode</option>
                                     <option value="transfer" selected>Transfer Bank</option>
                                     <option value="cash">Cash</option>
@@ -213,6 +220,13 @@
                                 @error('metode_pembayaran')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                <small class="text-muted">
+                                    @if($metode_pembayaran === 'cash')
+                                        Pembayaran cash dilakukan langsung di lokasi
+                                    @else
+                                        Transfer ke rekening yang tersedia
+                                    @endif
+                                </small>
                             </div>
 
                             @if ($metode_pembayaran === 'transfer')
@@ -237,8 +251,8 @@
                                 @enderror
                             </div> --}}
 
-                            <!-- Preview Image -->
-                            @if ($bukti_transfer)
+                            <!-- Preview Image untuk Transfer -->
+                            @if ($bukti_transfer && $metode_pembayaran === 'transfer')
                                 <div class="col-12">
                                     <label class="form-label fw-semibold">Preview Bukti Transfer:</label>
                                     <div class="text-center">
@@ -249,12 +263,27 @@
                                 </div>
                             @endif
 
+                            <!-- Informasi Cash Payment -->
+                            @if ($metode_pembayaran === 'cash')
+                                <div class="col-12">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <strong>Pembayaran Cash:</strong> Silakan lakukan pembayaran secara langsung di lokasi pada saat check-in. Booking Anda akan langsung dikonfirmasi setelah submit.
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="col-12">
                                 <button type="submit" class="btn btn-success btn-lg w-100"
-                                    wire:loading.attr="disabled">
+                                    wire:loading.attr="disabled" id="btn-bayar-{{ $booking->id }}">
                                     <span wire:loading.remove>
-                                        <i class="fas fa-upload me-2"></i>
-                                        Upload Bukti Pembayaran
+                                        @if($metode_pembayaran === 'cash')
+                                            <i class="fas fa-money-bill-wave me-2"></i>
+                                            Konfirmasi Pembayaran Cash
+                                        @else
+                                            <i class="fas fa-upload me-2"></i>
+                                            Upload Bukti Pembayaran
+                                        @endif
                                         (<span id="countdown-{{ $booking->id }}"></span>)
                                     </span>
                                     <script>
@@ -286,7 +315,11 @@
                                     </script>
                                     <span wire:loading>
                                         <i class="fas fa-spinner fa-spin me-2"></i>
-                                        Mengupload...
+                                        @if($metode_pembayaran === 'cash')
+                                            Memproses...
+                                        @else
+                                            Mengupload...
+                                        @endif
                                     </span>
                                 </button>
                             </div>
@@ -304,38 +337,57 @@
                 </div>
                 <div class="card-body">
                     <div class="payment-info">
-                        <h6 class="fw-bold mb-3">Rekening Tujuan:</h6>
+                        @if($metode_pembayaran === 'transfer')
+                            <h6 class="fw-bold mb-3">Rekening Tujuan:</h6>
 
-                        <div class="bank-info mb-3 p-3 bg-light rounded">
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-university text-primary me-2"></i>
-                                <strong>Bank BJB</strong>
+                            <div class="bank-info mb-3 p-3 bg-light rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-university text-primary me-2"></i>
+                                    <strong>Bank BJB</strong>
+                                </div>
+                                <div class="ms-4">
+                                    <div>No. Rek: <strong>0139280245001</strong></div>
+                                    <div>A.n: <strong>BPP UPTD PELATIHAN KESEHATAN</strong></div>
+                                </div>
                             </div>
-                            <div class="ms-4">
-                                <div>No. Rek: <strong>0139280245001</strong></div>
-                                <div>A.n: <strong>BPP UPTD PELATIHAN KESEHATAN</strong></div>
-                            </div>
-                        </div>
 
-                        {{-- <div class="bank-info mb-3 p-3 bg-light rounded">
-                            <div class="d-flex align-items-center mb-2">
-                                <i class="fas fa-university text-success me-2"></i>
-                                <strong>Bank Mandiri</strong>
-                            </div>
-                            <div class="ms-4">
-                                <div>No. Rek: <strong>0987654321</strong></div>
-                                <div>A.n: <strong>UPELKES</strong></div>
-                            </div>
-                        </div> --}}
+                            <hr>
 
-                        <hr>
+                            <h6 class="fw-bold mb-3">Petunjuk Pembayaran Transfer:</h6>
+                            <ol class="small">
+                                <li>Transfer sesuai nominal yang tertera</li>
+                                <li>Simpan bukti transfer</li>
+                                <li>Upload bukti transfer di form</li>
+                                <li>Tunggu verifikasi admin</li>
+                            </ol>
+                        @elseif($metode_pembayaran === 'cash')
+                            <h6 class="fw-bold mb-3">Informasi Pembayaran Cash:</h6>
+                            
+                            <div class="alert alert-success">
+                                <i class="fas fa-money-bill-wave me-2"></i>
+                                <strong>Pembayaran Cash</strong>
+                            </div>
 
-                        <h6 class="fw-bold mb-3">Petunjuk Pembayaran:</h6>
-                        <ol class="small">
-                            <li>Transfer sesuai nominal yang tertera</li>
-                            <li>Simpan bukti transfer</li>
-                            <li>Upload bukti transfer di</li>
-                        </ol>
+                            <h6 class="fw-bold mb-3">Petunjuk Pembayaran Cash:</h6>
+                            <ol class="small">
+                                <li>Konfirmasi booking dengan klik tombol submit</li>
+                                <li>Booking akan langsung disetujui</li>
+                                <li>Lakukan pembayaran cash saat check-in</li>
+                                <li>Siapkan uang pas sesuai nominal</li>
+                            </ol>
+
+                            <div class="alert alert-info mt-3">
+                                <small>
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Pembayaran cash dilakukan langsung di lokasi saat kedatangan
+                                </small>
+                            </div>
+                        @else
+                            <div class="text-center text-muted">
+                                <i class="fas fa-hand-pointer fa-2x mb-2"></i>
+                                <p>Pilih metode pembayaran terlebih dahulu</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -19,24 +19,66 @@
 
                     @if (count($carts) > 0)
                         @foreach ($carts as $cart)
-                            <div class="d-flex mb-4 pb-4 border-bottom">
+                            <div class="d-flex mb-4 pb-4 border-bottom cart-item">
                                 <div class="flex-shrink-0">
-                                    <img src="{{ $cart->layanan->gambar->first()->path ?? 'https://via.placeholder.com/150' }}"
-                                        alt="{{ $cart->layanan->nama_layanan }}" class="img-fluid rounded"
+                                    @php
+                                        $imagePath = null;
+                                        
+                                        // Prioritas: gambar kamar -> gambar ruang -> gambar layanan
+                                        if ($cart->kamar && $cart->kamar->gambarRuangs->count() > 0) {
+                                            $imagePath = 'storage/' . $cart->kamar->gambarRuangs->first()->path;
+                                        } elseif ($cart->ruang && $cart->ruang->gambarRuangs->count() > 0) {
+                                            $imagePath = 'storage/' . $cart->ruang->gambarRuangs->first()->path;
+                                        } elseif ($cart->layanan && $cart->layanan->gambar->count() > 0) {
+                                            $imagePath = 'storage/' . $cart->layanan->gambar->first()->path;
+                                        }
+                                    @endphp
+                                    
+                                    <img src="{{ $imagePath ? asset($imagePath) : 'https://via.placeholder.com/150x150/e9ecef/6c757d?text=No+Image' }}"
+                                        alt="{{ $cart->layanan->nama_layanan }}" class="img-fluid cart-item-image"
                                         style="width: 120px; height: 120px; object-fit: cover;">
                                 </div>
                                 <div class="flex-grow-1 ms-3">
                                     <h5>{{ $cart->layanan->nama_layanan }}</h5>
-                                    {{-- <p class="mb-1">
-                                        <span class="fw-bold">Tanggal:</span> 
-                                        {{ $cart->tanggal_checkin->format('d M Y') }} - {{ $cart->tanggal_checkout->format('d M Y') }}
-                                    </p> --}}
-                                    @if ($cart->jam_mulai)
-                                        {{-- <p class="mb-1">
-                                            <span class="fw-bold">Jam:</span> 
-                                            {{ $cart->jam_mulai->format('H:i') }} - {{ $cart->jam_selesai->format('H:i') }}
-                                        </p> --}}
+                                    
+                                    @if ($cart->kamar)
+                                        <p class="mb-1 text-muted">
+                                            <i class="fas fa-bed me-1"></i>
+                                            <span class="fw-bold">Kamar:</span> {{ $cart->kamar->nomor_kamar }}
+                                        </p>
                                     @endif
+                                    
+                                    @if ($cart->ruang)
+                                        <p class="mb-1 text-muted">
+                                            <i class="fas fa-door-open me-1"></i>
+                                            <span class="fw-bold">Ruang:</span> {{ $cart->ruang->kode_ruang }}
+                                        </p>
+                                    @endif
+                                    
+                                    <p class="mb-1">
+                                        <span class="fw-bold">Kegiatan:</span> {{ $cart->nama_kegiatan }}
+                                    </p>
+                                    
+                                    @if ($cart->tanggal_checkin)
+                                        <p class="mb-1">
+                                            <span class="fw-bold">Tanggal:</span> 
+                                            @if ($cart->tanggal_checkout && $cart->tanggal_checkin != $cart->tanggal_checkout)
+                                                {{ \Carbon\Carbon::parse($cart->tanggal_checkin)->format('d M Y') }} - {{ \Carbon\Carbon::parse($cart->tanggal_checkout)->format('d M Y') }}
+                                            @else
+                                                {{ \Carbon\Carbon::parse($cart->tanggal_checkin)->format('d M Y') }}
+                                            @endif
+                                        </p>
+                                    @endif
+                                    
+                                    @if ($cart->jam_mulai && $cart->jam_selesai)
+                                        <p class="mb-1">
+                                            <span class="fw-bold">Jam:</span> 
+                                            {{ \Carbon\Carbon::parse($cart->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($cart->jam_selesai)->format('H:i') }}
+                                        </p>
+                                    @else
+                                        -
+                                    @endif
+                                    
                                     <p class="mb-1">
                                         <span class="fw-bold">Jumlah Orang:</span> {{ $cart->jumlah_orang }}
                                     </p>
@@ -97,4 +139,46 @@
             </div>
         </div>
     </div>
+    <style>
+        .card {
+            border-radius: 15px;
+            border: none;
+        }
+        
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+        
+        .cart-item-image {
+            border-radius: 10px;
+            border: 3px solid #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item-image:hover {
+            border-color: #0d6efd;
+            transform: scale(1.02);
+        }
+        
+        .cart-item {
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+        
+        .cart-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .btn-outline-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
+        }
+    </style>
 </div>
+

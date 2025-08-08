@@ -264,7 +264,7 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    @if ($selectedkamar)
+                    {{-- @if ($selectedkamar)
                         @php
                             $kamarDetail = $kamarList->find($selectedkamar);
                         @endphp
@@ -272,7 +272,7 @@
                             <a href="{{ route('bookingId', ['layanan_id' => $kamarDetail->layanan->id]) }}" class="btn btn-primary">Booking
                                 Sekarang</a>
                         @endif
-                    @endif
+                    @endif --}}
                 </div>
             </div>
         </div>
