@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('layanan_id')->constrained('layanans')->onDelete('cascade');
             $table->foreignId('kamar_id')->nullable()->constrained('kamars')->onDelete('set null');
             $table->foreignId('ruang_id')->nullable()->constrained('ruangs')->onDelete('set null');
+            $table->string('nama_kegiatan')->nullable(); // Optional activity name
             $table->dateTime('tanggal_checkin');
             $table->dateTime('tanggal_checkout');
             $table->enum('status', ['pending', 'booked', 'cancelled', 'waiting_payment'])->default('pending');

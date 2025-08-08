@@ -15,7 +15,7 @@
                         <div class="step-circle">
                             <i class="fas fa-user"></i>
                         </div>
-                        <span class="step-label">Data Diri</span>
+                        <span class="step-label">Identitas Pemesan dan Instansi</span>
                     </div>
                     <div class="step-line {{ $step >= 3 ? 'active' : '' }}"></div>
                     <div class="step {{ $step >= 3 ? 'active' : '' }}">
@@ -150,10 +150,7 @@
                             @endif
 
                             {{-- Summary info --}}
-                            {{-- @if (
-                                ($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) ||
-                                    ($layananData->requiresTimeSelection() && $tanggal_checkin && $jam_mulai && $jam_selesai) ||
-                                    ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
+                            {{-- @if (($layananData->requiresDateRange() && $tanggal_checkin && $tanggal_checkout) || ($layananData->requiresTimeSelection() && $tanggal_checkin && $jam_mulai && $jam_selesai) || ($layananData->satuan === 'per_orang_kunjungan' && $tanggal_kunjungan))
                                 <div class="alert alert-info mt-3">
                                     <i class="fas fa-info-circle me-2"></i>
                                     @if ($layananData->satuan === 'per_jam' && $jam_mulai && $jam_selesai)
@@ -384,49 +381,109 @@
     <!-- Step 2: User Data -->
     @if ($step == 2)
         <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="fas fa-user me-2"></i>Data Diri</h5>
+            <div class="col-lg-12">
+                <div class="row">
+                    <!-- Data Diri -->
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-user me-2"></i>Data Diri</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Nama Lengkap *</label>
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                        wire:model="nama" placeholder="Masukkan nama lengkap">
+                                    @error('nama')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Email *</label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        wire:model="email" placeholder="Masukkan email">
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Nomor HP *</label>
+                                    <input type="number" class="form-control @error('no_hp') is-invalid @enderror"
+                                        wire:model="no_hp" placeholder="Masukkan nomor HP">
+                                    @error('no_hp')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Alamat *</label>
+                                    <textarea class="form-control @error('alamat') is-invalid @enderror" wire:model="alamat" rows="3"
+                                        placeholder="Masukkan alamat lengkap"></textarea>
+                                    @error('alamat')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Nama Lengkap *</label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                    wire:model="nama" placeholder="Masukkan nama lengkap">
-                                @error('nama')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+
+                    <!-- Data Instansi -->
+                    <div class="col-lg-6">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-building me-2"></i>Data Instansi</h5>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Email *</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                    wire:model="email" placeholder="Masukkan email">
-                                @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Nomor HP *</label>
-                                <input type="number" class="form-control @error('no_hp') is-invalid @enderror"
-                                    wire:model="no_hp" placeholder="Masukkan nomor HP">
-                                @error('no_hp')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Alamat *</label>
-                                <textarea class="form-control @error('alamat') is-invalid @enderror" wire:model="alamat" rows="3"
-                                    placeholder="Masukkan alamat lengkap"></textarea>
-                                @error('alamat')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Nama Kegiatan *</label>
+                                    <input type="text"
+                                        class="form-control @error('nama_kegiatan') is-invalid @enderror"
+                                        wire:model="nama_kegiatan" placeholder="Masukkan nama kegiatan">
+                                    @error('nama_kegiatan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Nama Instansi *</label>
+                                    <input type="text"
+                                        class="form-control @error('nama_instansi') is-invalid @enderror"
+                                        wire:model="nama_instansi" placeholder="Masukkan nama instansi">
+                                    @error('nama_instansi')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Jabatan di Instansi *</label>
+                                    <input type="text"
+                                        class="form-control @error('jabatan_instansi') is-invalid @enderror"
+                                        wire:model="jabatan_instansi" placeholder="Masukkan jabatan di instansi">
+                                    @error('jabatan_instansi')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Alamat Instansi *</label>
+                                    <textarea class="form-control @error('alamat_instansi') is-invalid @enderror" wire:model="alamat_instansi"
+                                        rows="2" placeholder="Masukkan alamat instansi lengkap"></textarea>
+                                    @error('alamat_instansi')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Foto KTP/Tanda Pengenal Instansi *</label>
+                                    <input type="file"
+                                        class="form-control @error('foto_id_card') is-invalid @enderror"
+                                        wire:model="foto_id_card">
+                                    @error('foto_id_card')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <!-- Navigation Buttons -->
@@ -450,95 +507,110 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-<div class="col-md-6">
-                            <h6 class="fw-bold mb-3">Detail Layanan</h6>
-                            <table class="table table-borderless">
-                                <tr>
-                                    <td>Layanan:</td>
-                                    <td class="fw-semibold">{{ $layananData->nama_layanan }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Kategori:</td>
-                                    <td><span class="badge bg-primary">{{ ucfirst($layananData->kategori) }}</span></td>
-                                </tr>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold mb-3">Detail Layanan</h6>
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td>Layanan:</td>
+                                        <td class="fw-semibold">{{ $layananData->nama_layanan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kategori:</td>
+                                        <td><span
+                                                class="badge bg-primary">{{ ucfirst($layananData->kategori) }}</span>
+                                        </td>
+                                    </tr>
 
-                                @if ($layananData->satuan === \App\Models\Layanan::UNIT_PER_JAM)
-                                    <tr>
-                                        <td>Tanggal:</td>
-                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Waktu:</td>
-                                        <td class="fw-semibold">{{ $jam_mulai }} - {{ $jam_selesai }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Durasi:</td>
-                                        <td class="fw-semibold">{{ $totalJam }} jam</td>
-                                    </tr>
-                                @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_HARI ||
-                                        $layananData->satuan === \App\Models\Layanan::UNIT_PER_KAMAR_HARI ||
-                                        $layananData->satuan === \App\Models\Layanan::UNIT_PER_KEGIATAN_HARI ||
-                                        $layananData->satuan === \App\Models\Layanan::UNIT_PER_ORANG_HARI)
-                                    <tr>
-                                        <td>Check-in:</td>
-                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Check-out:</td>
-                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Durasi:</td>
-                                        <td class="fw-semibold">{{ $totalHari }} hari</td>
-                                    </tr>
-                                @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_BULAN)
-                                    <tr>
-                                        <td>Check-in:</td>
-                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Check-out:</td>
-                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Durasi:</td>
-                                        <td class="fw-semibold">{{ $totalBulan }} bulan</td>
-                                    </tr>
-                                @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_ORANG_KUNJUNGAN)
-                                    <tr>
-                                        <td>Tanggal Kunjungan:</td>
-                                        <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_kunjungan)) }}</td>
-                                    </tr>
-                                @endif
+                                    @if ($layananData->satuan === \App\Models\Layanan::UNIT_PER_JAM)
+                                        <tr>
+                                            <td>Tanggal:</td>
+                                            <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Waktu:</td>
+                                            <td class="fw-semibold">{{ $jam_mulai }} - {{ $jam_selesai }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Durasi:</td>
+                                            <td class="fw-semibold">{{ $totalJam }} jam</td>
+                                        </tr>
+                                    @elseif (
+                                        $layananData->satuan === \App\Models\Layanan::UNIT_PER_HARI ||
+                                            $layananData->satuan === \App\Models\Layanan::UNIT_PER_KAMAR_HARI ||
+                                            $layananData->satuan === \App\Models\Layanan::UNIT_PER_KEGIATAN_HARI ||
+                                            $layananData->satuan === \App\Models\Layanan::UNIT_PER_ORANG_HARI)
+                                        <tr>
+                                            <td>Check-in:</td>
+                                            <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Check-out:</td>
+                                            <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Durasi:</td>
+                                            <td class="fw-semibold">{{ $totalHari }} hari</td>
+                                        </tr>
+                                    @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_BULAN)
+                                        <tr>
+                                            <td>Check-in:</td>
+                                            <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkin)) }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Check-out:</td>
+                                            <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_checkout)) }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Durasi:</td>
+                                            <td class="fw-semibold">{{ $totalBulan }} bulan</td>
+                                        </tr>
+                                    @elseif ($layananData->satuan === \App\Models\Layanan::UNIT_PER_ORANG_KUNJUNGAN)
+                                        <tr>
+                                            <td>Tanggal Kunjungan:</td>
+                                            <td class="fw-semibold">{{ date('d M Y', strtotime($tanggal_kunjungan)) }}
+                                            </td>
+                                        </tr>
+                                    @endif
 
-                                @if ($layananData->requiresPersonCount())
-                                    <tr>
-                                        <td>Jumlah Orang:</td>
-                                        <td class="fw-semibold">{{ $jumlah_orang }} orang</td>
-                                    </tr>
-                                @endif
+                                    @if ($layananData->requiresPersonCount())
+                                        <tr>
+                                            <td>Jumlah Orang:</td>
+                                            <td class="fw-semibold">{{ $jumlah_orang }} orang</td>
+                                        </tr>
+                                    @endif
 
-                                @if ($selectedKamar)
-                                    @php
-                                        $selectedKamarData = collect($availableKamar)->firstWhere('id', $selectedKamar);
-                                    @endphp
-                                    <tr>
-                                        <td>Kamar:</td>
-                                        <td class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</td>
-                                    </tr>
-                                @endif
+                                    @if ($selectedKamar)
+                                        @php
+                                            $selectedKamarData = collect($availableKamar)->firstWhere(
+                                                'id',
+                                                $selectedKamar,
+                                            );
+                                        @endphp
+                                        <tr>
+                                            <td>Kamar:</td>
+                                            <td class="fw-semibold">{{ $selectedKamarData['nomor_kamar'] ?? '' }}</td>
+                                        </tr>
+                                    @endif
 
-                                @if ($selectedRuang)
-                                    @php
-                                        $selectedRuangData = collect($availableRuang)->firstWhere('id', $selectedRuang);
-                                    @endphp
-                                    <tr>
-                                        <td>Ruang:</td>
-                                        <td class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</td>
-                                    </tr>
-                                @endif
-                            </table>
-                        </div>
+                                    @if ($selectedRuang)
+                                        @php
+                                            $selectedRuangData = collect($availableRuang)->firstWhere(
+                                                'id',
+                                                $selectedRuang,
+                                            );
+                                        @endphp
+                                        <tr>
+                                            <td>Ruang:</td>
+                                            <td class="fw-semibold">{{ $selectedRuangData['kode_ruang'] ?? '' }}</td>
+                                        </tr>
+                                    @endif
+                                </table>
+                            </div>
 
                             <div class="col-md-6">
                                 <h6 class="fw-bold mb-3">Data Pemesan</h6>
@@ -559,6 +631,18 @@
                                         <td>Alamat:</td>
                                         <td class="fw-semibold">{{ $alamat }}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Nama Instansi:</td>
+                                        <td class="fw-semibold">{{ $nama_instansi }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jabatan:</td>
+                                        <td class="fw-semibold">{{ $jabatan_instansi }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Alamat Instansi:</td>
+                                        <td class="fw-semibold">{{ $alamat_instansi }}</td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
@@ -576,7 +660,11 @@
                                     </div>
                                     <small class="text-muted">
                                         {{ $layananData->tarif }} x
-                                        @if ($layananData->satuan == 'per_hari' || $layananData->satuan == 'per_kamar_hari' || $layananData->satuan == 'per_kegiatan_hari' || $layananData->satuan == 'per_orang_hari')
+                                        @if (
+                                            $layananData->satuan == 'per_hari' ||
+                                                $layananData->satuan == 'per_kamar_hari' ||
+                                                $layananData->satuan == 'per_kegiatan_hari' ||
+                                                $layananData->satuan == 'per_orang_hari')
                                             {{ $totalHari }} Hari
                                         @elseif ($layananData->satuan == 'per_bulan')
                                             {{ $totalBulan }} Bulan

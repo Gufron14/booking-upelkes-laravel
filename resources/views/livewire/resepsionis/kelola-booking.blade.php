@@ -220,117 +220,179 @@
 
     {{-- Detail Modal --}}
     @if ($selectedBooking)
-        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel"
-            aria-hidden="true" wire:ignore.self>
-            <div class="modal-dialog modal-lg">
+        <div class="modal fade modal-fullscreen-sm-down" id="detailModal" tabindex="-1"
+            aria-labelledby="detailModalLabel" aria-hidden="true" wire:ignore.self>
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailModalLabel">Detail Booking</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             wire:click="closeDetailModal"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body p-5">
                         <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="mb-3">
-                                <h6 class="fw-bold mb-3">Informasi Customer</h6>
-                                <table class="table table-borderless table-sm">
-                                    <tr>
-                                        <td class="fw-semibold">Nama:</td>
-                                        <td>{{ $selectedBooking->user->nama }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">Email:</td>
-                                        <td>{{ $selectedBooking->user->email }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">No. Telepon:</td>
-                                        <td>{{ $selectedBooking->user->no_hp ?? '-' }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                                <h6 class="fw-bold mb-3">Informasi Booking</h6>
-                                <table class="table table-borderless table-sm">
-                                    <tr>
-                                        <td class="fw-semibold">Layanan:</td>
-                                        <td>{{ $selectedBooking->layanan->nama_layanan }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">Ruang/Kamar:</td>
-                                        <td>
-                                            @if ($selectedBooking->kamar)
-                                                Kamar {{ $selectedBooking->kamar->nomor_kamar }}
-                                            @elseif($selectedBooking->ruang)
-                                                Ruang {{ $selectedBooking->ruang->kode_ruang }}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">Tanggal Checkin:</td>
-                                        <td>{{ $selectedBooking->formatted_checkin }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">Tanggal Checkout:</td>
-                                        <td>{{ $selectedBooking->formatted_checkout }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">Total Biaya:</td>
-                                        <td class="fw-bold text-success">Rp
-                                            {{ number_format($booking->calculateTotal(), 0, ',', '.') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">Status:</td>
-                                        <td>
-                                            @if ($selectedBooking->status === 'pending')
-                                                <span class="badge bg-warning">Pending</span>
-                                            @elseif($selectedBooking->status === 'booked')
-                                                <span class="badge bg-success">Confirmed</span>
-                                            @elseif($selectedBooking->status === 'cancelled')
-                                                <span class="badge bg-danger">Cancelled</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
+                            {{-- KIRI --}}
                             <div class="col-md-6">
-                                <h6 class="fw-bold mb-2">Bukti Pembayaran</h6>
-                                @if ($selectedBooking->payment && $selectedBooking->payment->bukti_transfer)
-                                    <img src="{{ asset('storage/' . $selectedBooking->payment->bukti_transfer) }}"
-                                        class="img-fluid img-thumbnail" alt="Bukti Pembayaran"
-                                        style="max-height: 300px; cursor: pointer;"
-                                        onclick="window.open(this.src, '_blank')">
-                                @else
-                                    <div class="alert alert-warning">
-                                        <i class="fas fa-exclamation-triangle me-2"></i>
-                                        Bukti pembayaran belum diupload
+                                {{-- Identitas Customer --}}
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Identitas Customer</h6>
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td class="fw-semibold">Nama</td>
+                                            <td>: {{ $selectedBooking->user->nama }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Email</td>
+                                            <td>: {{ $selectedBooking->user->email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">No. Telepon</td>
+                                            <td>: {{ $selectedBooking->user->no_hp ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Alamat</td>
+                                            <td>: {{ $selectedBooking->user->alamat ?? '-' }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                {{-- Informasi Instansi --}}
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Informasi Instansi</h6>
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td class="fw-semibold">Instansi</td>
+                                            <td>: {{ $selectedBooking->user->nama_instansi ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Jabatan</td>
+                                            <td>: {{ $selectedBooking->user->jabatan_instansi ?? '-' }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                {{-- Informasi Booking --}}
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Informasi Booking</h6>
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td class="fw-semibold">Layanan</td>
+                                            <td>: {{ $selectedBooking->layanan->nama_layanan }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Ruang/Kamar</td>
+                                            <td>:
+                                                @if ($selectedBooking->kamar)
+                                                    Kamar {{ $selectedBooking->kamar->nomor_kamar }}
+                                                @elseif($selectedBooking->ruang)
+                                                    Ruang {{ $selectedBooking->ruang->kode_ruang }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Nama Kegiatan</td>
+                                            <td>: {{ $selectedBooking->nama_kegiatan ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Jumlah Orang</td>
+                                            <td>: {{ $selectedBooking->jumlah_orang ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Jam Mulai</td>
+                                            <td>:
+                                                {{ $selectedBooking->jam_mulai ? Carbon\Carbon::parse($selectedBooking->jam_mulai)->format('H:i') : '-' }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Jam Selesai</td>
+                                            <td>:
+                                                {{ $selectedBooking->jam_selesai ? Carbon\Carbon::parse($selectedBooking->jam_selesai)->format('H:i') : '-' }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Tanggal Checkin</td>
+                                            <td>: {{ $selectedBooking->formatted_checkin }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Tanggal Checkout</td>
+                                            <td>: {{ $selectedBooking->formatted_checkout }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Total Biaya</td>
+                                            <td class="fw-bold text-success">
+                                                : Rp
+                                                {{ number_format($selectedBooking->calculateTotal(), 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Deadline Pembayaran</td>
+                                            <td>:
+                                                {{ $selectedBooking->payment_deadline ? Carbon\Carbon::parse($selectedBooking->payment_deadline)->format('d M Y H:i') : '-' }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-semibold">Status</td>
+                                            <td>:
+                                                @if ($selectedBooking->status === 'pending')
+                                                    <span class="badge bg-warning">Pending</span>
+                                                @elseif($selectedBooking->status === 'booked')
+                                                    <span class="badge bg-success">Confirmed</span>
+                                                @elseif($selectedBooking->status === 'cancelled')
+                                                    <span class="badge bg-danger">Cancelled</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            {{-- KANAN --}}
+                            <div class="col-md-6">
+                                {{-- Bukti Pembayaran --}}
+                                <div class="mb-4">
+                                    <h6 class="fw-bold mb-3">Bukti Pembayaran</h6>
+                                    @if ($selectedBooking->payment && $selectedBooking->payment->bukti_transfer)
+                                        <img src="{{ asset('storage/' . $selectedBooking->payment->bukti_transfer) }}"
+                                            class="img-fluid img-thumbnail" alt="Bukti Pembayaran"
+                                            style="max-height: 300px; cursor: pointer;"
+                                            onclick="window.open(this.src, '_blank')">
+                                    @else
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            Bukti pembayaran belum diupload
+                                        </div>
+                                    @endif
+                                </div>
+
+                                {{-- Catatan Customer --}}
+                                @if ($selectedBooking->catatan)
+                                    <div class="mb-4">
+                                        <h6 class="fw-bold mb-3">Catatan Customer</h6>
+                                        <div class="alert alert-info">
+                                            {{ $selectedBooking->catatan }}
+                                        </div>
                                     </div>
                                 @endif
                             </div>
                         </div>
-
-                        @if ($selectedBooking->catatan)
-                            <div class="mt-4">
-                                <h6 class="fw-bold mb-2">Catatan Customer</h6>
-                                <div class="alert alert-info">
-                                    {{ $selectedBooking->catatan }}
-                                </div>
-                            </div>
-                        @endif
                     </div>
+
                     <div class="modal-footer">
                         @if ($selectedBooking->status === 'pending')
                             <button type="button" class="btn btn-success"
                                 wire:click="confirmBooking({{ $selectedBooking->id }})"
                                 wire:confirm="Apakah Anda yakin ingin mengkonfirmasi booking ini?"
                                 data-bs-dismiss="modal">
-                                <i class="fas fa-check me-1"></i>Konfirmasi Booking
+                                <i class="fas fa-check me-1"></i> Konfirmasi Booking
                             </button>
 
                             <button type="button" class="btn btn-danger"
                                 wire:click="cancelBooking({{ $selectedBooking->id }})"
                                 wire:confirm="Apakah Anda yakin ingin membatalkan booking ini?"
                                 data-bs-dismiss="modal">
-                                <i class="fas fa-times me-1"></i>Batalkan Booking
+                                <i class="fas fa-times me-1"></i> Batalkan Booking
                             </button>
                         @endif
 
@@ -341,4 +403,5 @@
             </div>
         </div>
     @endif
+
 </div>

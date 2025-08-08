@@ -10,7 +10,7 @@ class Booking extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'layanan_id', 'kamar_id', 'ruang_id', 'tanggal_checkin', 'tanggal_checkout', 'jam_mulai', 'jam_selesai', 'jumlah_orang', 'status', 'total_biaya', 'catatan', 'payment_deadline'];
+    protected $fillable = ['user_id', 'layanan_id', 'kamar_id', 'ruang_id', 'nama_kegiatan', 'tanggal_checkin', 'tanggal_checkout', 'jam_mulai', 'jam_selesai', 'jumlah_orang', 'status', 'total_biaya', 'catatan', 'payment_deadline'];
 
     protected $casts = [
         'tanggal_checkin' => 'date',

@@ -12,14 +12,17 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Title;
+use Livewire\WithFileUploads;
 
 #[Title('Booking Ruangan | Upelkes Jabar')]
 class Booking extends Component
 {
+    use WithFileUploads;
     public $step = 1;
     public $selectedLayanan = null;
     public $selectedKamar = null;
     public $selectedRuang = null;
+    public $nama_kegiatan;
     public $tanggal_checkin = '';
     public $tanggal_checkout = '';
     public $tanggal_kunjungan = '';
@@ -42,7 +45,10 @@ class Booking extends Component
     public $email = '';
     public $no_hp = '';
     public $alamat = '';
-
+    public $nama_instansi = '';
+    public $alamat_instansi = '';
+    public $jabatan_instansi = '';
+    public $foto_id_card;
     protected function rules()
     {
         if (!$this->layananData) {
@@ -51,10 +57,15 @@ class Booking extends Component
 
         $rules = [
             'selectedLayanan' => 'required',
+            'nama_kegiatan' => 'required|string|max:255',
             'nama' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'no_hp' => 'required|string|max:20',
             'alamat' => 'required|string|max:500',
+            'nama_instansi' => 'required|string|max:255',
+            'alamat_instansi' => 'required|string|max:500',
+            'jabatan_instansi' => 'required|string|max:255',
+            'foto_id_card' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ];
 
         // Date validation based on unit type
@@ -87,6 +98,7 @@ class Booking extends Component
 
     protected $messages = [
         'selectedLayanan.required' => 'Pilih layanan terlebih dahulu',
+        'nama_kegiatan.required' => 'Nama kegiatan harus diisi',
         'tanggal_checkin.required' => 'Tanggal check-in harus diisi',
         'tanggal_checkin.after_or_equal' => 'Tanggal check-in tidak boleh kurang dari hari ini',
         'tanggal_checkout.required' => 'Tanggal check-out harus diisi',
@@ -96,6 +108,9 @@ class Booking extends Component
         'email.email' => 'Format email tidak valid',
         'no_hp.required' => 'Nomor HP harus diisi',
         'alamat.required' => 'Alamat harus diisi',
+        'nama_instansi.required' => 'Nama instansi harus diisi',
+        'alamat_instansi.required' => 'Alamat instansi harus diisi',
+        'jabatan_instansi.required' => 'Jabatan di instansi harus diisi'
     ];
 
     public function mount($layanan_id = null)
@@ -112,12 +127,17 @@ class Booking extends Component
             $this->email = $user->email ?? '';
             $this->no_hp = $user->no_hp ?? '';
             $this->alamat = $user->alamat ?? '';
+            $this->foto_id_card = $user->foto_id_card ?? '';
+            $this->nama_instansi = $user->nama_instansi ?? '';
+            $this->alamat_instansi = $user->alamat_instansi ?? '';
+            $this->jabatan_instansi = $user->jabatan_instansi ?? '';
         }
 
         // Initialize empty arrays for availability
         $this->availableKamar = [];
         $this->availableRuang = [];
 
+        
         $this->layananId = $layanan_id;
         $this->layanan = Layanan::findOrFail($layanan_id);
         $this->loadAvailableRoomsAndSpaces();
@@ -403,8 +423,15 @@ class Booking extends Component
                     'email' => $this->email,
                     'no_hp' => $this->no_hp,
                     'alamat' => $this->alamat,
+                    'nama_instansi' => $this->nama_instansi,
+                    'alamat_instansi' => $this->alamat_instansi,
+                    'jabatan_instansi' => $this->jabatan_instansi,
+                    'foto_id_card' => $this->foto_id_card->store('foto_id_card', 'public'),
                 ]);
             } else {
+                // Store Images => foto_id_card
+                $this->foto_id_card = $this->foto_id_card->store('foto_id_card', 'public');
+
                 // Check if user exists
                 $user = User::where('email', $this->email)->first();
                 if (!$user) {
@@ -413,6 +440,10 @@ class Booking extends Component
                         'email' => $this->email,
                         'no_hp' => $this->no_hp,
                         'alamat' => $this->alamat,
+                        'nama_instansi' => $this->nama_instansi,
+                        'jabatan_instansi' => $this->jabatan_instansi,
+                        'alamat_instansi' => $this->alamat_instansi,
+                        'foto_id_card' => $this->foto_id_card,
                         'password' => bcrypt('password123'), // Default password
                     ]);
                     $user->assignRole('customer');
@@ -426,6 +457,7 @@ class Booking extends Component
                 'kamar_id' => $this->selectedKamar,
                 'ruang_id' => $this->selectedRuang,
                 'jumlah_orang' => $this->jumlah_orang,
+                'nama_kegiatan' => $this->nama_kegiatan,
                 'status' => 'waiting_payment',
                 'payment_deadline' => Carbon::now()->addHours(1), // Set payment deadline to 1 day from now
                 // 'total_biaya' => $this->totalBiaya,
@@ -451,6 +483,9 @@ class Booking extends Component
             $booking = ModelsBooking::create($bookingData);
 
             DB::commit();
+
+            // Send email notification
+            $this->sendBookingNotification($booking, $user);
 
             session()->flash('success', 'Booking berhasil dibuat!');
 
@@ -481,6 +516,25 @@ class Booking extends Component
     {
         $this->checkAvailability();
         $this->calculateTotal();
+    }
+
+    protected function sendBookingNotification($booking, $user)
+    {
+        $adminEmail = env('ADMIN_EMAIL', 'dekaapriyanti5@gmail.com');
+        $bookingUrl = url('/booking/' . $booking->id);
+
+        $details = [
+            'subject' => 'Booking Baru - ' . $booking->nama_kegiatan,
+            'user_name' => $user->nama,
+            'user_email' => $user->email,
+            'user_phone' => $user->no_hp,
+            'user_instansi' => $user->nama_instansi,
+            'booking_activity' => $booking->nama_kegiatan,
+            'booking_date' => $booking->tanggal_checkin,
+            'booking_url' => $bookingUrl
+        ];
+
+        \Mail::to($adminEmail)->send(new \App\Mail\BookingNotification($details));
     }
 
     public function render()
