@@ -68,6 +68,24 @@
                                     @enderror
                                 </div>
 
+                                <!-- Foto ID Card input -->
+                                <div class="mb-4">
+                                    <label for="foto_id_card" class="form-label">Foto KTP/Tanda Pengenal</label>
+                                    <input type="file" id="foto_id_card"
+                                        class="form-control @error('foto_id_card') is-invalid @enderror"
+                                        wire:model="foto_id_card" accept="image/*" />
+                                    @error('foto_id_card')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    @if ($foto_id_card)
+                                        <div class="mt-2">
+                                            <img src="{{ $foto_id_card->temporaryUrl() }}" alt="Preview" class="img-thumbnail" style="max-width: 200px;">
+                                        </div>
+                                    @endif
+                                </div>
+
                                 <!-- Email input -->
                                 <div class="form-floating mb-3">
                                     <input type="email" id="email"

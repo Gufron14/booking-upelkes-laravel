@@ -35,6 +35,17 @@
                                 <div class="text-danger small">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Foto KTP</label>
+                            <input type="file" wire:model="foto_id_card" class="form-control">
+                            @error('foto_id_card')
+                                <div class="text-danger small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Foto KTP Saat ini</label>
+                            <img src="{{ asset('storage/' . $user->foto_id_card) }}" alt="Foto KTP" class="img-fluid rounded">
+                        </div>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                 </div>

@@ -43,8 +43,9 @@
                     <td>Customer</td>
                     <td>No. Telepon</td>
                     <td>Alamat</td>
-                            <td>Instansi</td>
-        <td>Tanggal Daftar</td>
+                    <td>Foto KTP</td>
+                    <td>Instansi</td>
+                    <td>Tanggal Daftar</td>
                     <td>Aksi</td>
                 </tr>
             </thead>
@@ -60,8 +61,20 @@
                         </td>
                         <td>{{ $user->no_hp }}</td>
                         <td>{{ $user->alamat }}</td>
-                                    <td>{{ $user->nama_instansi }}</td>
-            <td>{{ $user->created_at->format('d/m/Y') }}</td>
+                        <td>
+                            @if($user->foto_id_card)
+                                <img src="{{ asset('storage/' . $user->foto_id_card) }}" 
+                                     alt="KTP {{ $user->nama }}" 
+                                     class="img-thumbnail" 
+                                     style="max-width: 100px; max-height: 100px; cursor: pointer;"
+                                     data-bs-toggle="modal" 
+                                     data-bs-target="#imageModal{{ $user->id }}">
+                            @else
+                                <span class="text-muted">Tidak ada foto</span>
+                            @endif
+                        </td>
+                        <td>{{ $user->nama_instansi }}</td>
+                        <td>{{ $user->created_at->format('d/m/Y') }}</td>
                         <td>
                             <button class="btn btn-danger rounded-pill" wire:click="delete({{ $user->id }})"
                                 wire:confirm="Apakah Anda yakin ingin menghapus customer ini?">
@@ -70,7 +83,7 @@
                             </button>
                         </td>
                     @empty
-                        <td colspan="6" class="text-center text-muted">
+                        <td colspan="8" class="text-center text-muted">
                             Belum ada Customer.
                         </td>
                     </tr>
@@ -78,4 +91,25 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Image Modals -->
+    @foreach ($users as $user)
+        @if($user->foto_id_card)
+            <div class="modal fade" id="imageModal{{ $user->id }}" tabindex="-1" aria-labelledby="imageModalLabel{{ $user->id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="imageModalLabel{{ $user->id }}">KTP/Tanda Pengenal - {{ $user->nama }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img src="{{ asset('storage/' . $user->foto_id_card) }}" 
+                                 alt="KTP {{ $user->nama }}" 
+                                 class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
 </div>

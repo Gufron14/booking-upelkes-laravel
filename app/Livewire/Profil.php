@@ -2,13 +2,16 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
+use Livewire\WithFileUploads;
 use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\Auth;
 
 #[Title('Profil')]
 class Profil extends Component
 {
-    public $nama, $email, $no_hp, $alamat;
+    use WithFileUploads;
+
+    public $nama, $email, $no_hp, $alamat, $foto_id_card;
 
     public function mount()
     {
@@ -17,11 +20,22 @@ class Profil extends Component
         $this->email = $user->email;
         $this->no_hp = $user->no_hp;
         $this->alamat = $user->alamat;
+        $this->foto_id_card = $user->foto_id_card;
     }
 
     public function updateProfil()
     {
         $user = Auth::user();
+
+        if ($this->foto_id_card) {
+            $this->validate([
+                'foto_id_card' => 'image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+            $user->update([
+                'foto_id_card' => $this->foto_id_card->store('foto_id_card', 'public'),
+            ]);
+        }
+
         $this->validate([
             'nama' => 'required|string|max:255',
             'no_hp' => 'nullable|string|max:20|unique:users,no_hp,' . $user->id,
@@ -37,6 +51,8 @@ class Profil extends Component
 
     public function render()
     {
-        return view('livewire.profil');
+        return view('livewire.profil', [
+            'user' => Auth::user()
+        ]);
     }
 }
