@@ -40,8 +40,8 @@
 
                     <!-- Gambar -->
                     <div class="position-relative">
-                        @if ($ruang->layanan->gambar->count() > 0)
-                            <img src="{{ asset('storage/' . $ruang->layanan->gambar->first()->path) }}"
+                        @if ($ruang->gambarRuangs->count() > 0)
+                            <img src="{{ asset('storage/' . $ruang->gambarRuangs->first()->path) }}"
                                 class="card-img-top" alt="{{ $ruang->layanan->nama }}"
                                 style="height: 250px; object-fit: cover;">
                         @else
@@ -187,8 +187,8 @@
                         @if ($ruangDetail)
                             <div class="row">
                                 <div class="col-md-6">
-                                    @if ($ruangDetail->layanan->gambar->count() > 0)
-                                        <img src="{{ asset('storage/' . $ruangDetail->layanan->gambar->first()->path) }}"
+                                    @if ($ruangDetail->gambarRuangs->count() > 0)
+                                        <img src="{{ asset('storage/' . $ruangDetail->gambarRuangs->first()->path) }}"
                                             class="img-fluid rounded" alt="{{ $ruangDetail->kode_ruang }}">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center rounded"
@@ -204,11 +204,11 @@
                                     <h4 class="fw-bold">Ruangan {{ $ruangDetail->kode_ruang }}</h4>
 
                                     <div class="row g-3">
-                                        <div class="col-6">
+                                        {{-- <div class="col-6">
                                             <strong>Kategori:</strong><br>
                                             <span
                                                 class="badge bg-primary">{{ ucfirst($ruangDetail->layanan->kategori) }}</span>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-6">
                                             <strong>Kapasitas:</strong><br>
                                             {{ $ruangDetail->layanan->kapasitas ?? 'N/A' }} orang

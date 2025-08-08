@@ -4,15 +4,21 @@ namespace App\Livewire\Admin;
 
 use App\Models\Ruang;
 use App\Models\Layanan;
+use App\Models\GambarRuang;
 use Livewire\Component;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
 
 #[Title('Kelola Ruangan')]
 #[Layout('components.layouts.admin-layout')]
 class Ruangan extends Component
 {
+    use WithFileUploads;
+
     public $layanan_id, $kode_ruang, $status, $ruang;
+    public $images = [];
+    public $editingId = null;
 
     protected $rules = [
         'layanan_id' => 'required',
@@ -22,7 +28,7 @@ class Ruangan extends Component
 
     public function mount()
     {
-        $this->ruang = Ruang::with('layanan')->get();
+        $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get();
     }
 
     public function save()
@@ -33,16 +39,22 @@ class Ruangan extends Component
             'layanan_id' => $this->layanan_id,
             'kode_ruang' => $this->kode_ruang,
         ]);
+
+        // Save images
+        foreach ($this->images as $image) {
+            $path = $image->store('ruang-images', 'public');
+            GambarRuang::create([
+                'ruang_id' => $ruang->id,
+                'path' => $path
+            ]);
+        }
     
         session()->flash('success', 'ruang berhasil disimpan.');
     
         $this->reset();
-        $this->ruang = Ruang::with('layanan')->get(); // Refresh data
-    
-        return $this->redirect(request()->header('Referer'), navigate: true);
+        $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get(); // Refresh data
+        $this->dispatch('hideRuangModal');
     }
-
-    public $editingId = null;
 
     public function edit($id)
     {
@@ -50,6 +62,7 @@ class Ruangan extends Component
         $this->editingId = $id;
         $this->layanan_id = $ruang->layanan_id;
         $this->kode_ruang = $ruang->kode_ruang;
+        $this->dispatch('showRuangModal');
     }
 
     public function update()
@@ -63,12 +76,34 @@ class Ruangan extends Component
             'kode_ruang' => $this->kode_ruang,
         ]);
 
+        // Update images if new ones are uploaded
+        if (!empty($this->images)) {
+            foreach ($this->images as $image) {
+                $path = $image->store('ruang-images', 'public');
+                GambarRuang::create([
+                    'ruang_id' => $ruang->id,
+                    'path' => $path
+                ]);
+            }
+        }
+
         session()->flash('success', 'Ruang berhasil diperbarui.');
 
         $this->reset();
-        $this->ruang = Ruang::with('layanan')->get();
+        $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get();
+        $this->dispatch('hideRuangModal');
+    }
 
-        return $this->redirect(request()->header('Referer'), navigate: true);
+    public function openModal()
+    {
+        $this->reset(['editingId', 'layanan_id', 'kode_ruang', 'images']);
+        $this->dispatch('showRuangModal');
+    }
+
+    public function closeModal()
+    {
+        $this->reset();
+        $this->dispatch('hideRuangModal');
     }
 
     public function cancelEdit()
@@ -81,9 +116,28 @@ class Ruangan extends Component
         Ruang::find($id)->delete();
         session()->flash('success', 'ruang berhasil dihapus.');
         
-        $this->ruang = Ruang::with('layanan')->get(); // Refresh data
+        $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get(); // Refresh data
         
         return $this->redirect(request()->header('Referer'), navigate: true);
+    }
+
+    public function deleteImage($imageId)
+    {
+        $image = GambarRuang::find($imageId);
+        if ($image) {
+            // Delete the actual file
+            if (file_exists(storage_path('app/public/' . $image->path))) {
+                unlink(storage_path('app/public/' . $image->path));
+            }
+            
+            // Delete from database
+            $image->delete();
+            
+            // Refresh data
+            $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get();
+            
+            session()->flash('success', 'Gambar berhasil dihapus.');
+        }
     }
 
     public function render()

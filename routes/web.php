@@ -57,18 +57,25 @@ Route::middleware('auth')->group(function () {
     })->name('logout');
 
     Route::get('booking/{layanan_id?}', Booking::class)->name('bookingId');
+    Route::get('kamar/booking/{kamar_id?}', Booking::class)->name('bookingKamarId');
+    Route::get('ruangan/booking/{ruangan_id?}', Booking::class)->name('bookingRuanganId');
     Route::get('riwayat', Riwayat::class)->name('riwayat');
     Route::get('payment/{booking}', Payment::class)->name('payment');
     Route::get('cart', Cart::class)->name('cart');
 
     Route::get('profil', Profil::class)->name('profil');
+
+    Route::get('receipt/{booking}', function ($booking) {
+        $booking = \App\Models\Booking::findOrFail($booking);
+        return view('components.print-receipt', compact('booking'));
+    })->name('receipt');
 });
 
-Route::middleware(['auth', 'role:admin|resepsionis'])->group( function () {
+Route::middleware(['auth', 'role:admin|resepsionis'])->group(function () {
 
-    Route::prefix('admin')->group(function () {        
+    Route::prefix('admin')->group(function () {
         Route::get('dashboard', Dashboard::class)->name('dashboard');
-    
+
         // ADMIN
         Route::get('layanan', Index::class)->name('daftar.layanan');
         Route::get('layanan/create', CreateLayanan::class)->name('layanan.create');
@@ -76,16 +83,16 @@ Route::middleware(['auth', 'role:admin|resepsionis'])->group( function () {
         Route::get('kamar', \App\Livewire\Admin\Kamar::class)->name('kamar');
         Route::get('ruangan', Ruangan::class)->name('ruangan');
         Route::get('fasilitas', Fasilitas::class)->name('fasilitas');
-    
+
         // RESEPSIONIS
         Route::get('booking', KelolaBooking::class)->name('kelola.booking');
         Route::get('transaksi', Transaksi::class)->name('transaksi');
 
         // Tambahkan route ini
         Route::get('cetak-laporan', CetakLaporan::class)
-        ->name('cetak-laporan');
+            ->name('cetak-laporan');
 
-    
+
         Route::get('customer', Customer::class)->name('customer');
     });
 });

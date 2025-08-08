@@ -32,10 +32,10 @@
             
             <h3>Informasi Booking</h3>
             <p><strong>Nama Kegiatan:</strong> {{ $details['booking_activity'] }}</p>
-            <p><strong>Tanggal:</strong> {{ $details['booking_date'] }}</p>
+            {{-- <p><strong>Tanggal:</strong> {{ $details['booking_date'] }}</p> --}}
             
             <p>Silahkan klik tombol di bawah ini untuk melihat detail booking:</p>
-            <a href="{{ $details['booking_url'] }}" class="button">Lihat Booking</a>
+            <a href="{{ route('kelola.booking') }}" class="button">Lihat Booking</a>
         </div>
         
         <div class="footer">

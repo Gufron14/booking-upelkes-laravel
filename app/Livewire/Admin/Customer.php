@@ -17,6 +17,25 @@ class Customer extends Component
     public $date_to = null;
     // Fungsi Hapus Customer
 
+    public $searchTerm = '';
+
+    public function searchCustomer()
+    {
+        $this->validate([
+            'searchTerm' => 'required|min:3'
+        ]);
+
+        $this->users = User::whereHas('roles', function ($query) {
+            $query->where('name', 'customer');
+        })
+            ->where(function ($q) {
+                $q->where('nama', 'like', '%' . $this->searchTerm . '%')
+                    ->orWhere('email', 'like', '%' . $this->searchTerm . '%')
+                    ->orWhere('nama_instansi', 'like', '%' . $this->searchTerm . '%');
+            })
+            ->get();
+    }
+
     public function delete($id)
     {
         $user = User::find($id);
@@ -39,7 +58,8 @@ class Customer extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%');
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('nama_instansi', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->date_from, function ($query) {

@@ -485,7 +485,7 @@ class Booking extends Component
             DB::commit();
 
             // Send email notification
-            $this->sendBookingNotification($booking, $user);
+            // $this->sendBookingNotification($booking, $user);
 
             session()->flash('success', 'Booking berhasil dibuat!');
 
@@ -518,24 +518,24 @@ class Booking extends Component
         $this->calculateTotal();
     }
 
-    protected function sendBookingNotification($booking, $user)
-    {
-        $adminEmail = env('ADMIN_EMAIL', 'dekaapriyanti5@gmail.com');
-        $bookingUrl = url('/booking/' . $booking->id);
+    // protected function sendBookingNotification($booking, $user)
+    // {
+    //     $adminEmail = env('ADMIN_EMAIL', 'gupron.nurjalil14@gmail.com');
+    //     $bookingUrl = url('/booking/' . $booking->id);
 
-        $details = [
-            'subject' => 'Booking Baru - ' . $booking->nama_kegiatan,
-            'user_name' => $user->nama,
-            'user_email' => $user->email,
-            'user_phone' => $user->no_hp,
-            'user_instansi' => $user->nama_instansi,
-            'booking_activity' => $booking->nama_kegiatan,
-            'booking_date' => $booking->tanggal_checkin,
-            'booking_url' => $bookingUrl
-        ];
+    //     $details = [
+    //         'subject' => 'Booking Baru - ' . $booking->nama_kegiatan,
+    //         'user_name' => $user->nama,
+    //         'user_email' => $user->email,
+    //         'user_phone' => $user->no_hp,
+    //         'user_instansi' => $user->nama_instansi,
+    //         'booking_activity' => $booking->nama_kegiatan,
+    //         'booking_date' => $booking->tanggal_checkin,
+    //         'booking_url' => $bookingUrl
+    //     ];
 
-        \Mail::to($adminEmail)->send(new \App\Mail\BookingNotification($details));
-    }
+    //     \Mail::to($adminEmail)->send(new \App\Mail\BookingNotification($details));
+    // }
 
     public function render()
     {

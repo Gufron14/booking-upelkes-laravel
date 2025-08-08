@@ -62,11 +62,11 @@
                                     </td>
                                 </tr>
 
-@php
-    $unit = $booking->layanan->satuan;
-    $duration = $booking->duration ?? 0;
-    $totalBulan = $booking->total_bulan ?? 0;
-@endphp
+                                @php
+                                    $unit = $booking->layanan->satuan;
+                                    $duration = $booking->duration ?? 0;
+                                    $totalBulan = $booking->total_bulan ?? 0;
+                                @endphp
 
                                 @if ($unit === \App\Models\Layanan::UNIT_PER_JAM)
                                     <tr>
@@ -163,31 +163,31 @@
                         <div class="col-12">
                             <div class="bg-light p-4 rounded">
                                 <div class="bg-light p-4 rounded">
-    <div class="row align-items-center">
-        <div class="col-md-8">
-            <h6 class="mb-1">Total Pembayaran</h6>
-            <small class="text-muted">
-                Rp {{ number_format($booking->layanan->tarif, 0, ',', '.') }} x
-                @if ($unit == 'per_hari' || $unit == 'per_kamar_hari' || $unit == 'per_kegiatan_hari' || $unit == 'per_orang_hari')
-                    {{ $duration }} Hari
-                @elseif ($unit == 'per_bulan')
-                    {{ $totalBulan }} Bulan
-                @elseif ($unit == 'per_jam')
-                    {{ $duration }} Jam
-                @elseif ($unit == 'per_orang_kunjungan')
-                    1 Orang/Kunjungan
-                @else
-                    {{ $duration }} Hari
-                @endif
-            </small>
-        </div>
-        <div class="col-md-4 text-md-end">
-            <h3 class="mb-0 text-primary fw-bold">
-                Rp {{ number_format($booking->calculateTotal() ?? 0, 0, ',', '.') }}
-            </h3>
-        </div>
-    </div>
-</div>
+                                    <div class="row align-items-center">
+                                        <div class="col-md-8">
+                                            <h6 class="mb-1">Total Pembayaran</h6>
+                                            <small class="text-muted">
+                                                Rp {{ number_format($booking->layanan->tarif, 0, ',', '.') }} x
+                                                @if ($unit == 'per_hari' || $unit == 'per_kamar_hari' || $unit == 'per_kegiatan_hari' || $unit == 'per_orang_hari')
+                                                    {{ $duration }} Hari
+                                                @elseif ($unit == 'per_bulan')
+                                                    {{ $totalBulan }} Bulan
+                                                @elseif ($unit == 'per_jam')
+                                                    {{ $duration }} Jam
+                                                @elseif ($unit == 'per_orang_kunjungan')
+                                                    1 Orang/Kunjungan
+                                                @else
+                                                    {{ $duration }} Hari
+                                                @endif
+                                            </small>
+                                        </div>
+                                        <div class="col-md-4 text-md-end">
+                                            <h3 class="mb-0 text-primary fw-bold">
+                                                Rp {{ number_format($booking->calculateTotal() ?? 0, 0, ',', '.') }}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -208,23 +208,24 @@
                                     wire:model="metode_pembayaran">
                                     <option value="" disabled>Pilih Metode</option>
                                     <option value="transfer" selected>Transfer Bank</option>
-                                    {{-- <option value="cash">Cash</option> --}}
+                                    <option value="cash">Cash</option>
                                 </select>
                                 @error('metode_pembayaran')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
+                            @if ($metode_pembayaran === 'transfer')
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Bukti Transfer *</label>
-                                <input type="file"
-                                    class="form-control @error('bukti_transfer') is-invalid @enderror"
+                                <input type="file" class="form-control @error('bukti_transfer') is-invalid @enderror"
                                     wire:model="bukti_transfer" accept="image/*">
                                 @error('bukti_transfer')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                                 <small class="text-muted">Format: JPG, PNG, maksimal 2MB</small>
                             </div>
+                        @endif
 
                             {{-- <div class="col-12">
                                 <label class="form-label fw-semibold">Keterangan (Opsional)</label>

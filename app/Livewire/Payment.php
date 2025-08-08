@@ -21,7 +21,7 @@ class Payment extends Component
     public $keterangan = '';
 
     protected $rules = [
-        'bukti_transfer' => 'required|image|max:2048',
+        'bukti_transfer' => 'required_if:metode_pembayaran,transfer|image|max:2048',
         'metode_pembayaran' => 'required|in:transfer,cash',
         'keterangan' => 'nullable|string|max:500',
     ];
@@ -74,6 +74,9 @@ class Payment extends Component
             // Update status booking jadi 'pending' (atau 'waiting_verification')
             $this->booking->update(['status' => 'pending']);
 
+            // Send email notification
+            $this->sendBookingNotification($this->booking, $this->user);
+
             DB::commit();
 
             session()->flash('success', 'Bukti pembayaran berhasil diupload! Menunggu verifikasi admin.');
@@ -82,6 +85,25 @@ class Payment extends Component
             DB::rollback();
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    protected function sendBookingNotification($booking, $user)
+    {
+        $adminEmail = env('ADMIN_EMAIL', 'gupron.nurjalil14@gmail.com');
+        $bookingUrl = url('/booking/' . $booking->id);
+
+        $details = [
+            'subject' => 'Booking Baru - ' . $booking->nama_kegiatan,
+            'user_name' => $user->nama,
+            'user_email' => $user->email,
+            'user_phone' => $user->no_hp,
+            'user_instansi' => $user->nama_instansi,
+            'booking_activity' => $booking->nama_kegiatan,
+            'booking_date' => $booking->tanggal_checkin,
+            'booking_url' => $bookingUrl,
+        ];
+
+        \Mail::to($adminEmail)->send(new \App\Mail\BookingNotification($details));
     }
 
     public function render()

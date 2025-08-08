@@ -27,16 +27,20 @@ z-index: 9999;
                     $inisial = collect(explode(' ', $nama))
                         ->map(fn($word) => strtoupper(substr($word, 0, 1)))
                         ->join('');
+                    // badge count cart
+                    $countCart = \App\Models\Cart::count();
                 @endphp
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-4">
                     <!-- Cart Icon -->
                     <a href="{{ route('cart') }}" class="position-relative text-decoration-none">
                         <i class="fa-solid fa-cart-shopping text-light fs-5"></i>
                         <!-- Tambahkan badge kalau perlu -->
-                        {{-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                3
-            </span> --}}
+                        @if ($countCart > 0)                            
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ $countCart }}
+                            </span>
+                        @endif
                     </a>
 
                     <!-- User Avatar Dropdown -->

@@ -22,9 +22,9 @@
         integrity="sha384-jLKHWMZt4E+8W2JjKhF1vZ8g0ikToez0GbdUjksYB6tFh3HGcKqekF5gJjFZ9X3N" crossorigin="anonymous">
 
     <!-- Font Awesome 6 Free -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-8xTebc2drw9ZD0oHaKpQUw5mLuEOXeaGQ0xZLqZrLZFr04VKaYyoQpD6LRzjH0eF1LsHZCPjPbdrs4YrXGME2w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
 
 
 

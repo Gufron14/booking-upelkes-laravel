@@ -167,7 +167,7 @@ class Ruangan extends Component
 
     public function render()
     {
-        $query = Ruang::with(['layanan.gambar', 'layanan.fasilitas']);
+        $query = Ruang::with(['gambarRuangs', 'layanan.fasilitas']);
 
         if ($this->search) {
             $query->whereHas('layanan', function ($query) {

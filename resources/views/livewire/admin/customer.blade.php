@@ -11,8 +11,14 @@
         <div class="card-body">
             <div class="row g-3 mb-3">
                 <div class="col">
-                    <input type="text" class="form-control" placeholder="Cari nama atau email..."
-                        wire:model.debounce.500ms="search">
+<form wire:submit.prevent="searchCustomer">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Cari customer..." wire:model="searchTerm">
+        <button class="btn btn-primary" type="submit">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</form>
                 </div>
                 <div class="col">
                     <input type="date" class="form-control" wire:model.lazy="date_from">
@@ -37,6 +43,8 @@
                     <td>Customer</td>
                     <td>No. Telepon</td>
                     <td>Alamat</td>
+                            <td>Instansi</td>
+        <td>Tanggal Daftar</td>
                     <td>Aksi</td>
                 </tr>
             </thead>
@@ -52,6 +60,8 @@
                         </td>
                         <td>{{ $user->no_hp }}</td>
                         <td>{{ $user->alamat }}</td>
+                                    <td>{{ $user->nama_instansi }}</td>
+            <td>{{ $user->created_at->format('d/m/Y') }}</td>
                         <td>
                             <button class="btn btn-danger rounded-pill" wire:click="delete({{ $user->id }})"
                                 wire:confirm="Apakah Anda yakin ingin menghapus customer ini?">

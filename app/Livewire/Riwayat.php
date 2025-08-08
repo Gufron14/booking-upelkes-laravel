@@ -8,6 +8,7 @@ use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 
 #[Title('Riwayat Booking | Upelkes Jabar')]
+
 class Riwayat extends Component
 {
     public function cancelBooking($bookingId)

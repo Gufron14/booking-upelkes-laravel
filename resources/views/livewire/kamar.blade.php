@@ -41,9 +41,9 @@
 
                     <!-- Gambar -->
                     <div class="position-relative">
-                        @if ($kamar->layanan->gambar->count() > 0)
-                            <img src="{{ asset('storage/' . $kamar->layanan->gambar->first()->path) }}"
-                                class="card-img-top" alt="{{ $kamar->layanan->nama }}"
+                        @if ($kamar->gambarRuangs->count() > 0)
+                            <img src="{{ asset('storage/' . $kamar->gambarRuangs->first()->path) }}"
+                                class="card-img-top" alt="{{ $kamar->nomor_kamar }}"
                                 style="height: 250px; object-fit: cover;">
                         @else
                             <div class="bg-gradient-primary d-flex align-items-center justify-content-center"
@@ -207,8 +207,8 @@
                         @if ($kamarDetail)
                             <div class="row">
                                 <div class="col-md-6">
-                                    @if ($kamarDetail->layanan->gambar->count() > 0)
-                                        <img src="{{ asset('storage/' . $kamarDetail->layanan->gambar->first()->path) }}"
+                                    @if ($kamarDetail->gambarRuangs->count() > 0)
+                                        <img src="{{ asset('storage/' . $kamarDetail->gambarRuangs->first()->path) }}"
                                             class="img-fluid rounded" alt="{{ $kamarDetail->nomor_kamar }}">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center rounded"
@@ -225,11 +225,11 @@
                                     {{-- <p class="text-muted">{{ $kamarDetail->deskripsi }}</p> --}}
 
                                     <div class="row g-3">
-                                        <div class="col-6">
+                                        {{-- <div class="col-6">
                                             <strong>Kategori:</strong><br>
                                             <span
                                                 class="badge bg-primary">{{ ucfirst($kamarDetail->layanan->kategori) }}</span>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-6">
                                             <strong>Kapasitas:</strong><br>
                                             {{ $kamarDetail->layanan->kapasitas ?? 'N/A' }} orang
