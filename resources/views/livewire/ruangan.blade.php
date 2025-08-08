@@ -274,9 +274,9 @@
                         @if($selectedRuang)
                             <div class="row mb-4">
                                 <div class="col-md-4">
-                                    @if($selectedRuang->layanan->gambar->count() > 0)
-                                        <img src="{{ asset('storage/' . $selectedRuang->layanan->gambar->first()->path) }}"
-                                            class="img-fluid rounded" alt="{{ $selectedRuang->layanan->nama_layanan }}">
+                                    @if($selectedRuang->gambarRuangs->count() > 0)
+                                        <img src="{{ asset('storage/' . $selectedRuang->gambarRuangs->first()->path) }}"
+                                            class="img-fluid rounded" alt="{{ $selectedRuang->kode_ruang }}">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center rounded"
                                             style="height: 150px;">
@@ -439,7 +439,7 @@
 
     <!-- Custom CSS -->
     <style>
-        .card {
+        /* .card {
             transition: all 0.3s ease;
             border-radius: 15px;
         }
@@ -447,7 +447,7 @@
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-        }
+        } */
 
         .card-img-top {
             border-radius: 15px 15px 0 0;

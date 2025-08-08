@@ -295,8 +295,8 @@
                         @if($selectedKamar)
                             <div class="row mb-4">
                                 <div class="col-md-4">
-                                    @if($selectedKamar->layanan->gambar->count() > 0)
-                                        <img src="{{ asset('storage/' . $selectedKamar->layanan->gambar->first()->path) }}"
+                                    @if($selectedKamar->gambarRuangs->count() > 0)
+                                        <img src="{{ asset('storage/' . $selectedKamar->gambarRuangs->first()->path) }}"
                                             class="img-fluid rounded" alt="{{ $selectedKamar->layanan->nama_layanan }}">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center rounded"
@@ -460,15 +460,15 @@
 
     <!-- Custom CSS -->
     <style>
-        .card {
+        /* .card {
             transition: all 0.3s ease;
             border-radius: 15px;
-        }
+        } */
 
-        .card:hover {
+        /* .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-        }
+        } */
 
         .card-img-top {
             border-radius: 15px 15px 0 0;

@@ -71,7 +71,7 @@
                 
                 <!-- Date Range -->
                 <div class="col-md-3 mb-3">
-                    <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
+                    <label for="tanggal_mulai" class="form-label">Dari Tanggal</label>
                     <input type="date" 
                            class="form-control" 
                            id="tanggal_mulai"
@@ -79,7 +79,7 @@
                 </div>
                 
                 <div class="col-md-3 mb-3">
-                    <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
+                    <label for="tanggal_selesai" class="form-label">SampaiTanggal</label>
                     <input type="date" 
                            class="form-control" 
                            id="tanggal_selesai"
@@ -166,7 +166,7 @@
                                     @if($booking->kamar)
                                         Kamar {{ $booking->kamar->nomor_kamar }}
                                     @elseif($booking->ruang)
-                                        {{ $booking->ruang->nama_ruang }}
+                                        {{ $booking->ruang->kode_ruang }}
                                     @else
                                         -
                                     @endif
