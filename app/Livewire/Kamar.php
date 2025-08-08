@@ -25,6 +25,15 @@ class Kamar extends Component
     public $jamMulai = '';
     public $jamSelesai = '';
     public $jumlahOrang = 1;
+    
+    // User/Instansi data untuk cart
+    public $nama = '';
+    public $email = '';
+    public $no_hp = '';
+    public $alamat = '';
+    public $nama_instansi = '';
+    public $alamat_instansi = '';
+    public $jabatan_instansi = '';
 
     public function selectkamar($kamarId)
     {
@@ -41,6 +50,7 @@ class Kamar extends Component
 
         $this->selectedKamarForCart = $kamarId;
         $this->resetCartForm();
+        $this->loadUserData();
         $this->showCartModal = true;
     }
 
@@ -52,6 +62,20 @@ class Kamar extends Component
         $this->jamMulai = '';
         $this->jamSelesai = '';
         $this->jumlahOrang = 1;
+    }
+    
+    public function loadUserData()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            $this->nama = $user->nama ?? '';
+            $this->email = $user->email ?? '';
+            $this->no_hp = $user->no_hp ?? '';
+            $this->alamat = $user->alamat ?? '';
+            $this->nama_instansi = $user->nama_instansi ?? '';
+            $this->alamat_instansi = $user->alamat_instansi ?? '';
+            $this->jabatan_instansi = $user->jabatan_instansi ?? '';
+        }
     }
 
     public function addToCart()
@@ -73,6 +97,13 @@ class Kamar extends Component
         $rules = [
             'namaKegiatan' => 'required|string|max:255',
             'jumlahOrang' => 'required|integer|min:1|max:' . ($layanan->kapasitas ?? 100),
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'no_hp' => 'required|string|max:20',
+            'alamat' => 'required|string|max:500',
+            'nama_instansi' => 'required|string|max:255',
+            'alamat_instansi' => 'required|string|max:500',
+            'jabatan_instansi' => 'required|string|max:255',
         ];
 
         // Validasi tanggal berdasarkan jenis layanan
@@ -101,6 +132,14 @@ class Kamar extends Component
             'jumlahOrang.required' => 'Jumlah orang harus diisi',
             'jumlahOrang.min' => 'Jumlah orang minimal 1',
             'jumlahOrang.max' => 'Jumlah orang melebihi kapasitas kamar',
+            'nama.required' => 'Nama harus diisi',
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Format email tidak valid',
+            'no_hp.required' => 'Nomor HP harus diisi',
+            'alamat.required' => 'Alamat harus diisi',
+            'nama_instansi.required' => 'Nama instansi harus diisi',
+            'alamat_instansi.required' => 'Alamat instansi harus diisi',
+            'jabatan_instansi.required' => 'Jabatan di instansi harus diisi'
         ]);
 
         // Hitung total biaya

@@ -26,7 +26,7 @@ class CreateLayanan extends Component
     public $deskripsi = '';
     public $gambar;
     public $kategori = 'pemerintah'; // Default to pemerintah
-    public $jenis = 'ruangan';
+    public $jenis = 'kamar'; // Default to kamar to match new column
     public $satuan = 'per_jam';
     public $selectedFasilitas = [];
 
@@ -96,6 +96,7 @@ class CreateLayanan extends Component
             $layanan = Layanan::create([
                 'nama_layanan' => $this->nama_layanan,
                 'kategori' => $this->kategori,
+                'jenis' => $this->jenis,
                 'satuan' => $this->satuan,
                 'kapasitas' => $this->kapasitas,
                 'tarif' => $this->tarif,

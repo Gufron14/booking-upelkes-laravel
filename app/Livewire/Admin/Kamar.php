@@ -79,7 +79,7 @@ class Kamar extends Component
 
     public function render()
     {
-        $layanan = Layanan::all();
+        $layanan = Layanan::where('jenis', 'kamar')->get();
         return view('livewire.admin.kamar', compact('layanan'));
     }
 
@@ -138,13 +138,13 @@ class Kamar extends Component
             if (file_exists(storage_path('app/public/' . $image->path))) {
                 unlink(storage_path('app/public/' . $image->path));
             }
-            
+
             // Delete from database
             $image->delete();
-            
+
             // Refresh data
             $this->kamar = KamarModel::with(['layanan', 'gambarRuangs'])->get();
-            
+
             session()->flash('success', 'Gambar berhasil dihapus.');
         }
     }

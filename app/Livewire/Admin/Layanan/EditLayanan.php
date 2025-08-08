@@ -31,7 +31,7 @@ class EditLayanan extends Component
     public $deskripsi = '';
     public $gambar;
     public $kategori = 'umum';
-    public $jenis = 'ruangan';
+    public $jenis = 'kamar'; // Default to kamar to match new column
     public $satuan = 'per_jam';
     public $selectedFasilitas = [];
 
@@ -76,10 +76,10 @@ class EditLayanan extends Component
     {
         $this->layananId = $id;
         $this->layanan = Layanan::with(['kamar', 'ruang', 'fasilitas', 'gambar'])->findOrFail($id);
-        
+
         // Load fasilitas list
         $this->fasilitasList = Fasilitas::all();
-        
+
         // Populate form with existing data
         $this->nama_layanan = $this->layanan->nama_layanan;
         $this->tarif = $this->layanan->tarif;
@@ -87,7 +87,7 @@ class EditLayanan extends Component
         $this->deskripsi = $this->layanan->deskripsi;
         $this->kategori = $this->layanan->kategori;
         $this->satuan = $this->layanan->satuan;
-        
+
         // Determine jenis and populate related fields
         // if ($this->layanan->kamar->isNotEmpty()) {
         //     $this->jenis = 'kamar';
@@ -97,10 +97,10 @@ class EditLayanan extends Component
         //     $this->kode_ruang = $this->layanan->ruang->first()->kode_ruang;
         // }
 
-        
+
         // Load selected fasilitas
         $this->selectedFasilitas = $this->layanan->fasilitas->pluck('id')->toArray();
-        
+
         // Load current image
         if ($this->layanan->gambar->isNotEmpty()) {
             $this->currentImage = $this->layanan->gambar->first()->path;
@@ -134,6 +134,7 @@ class EditLayanan extends Component
             $this->layanan->update([
                 'nama_layanan' => $this->nama_layanan,
                 'kategori' => $this->kategori,
+                'jenis' => $this->jenis,
                 'satuan' => $this->satuan,
                 'kapasitas' => $this->kapasitas,
                 'tarif' => $this->tarif,
@@ -147,7 +148,7 @@ class EditLayanan extends Component
                     Storage::disk('public')->delete($this->currentImage);
                     GambarLayanan::where('layanan_id', $this->layanan->id)->delete();
                 }
-                
+
                 // Upload new image
                 $path = $this->gambar->store('layanan-images', 'public');
                 GambarLayanan::create([
@@ -163,7 +164,7 @@ class EditLayanan extends Component
             //     if ($this->layanan->ruang->isNotEmpty()) {
             //         $this->layanan->ruang->first()->delete();
             //     }
-                
+
             //     // Update or create kamar
             //     Kamar::updateOrCreate(
             //         ['layanan_id' => $this->layanan->id],
@@ -177,7 +178,7 @@ class EditLayanan extends Component
             //     if ($this->layanan->kamar->isNotEmpty()) {
             //         $this->layanan->kamar->first()->delete();
             //     }
-                
+
             //     // Update or create ruang
             //     Ruang::updateOrCreate(
             //         ['layanan_id' => $this->layanan->id],

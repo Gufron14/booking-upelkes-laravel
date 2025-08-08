@@ -132,7 +132,7 @@
                             <th>Nama Layanan</th>
                             <th>Nomor ruang</th>
                             <th>Gambar</th>
-                            <th>Status</th>
+                            {{-- <th>Status</th> --}}
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -159,14 +159,14 @@
                                         <span class="text-muted">Tidak ada gambar</span>
                                     @endif
                                 </td>
-                                <td>
+                                {{-- <td>
                                     <span
                                         class="badge 
                                         @if ($item->status == 'tersedia') bg-success
                                         @else
                                             bg-primary @endif
                                         ">{{ $item->status }}</span>
-                                </td>
+                                </td> --}}
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-warning btn-sm" wire:click="edit({{ $item->id }})">

@@ -11,10 +11,10 @@
         </div>
         <div class="col">
             {{-- Filter Kategori --}}
-            <select class="form-select rounded-5" wire:model.live="kategoriFilter">
-                <option value="">Semua Kategori</option>
-                <option value="umum">Umum</option>
-                <option value="pemerintah">Pemerintah</option>
+            <select class="form-select rounded-5" wire:model.live="jenisFilter">
+                <option value="">Semua Jenis</option>
+                <option value="kamar">Kamar</option>
+                <option value="ruangan">Ruang</option>
             </select>
         </div>
         <div class="col text-end">
@@ -45,7 +45,7 @@
                 <tr>
                     {{-- <th>Gambar</th> --}}
                     <th>Nama Layanan</th>
-                    <th>Kategori</th>
+                    <th>Jenis</th>
                     {{-- <th>Deskripsi</th> --}}
                     <th>Kapasitas</th>
                     {{-- <th>Satuan</th> --}}
@@ -69,8 +69,8 @@
                     </td> --}}
                         <td><strong>{{ $layanan->nama_layanan }}</strong></td>
                         <td>
-                            <span class="badge {{ $layanan->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }}">
-                                {{ ucfirst($layanan->kategori) }}
+                            <span class="badge {{ $layanan->jenis == 'ruangan' ? 'bg-success' : 'bg-primary' }}">
+                                {{ ucfirst($layanan->jenis) }}
                             </span>
                         </td>
                         {{-- <td>{{ Str::limit($layanan->deskripsi, 60) }}</td> --}}

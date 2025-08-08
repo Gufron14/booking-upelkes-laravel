@@ -62,7 +62,7 @@
 
                     <div class="card-body p-4">
                         <!-- Nama kamar -->
-                        <h5 class="card-title fw-bold text-dark mb-2">Kamar {{ $kamar->nomor_kamar }}</h5>
+                        <h5 class="card-title fw-bold text-dark mb-2">Kamar Nomor {{ $kamar->nomor_kamar }}</h5>
 
                         <!-- Deskripsi -->
                         <p class="card-text text-muted mb-3" style="font-size: 0.9rem;">
@@ -151,7 +151,7 @@
                                 <button class="btn btn-success btn-sm"
                                     wire:click="openCartModal({{ $kamar->id }})">
                                     <i class="fas fa-cart-plus me-1"></i>
-                                    Tambah ke Keranjang
+                                    Keranjang
                                 </button>
 
 {{-- 
@@ -281,7 +281,7 @@
     <!-- Modal Cart -->
     @if($showCartModal)
     <div class="modal fade show" style="display: block;" tabindex="-1" wire:ignore.self>
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header border-0">
                     <h5 class="modal-title fw-bold">Tambah ke Keranjang</h5>
@@ -314,54 +314,133 @@
                             </div>
 
                             <form wire:submit="addToCart">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Nama Kegiatan <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" wire:model="namaKegiatan" placeholder="Masukkan nama kegiatan">
-                                        @error('namaKegiatan') <div class="text-danger small">{{ $message }}</div> @enderror
+                                <!-- Data Kegiatan -->
+                                <div class="card border-0 shadow-sm mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h6 class="mb-0"><i class="fas fa-calendar me-2"></i>Data Kegiatan</h6>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Jumlah Orang <span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" wire:model="jumlahOrang" min="1" max="{{ $selectedKamar->layanan->kapasitas }}">
-                                        @error('jumlahOrang') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Nama Kegiatan <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" wire:model="namaKegiatan" placeholder="Masukkan nama kegiatan">
+                                                @error('namaKegiatan') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Jumlah Orang <span class="text-danger">*</span></label>
+                                                <input type="number" class="form-control" wire:model="jumlahOrang" min="1" max="{{ $selectedKamar->layanan->kapasitas }}">
+                                                @error('jumlahOrang') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                @if($selectedKamar->layanan->requiresDateRange())
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Tanggal Check-in <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
-                                        @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
+                                <!-- Data Tanggal/Waktu -->
+                                @if($selectedKamar->layanan->requiresDateRange() || $selectedKamar->layanan->requiresSingleDate() || $selectedKamar->layanan->requiresTimeSelection())
+                                <div class="card border-0 shadow-sm mb-4">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0"><i class="fas fa-clock me-2"></i>Data Tanggal & Waktu</h6>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Tanggal Check-out <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" wire:model="tanggalCheckout" min="{{ $tanggalCheckin ?: date('Y-m-d') }}">
-                                        @error('tanggalCheckout') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    <div class="card-body">
+                                        @if($selectedKamar->layanan->requiresDateRange())
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Tanggal Check-in <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
+                                                @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Tanggal Check-out <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" wire:model="tanggalCheckout" min="{{ $tanggalCheckin ?: date('Y-m-d') }}">
+                                                @error('tanggalCheckout') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            </div>
+                                        </div>
+                                        @elseif($selectedKamar->layanan->requiresSingleDate())
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Tanggal <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
+                                                @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            </div>
+                                        </div>
+                                        @endif
+
+                                        @if($selectedKamar->layanan->requiresTimeSelection())
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Jam Mulai <span class="text-danger">*</span></label>
+                                                <input type="time" class="form-control" wire:model="jamMulai">
+                                                @error('jamMulai') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Jam Selesai <span class="text-danger">*</span></label>
+                                                <input type="time" class="form-control" wire:model="jamSelesai">
+                                                @error('jamSelesai') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            </div>
+                                        </div>
+                                        @endif
                                     </div>
-                                </div>
-                                @elseif($selectedKamar->layanan->requiresSingleDate())
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Tanggal <span class="text-danger">*</span></label>
-                                    <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
-                                    @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
                                 </div>
                                 @endif
 
-                                @if($selectedKamar->layanan->requiresTimeSelection())
+                                <!-- Data Diri -->
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Jam Mulai <span class="text-danger">*</span></label>
-                                        <input type="time" class="form-control" wire:model="jamMulai">
-                                        @error('jamMulai') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    <div class="col-lg-6">
+                                        <div class="card border-0 shadow-sm mb-4">
+                                            <div class="card-header bg-info text-white">
+                                                <h6 class="mb-0"><i class="fas fa-user me-2"></i>Data Diri</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" wire:model="nama" placeholder="Masukkan nama lengkap">
+                                                    @error('nama') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email <span class="text-danger">*</span></label>
+                                                    <input type="email" class="form-control" wire:model="email" placeholder="Masukkan email">
+                                                    @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nomor HP <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" wire:model="no_hp" placeholder="Masukkan nomor HP">
+                                                    @error('no_hp') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Alamat <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" wire:model="alamat" rows="3" placeholder="Masukkan alamat lengkap"></textarea>
+                                                    @error('alamat') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Jam Selesai <span class="text-danger">*</span></label>
-                                        <input type="time" class="form-control" wire:model="jamSelesai">
-                                        @error('jamSelesai') <div class="text-danger small">{{ $message }}</div> @enderror
+
+                                    <!-- Data Instansi -->
+                                    <div class="col-lg-6">
+                                        <div class="card border-0 shadow-sm mb-4">
+                                            <div class="card-header bg-warning text-dark">
+                                                <h6 class="mb-0"><i class="fas fa-building me-2"></i>Data Instansi</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Nama Instansi <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" wire:model="nama_instansi" placeholder="Masukkan nama instansi">
+                                                    @error('nama_instansi') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Jabatan di Instansi <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" wire:model="jabatan_instansi" placeholder="Masukkan jabatan di instansi">
+                                                    @error('jabatan_instansi') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Alamat Instansi <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" wire:model="alamat_instansi" rows="3" placeholder="Masukkan alamat instansi lengkap"></textarea>
+                                                    @error('alamat_instansi') <div class="text-danger small">{{ $message }}</div> @enderror
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                @endif
                             </form>
                         @endif
                     @endif

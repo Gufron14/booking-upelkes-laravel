@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="kategori" id="kategori_umum"
-                                        value="umum" wire:model="kategori">
+                                        value="umum" wire:model="kategori" disabled>
                                     <label class="form-check-label" for="kategori_umum">
                                         Umum
                                     </label>
@@ -49,7 +49,7 @@
                                 <label class="form-label">Jenis</label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="jenis" id="jenis_kamar"
-                                        value="kamar" wire:model="jenis">
+                                        value="kamar" wire:model="jenis" checked>
                                     <label class="form-check-label" for="jenis_kamar">
                                         Kamar
                                     </label>
@@ -131,7 +131,7 @@
                                 @endforeach
                             </div>
                             {{-- Image Preview --}}
-                            <div class="mt-3">
+                            {{-- <div class="mt-3">
                                 @if ($gambar)
                                     <img src="{{ $gambar->temporaryUrl() }}" class="img-thumbnail"
                                         style="max-width: 200px; max-height: 150px;" alt="Preview">
@@ -141,12 +141,12 @@
                                         style="max-width: 200px; max-height: 150px;" alt="Current Image">
                                     <p class="small text-muted mt-1">Gambar Saat Ini</p>
                                 @endif
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="gambar" class="form-label">Gambar Kamar/Ruangan</label>
                             <input type="file" class="form-control @error('gambar') is-invalid @enderror"
                                 wire:model="gambar" accept="image/*">
@@ -155,14 +155,13 @@
                             @enderror
                             <small class="text-muted">Biarkan kosong jika tidak ingin mengubah gambar</small>
 
-                            {{-- Loading indicator for image upload --}}
                             <div wire:loading wire:target="gambar" class="mt-2">
                                 <div class="spinner-border spinner-border-sm text-primary" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                                 <small class="text-muted ms-2">Mengupload gambar...</small>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control @error('nama_layanan') is-invalid @enderror"
@@ -227,7 +226,7 @@
                     </div>
                 </div>
                 <div class="text-end float-right">
-                    <button type="submit" class="btn btn-primary fw-bold mt-5 float-right" 
+                    <button type="submit" class="btn btn-primary btn-lg font-weight-bold float-right" 
                             wire:loading.attr="disabled">
                         <span wire:loading.remove>Perbarui</span>
                         <span wire:loading>

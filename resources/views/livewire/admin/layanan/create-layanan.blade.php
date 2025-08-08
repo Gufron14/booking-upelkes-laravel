@@ -24,7 +24,7 @@
     <div class="card">
         <div class="card-body">
             <form wire:submit.prevent="save">
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-3 p-5">
                     <div class="col-md-6">
                         <div class="d-flex gap-5 mb-4">
                             <div class="col">
@@ -49,7 +49,7 @@
                                     <label class="form-label">Jenis</label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="jenis" id="jenis_kamar"
-                                            value="kamar" wire:model="jenis">
+                                            value="kamar" wire:model="jenis" checked>
                                         <label class="form-check-label" for="jenis_kamar">
                                             Kamar
                                         </label>
@@ -135,18 +135,18 @@
                                 @endforeach
                             </div>
                             {{-- Image Preview --}}
-                            @if ($gambar)
+                            {{-- @if ($gambar)
                                 <div class="mt-3">
                                     <img src="{{ $gambar->temporaryUrl() }}" class="img-thumbnail"
                                         style="max-width: 200px; max-height: 150px;" alt="Preview">
                                     <p class="small text-muted mt-1">Preview Gambar</p>
                                 </div>
-                            @endif
+                            @endif --}}
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="gambar" class="form-label">Gambar Kamar/Ruangan</label>
                             <input type="file" class="form-control @error('gambar') is-invalid @enderror"
                                 wire:model="gambar" accept="image/*">
@@ -154,7 +154,6 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
 
-                            {{-- Loading indicator for image upload --}}
                             <div wire:loading wire:target="gambar" class="mt-2">
                                 <div class="spinner-border spinner-border-sm text-primary" role="status">
                                     <span class="visually-hidden">Loading...</span>
@@ -163,7 +162,7 @@
                             </div>
 
 
-                        </div>
+                        </div> --}}
 
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control @error('nama_layanan') is-invalid @enderror"
@@ -232,7 +231,7 @@
                     </div>
                 </div>
                 <div class="text-end float-right">
-                    <button class="btn btn-primary fw-bold mt-5 float-right">Simpan</button>
+                    <button class="btn btn-primary font-weight-bold float-right btn-lg">Simpan</button>
                 </div>
             </form>
         </div>

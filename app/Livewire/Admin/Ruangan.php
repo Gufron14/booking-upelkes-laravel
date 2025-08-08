@@ -34,7 +34,7 @@ class Ruangan extends Component
     public function save()
     {
         $this->validate();
-    
+
         $ruang = Ruang::create([
             'layanan_id' => $this->layanan_id,
             'kode_ruang' => $this->kode_ruang,
@@ -48,9 +48,9 @@ class Ruangan extends Component
                 'path' => $path
             ]);
         }
-    
+
         session()->flash('success', 'ruang berhasil disimpan.');
-    
+
         $this->reset();
         $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get(); // Refresh data
         $this->dispatch('hideRuangModal');
@@ -110,14 +110,14 @@ class Ruangan extends Component
     {
         $this->reset();
     }
-    
+
     public function delete($id)
     {
         Ruang::find($id)->delete();
         session()->flash('success', 'ruang berhasil dihapus.');
-        
+
         $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get(); // Refresh data
-        
+
         return $this->redirect(request()->header('Referer'), navigate: true);
     }
 
@@ -129,20 +129,20 @@ class Ruangan extends Component
             if (file_exists(storage_path('app/public/' . $image->path))) {
                 unlink(storage_path('app/public/' . $image->path));
             }
-            
+
             // Delete from database
             $image->delete();
-            
+
             // Refresh data
             $this->ruang = Ruang::with(['layanan', 'gambarRuangs'])->get();
-            
+
             session()->flash('success', 'Gambar berhasil dihapus.');
         }
     }
 
     public function render()
     {
-        $layanan = Layanan::all();
+        $layanan = Layanan::where('jenis', 'ruangan')->get();
         return view('livewire.admin.ruangan', compact('layanan'));
     }
 }

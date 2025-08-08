@@ -74,8 +74,10 @@ class Payment extends Component
             // Update status booking jadi 'pending' (atau 'waiting_verification')
             $this->booking->update(['status' => 'pending']);
 
+            $user = $this->booking->user;
+
             // Send email notification
-            $this->sendBookingNotification($this->booking, $this->user);
+            $this->sendBookingNotification($this->booking, $user);
 
             DB::commit();
 
