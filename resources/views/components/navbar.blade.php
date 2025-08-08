@@ -15,34 +15,65 @@ z-index: 9999;
                 <x-nav-link :active="request()->routeIs('/')" href="{{ route('/') }}">Beranda</x-nav-link>
                 <x-nav-link :active="request()->routeIs('kamarShow')" href="{{ route('kamarShow') }}">Kamar</x-nav-link>
                 <x-nav-link :active="request()->routeIs('ruanganShow')" href="{{ route('ruanganShow') }}">Ruangan</x-nav-link>
-                @auth                    
+                @auth
                     <x-nav-link :active="request()->routeIs('riwayat')" href="{{ route('riwayat') }}">Riwayat</x-nav-link>
                 @endauth
                 {{-- <x-nav-link :active="request()->routeIs('')" href="">Ruangan</x-nav-link> --}}
             </ul>
             @auth
-                <div class="dropdown d-inline">
-                    <button class="btn btn-outline-light fw-bold dropdown-toggle d-flex align-items-center" type="button"
-                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ Auth::user()->nama }}
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('profil') }}">
-                                <i class="bi bi-person-lines-fill me-2"></i> Profil
-                            </a>
-                        </li>
-                        <li>
-                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="dropdown-item text-danger" wire:confirm="Anda yakin ingin keluar?">
-                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
+                @php
+                    // Ambil inisial dari nama user
+                    $nama = Auth::user()->nama;
+                    $inisial = collect(explode(' ', $nama))
+                        ->map(fn($word) => strtoupper(substr($word, 0, 1)))
+                        ->join('');
+                @endphp
+
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Cart Icon -->
+                    <a href="{{ route('cart') }}" class="position-relative text-decoration-none">
+                        <i class="fa-solid fa-cart-shopping text-light fs-5"></i>
+                        <!-- Tambahkan badge kalau perlu -->
+                        {{-- <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                3
+            </span> --}}
+                    </a>
+
+                    <!-- User Avatar Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn d-flex align-items-center justify-content-center rounded-circle" type="button"
+                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="width: 40px; height: 40px; background-color: #495057; color: white; font-weight: 600;">
+                            {{ $inisial }}
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+                            <li class="px-3 py-2">
+                                <small class="text-muted">Halo,</small><br>
+                                <strong>{{ Auth::user()->nama }}</strong>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profil') }}">
+                                    <i class="bi bi-person-lines-fill me-2"></i> Profil
+                                </a>
+                            </li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger"
+                                        wire:confirm="Anda yakin ingin keluar?">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             @endauth
+
 
             @guest
                 <div class="d-flex gap-2">
