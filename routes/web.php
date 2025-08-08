@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Cart;
 use App\Livewire\Home;
 use App\Livewire\Kamar;
 use App\Livewire\Profil;
@@ -58,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('booking/{layanan_id?}', Booking::class)->name('bookingId');
     Route::get('riwayat', Riwayat::class)->name('riwayat');
     Route::get('payment/{booking}', Payment::class)->name('payment');
+    Route::get('cart', Cart::class)->name('cart');
 
     Route::get('profil', Profil::class)->name('profil');
 });

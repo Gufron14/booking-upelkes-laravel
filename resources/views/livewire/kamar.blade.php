@@ -22,13 +22,7 @@
                     wire:model.live="search">
             </div>
         </div>
-        {{-- <div class="col-md-3">
-            <select class="form-select" wire:model.live="kategori">
-                <option value="">Semua Kategori</option>
-                <option value="umum">Umum</option>
-                <option value="pemerintah">Pemerintah</option>
-            </select>
-        </div> --}}
+
     </div>
 
     <!-- Cards Section -->
@@ -39,9 +33,9 @@
                     <!-- Badge Kategori -->
                     <div class="position-absolute top-0 start-0 z-3 m-3">
                         <span
-                            class="badge {{ $kamar->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }} px-3 py-2 rounded-pill">
-                            <i class="fas {{ $kamar->kategori == 'pemerintah' ? 'fa-building' : 'fa-users' }} me-1"></i>
-                            {{ ucfirst($kamar->kategori) }}
+                            class="badge bg-primary">
+                            <i class="fas fa-building me-1"></i>
+                            {{ ucfirst($kamar->layanan->nama_layanan) }}
                         </span>
                     </div>
 
@@ -68,11 +62,11 @@
 
                     <div class="card-body p-4">
                         <!-- Nama kamar -->
-                        <h5 class="card-title fw-bold text-dark mb-2">{{ $kamar->layanan->nama_layanan }}</h5>
+                        <h5 class="card-title fw-bold text-dark mb-2">Kamar {{ $kamar->nomor_kamar }}</h5>
 
                         <!-- Deskripsi -->
                         <p class="card-text text-muted mb-3" style="font-size: 0.9rem;">
-                            {{ Str::limit($kamar->deskripsi, 100) }}
+                            {{ Str::limit($kamar->layanan->deskripsi, 100) }}
                         </p>
 
                         <!-- Info Grid -->
@@ -113,24 +107,15 @@
                             </div>
                         @endif
 
-                        <!-- Kamar Tersedia -->
-                        @if ($kamar->count() > 0)
-                            <div class="mb-3">
-                                <small class="text-muted fw-semibold">Kamar Tersedia:</small>
-                                <div class="d-flex flex-wrap gap-1 mt-1">
-                                    @foreach ($kamar->layanan->take(5) as $item)
-                                        <span class="badge bg-light text-dark border">
-                                            {{ $item->nomor_kamar }}
-                                        </span>
-                                    @endforeach
-                                    @if ($kamar->layanan->count() > 5)
-                                        <span class="badge bg-secondary">
-                                            +{{ $kamar->layanan->count() - 5 }} lainnya
-                                        </span>
-                                    @endif
-                                </div>
+                        <!-- Kamar Info -->
+                        <div class="mb-3">
+                            <small class="text-muted fw-semibold">Nomor Kamar:</small>
+                            <div class="d-flex flex-wrap gap-1 mt-1">
+                                <span class="badge bg-light text-dark border">
+                                    {{ $kamar->nomor_kamar }}
+                                </span>
                             </div>
-                        @endif
+                        </div>
 
                         <!-- Harga dan Action -->
                         <div class="d-flex justify-content-between align-items-center">
@@ -163,7 +148,14 @@
                                     <i class="fas fa-eye me-1"></i>
                                     Detail
                                 </button>
-                                {{-- @if ($kamar->kamar->count() > 0 || $kamar->ruang->count() > 0)                                    
+                                <button class="btn btn-success btn-sm"
+                                    wire:click="openCartModal({{ $kamar->id }})">
+                                    <i class="fas fa-cart-plus me-1"></i>
+                                    Tambah ke Keranjang
+                                </button>
+
+{{-- 
+                                @if ($kamar->kamar->count() > 0 || $kamar->ruang->count() > 0)                                    
                                     <a href="{{ route('bookingId', ['kamar_id' => $kamar->id]) }}"
                                         class="btn btn-primary btn-sm">
                                         <i class="fas fa-calendar-plus me-1"></i>
@@ -247,22 +239,22 @@
                                             Rp {{ number_format($kamarDetail->layanan->tarif, 0, ',', '.') }}
                                         </div>
                                         <div class="col-6">
-                                            <strong>Durasi:</strong><br>
-                                            @if ($kamar->layanan->satuan == 'per_hari')
-                                                Per Hari
-                                            @elseif ($kamar->layanan->satuan == 'per_jam')
-                                                Per Jam
-                                            @elseif ($kamar->layanan->satuan == 'per_orang_kunjungan')
-                                                Per Orang/Kunjungan
-                                            @elseif ($kamar->layanan->satuan == 'per_bulan')
-                                                Per Bulan
-                                            @elseif ($kamar->layanan->satuan == 'per_orang_hari')
-                                                Per Orang/Hari
-                                            @elseif ($kamar->layanan->satuan == 'per_kamar_hari')
-                                                Per Kamar/Hari
-                                            @elseif ($kamar->layanan->satuan == 'per_kegiatan_hari')
-                                                Per Kegiatan/Hari
-                                            @endif
+                                        <strong>Durasi:</strong><br>
+                                        @if ($kamarDetail->layanan->satuan == 'per_hari')
+                                        Per Hari
+                                        @elseif ($kamarDetail->layanan->satuan == 'per_jam')
+                                        Per Jam
+                                        @elseif ($kamarDetail->layanan->satuan == 'per_orang_kunjungan')
+                                        Per Orang/Kunjungan
+                                        @elseif ($kamarDetail->layanan->satuan == 'per_bulan')
+                                        Per Bulan
+                                        @elseif ($kamarDetail->layanan->satuan == 'per_orang_hari')
+                                        Per Orang/Hari
+                                        @elseif ($kamarDetail->layanan->satuan == 'per_kamar_hari')
+                                        Per Kamar/Hari
+                                        @elseif ($kamarDetail->layanan->satuan == 'per_kegiatan_hari')
+                                        Per Kegiatan/Hari
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
@@ -272,12 +264,121 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <a href="{{ route('bookingId', ['layanan_id' => $kamar->layanan->id]) }}" class="btn btn-primary">Booking
-                        Sekarang</a>
+                    @if ($selectedkamar)
+                        @php
+                            $kamarDetail = $kamarList->find($selectedkamar);
+                        @endphp
+                        @if ($kamarDetail)
+                            <a href="{{ route('bookingId', ['layanan_id' => $kamarDetail->layanan->id]) }}" class="btn btn-primary">Booking
+                                Sekarang</a>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal Cart -->
+    @if($showCartModal)
+    <div class="modal fade show" style="display: block;" tabindex="-1" wire:ignore.self>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Tambah ke Keranjang</h5>
+                    <button type="button" class="btn-close" wire:click="$set('showCartModal', false)"></button>
+                </div>
+                <div class="modal-body">
+                    @if($selectedKamarForCart)
+                        @php
+                            $selectedKamar = $kamarList->find($selectedKamarForCart);
+                        @endphp
+                        @if($selectedKamar)
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    @if($selectedKamar->layanan->gambar->count() > 0)
+                                        <img src="{{ asset('storage/' . $selectedKamar->layanan->gambar->first()->path) }}"
+                                            class="img-fluid rounded" alt="{{ $selectedKamar->layanan->nama_layanan }}">
+                                    @else
+                                        <div class="bg-light d-flex align-items-center justify-content-center rounded"
+                                            style="height: 150px;">
+                                            <i class="fas fa-image fa-3x text-muted"></i>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="col-md-8">
+                                    <h5 class="fw-bold">{{ $selectedKamar->layanan->nama_layanan }}</h5>
+                                    <p class="text-muted">Kamar: {{ $selectedKamar->nomor_kamar }}</p>
+                                    <p class="mb-1"><strong>Kapasitas:</strong> {{ $selectedKamar->layanan->kapasitas }} orang</p>
+                                    <p class="mb-1"><strong>Tarif:</strong> Rp {{ number_format($selectedKamar->layanan->tarif, 0, ',', '.') }} {{ $selectedKamar->layanan->satuan_label }}</p>
+                                </div>
+                            </div>
+
+                            <form wire:submit="addToCart">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Nama Kegiatan <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" wire:model="namaKegiatan" placeholder="Masukkan nama kegiatan">
+                                        @error('namaKegiatan') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Jumlah Orang <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" wire:model="jumlahOrang" min="1" max="{{ $selectedKamar->layanan->kapasitas }}">
+                                        @error('jumlahOrang') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+
+                                @if($selectedKamar->layanan->requiresDateRange())
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Tanggal Check-in <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
+                                        @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Tanggal Check-out <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" wire:model="tanggalCheckout" min="{{ $tanggalCheckin ?: date('Y-m-d') }}">
+                                        @error('tanggalCheckout') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+                                @elseif($selectedKamar->layanan->requiresSingleDate())
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tanggal <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
+                                    @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
+                                </div>
+                                @endif
+
+                                @if($selectedKamar->layanan->requiresTimeSelection())
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Jam Mulai <span class="text-danger">*</span></label>
+                                        <input type="time" class="form-control" wire:model="jamMulai">
+                                        @error('jamMulai') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Jam Selesai <span class="text-danger">*</span></label>
+                                        <input type="time" class="form-control" wire:model="jamSelesai">
+                                        @error('jamSelesai') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+                                @endif
+                            </form>
+                        @endif
+                    @endif
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" wire:click="$set('showCartModal', false)">Batal</button>
+                    <button type="button" class="btn btn-success" wire:click="addToCart">
+                        <i class="fas fa-cart-plus me-1"></i>
+                        Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+    @endif
+
     <!-- Custom CSS -->
     <style>
         .card {

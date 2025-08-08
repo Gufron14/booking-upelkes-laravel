@@ -21,4 +21,9 @@ class Ruang extends Model
     {
         return $this->hasMany(Booking::class, 'ruang_id');
     }
+
+    public function gambarRuangs()
+    {
+        return $this->hasMany(GambarRuang::class, 'ruang_id');
+    }
 }

@@ -3,18 +3,18 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="d-flex align-items-center mb-3">
-                <a href="{{ route('booking') }}" class="btn btn-outline-secondary me-3">
+                {{-- <a href="{{ route('booking') }}" class="btn btn-outline-secondary me-3">
                     <i class="fas fa-arrow-left"></i>
-                </a>
+                </a> --}}
                 <h2 class="mb-0">Pembayaran</h2>
             </div>
-            <nav aria-label="breadcrumb">
+            {{-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('booking') }}">Booking</a></li>
                     <li class="breadcrumb-item active">Pembayaran</li>
                 </ol>
-            </nav>
+            </nav> --}}
         </div>
     </div>
 

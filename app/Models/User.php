@@ -18,7 +18,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['nama', 'email', 'no_hp', 'alamat', 'password'];
+    protected $fillable = ['nama', 'email', 'no_hp', 'alamat', 'password', 'nama_instansi', 'alamat_instansi', 'jabatan_instansi', 'foto_id_card'];
 
     public function bookings()
     {
@@ -30,10 +30,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * The attributes that should be cast.

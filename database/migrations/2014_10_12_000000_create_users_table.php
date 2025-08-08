@@ -18,6 +18,13 @@ return new class extends Migration
             $table->string('password');
             $table->string('no_hp')->nullable()->unique();
             $table->text('alamat')->nullable();
+
+            // Instansi
+            $table->string('nama_instansi')->nullable(); // Optional field for institution name
+            $table->string('alamat_instansi')->nullable(); // Optional field for institution address
+            $table->string('jabatan_instansi')->nullable(); // Optional field for position in the institution
+            $table->string('foto_id_card')->nullable(); // Optional field for ID card picture
+
             $table->rememberToken();
             $table->timestamps();
         });

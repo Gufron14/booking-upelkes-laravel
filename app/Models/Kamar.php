@@ -33,4 +33,9 @@ class Kamar extends Model
     {
         return $query->where('status', '!=', 'tersedia');
     }
+
+    public function gambarRuangs()
+    {
+        return $this->hasMany(GambarRuang::class, 'kamar_id');
+    }
 }

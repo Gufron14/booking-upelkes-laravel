@@ -137,6 +137,12 @@
                                     <i class="fas fa-eye me-1"></i>
                                     Detail
                                 </button>
+                                <button class="btn btn-success btn-sm"
+                                    wire:click="openCartModal({{ $ruang->id }})">
+                                    <i class="fas fa-cart-plus me-1"></i>
+                                    Tambah ke Keranjang
+                                </button>
+                                
                             </div>
                         </div>
                     </div>
@@ -212,22 +218,22 @@
                                             Rp {{ number_format($ruangDetail->layanan->tarif, 0, ',', '.') }}
                                         </div>
                                         <div class="col-6">
-                                            <strong>Durasi:</strong><br>
-                                            @if ($ruang->layanan->satuan == 'per_hari')
-                                                Per Hari
-                                            @elseif ($ruang->layanan->satuan == 'per_jam')
-                                                Per Jam
-                                            @elseif ($ruang->layanan->satuan == 'per_orang_kunjungan')
-                                                Per Orang/Kunjungan
-                                            @elseif ($ruang->layanan->satuan == 'per_bulan')
-                                                Per Bulan
-                                            @elseif ($ruang->layanan->satuan == 'per_orang_hari')
-                                                Per Orang/Hari
-                                            @elseif ($ruang->layanan->satuan == 'per_kamar_hari')
-                                                Per Ruangan/Hari
-                                            @elseif ($ruang->layanan->satuan == 'per_kegiatan_hari')
-                                                Per Kegiatan/Hari
-                                            @endif
+                                        <strong>Durasi:</strong><br>
+                                        @if ($ruangDetail->layanan->satuan == 'per_hari')
+                                        Per Hari
+                                        @elseif ($ruangDetail->layanan->satuan == 'per_jam')
+                                        Per Jam
+                                        @elseif ($ruangDetail->layanan->satuan == 'per_orang_kunjungan')
+                                        Per Orang/Kunjungan
+                                        @elseif ($ruangDetail->layanan->satuan == 'per_bulan')
+                                        Per Bulan
+                                        @elseif ($ruangDetail->layanan->satuan == 'per_orang_hari')
+                                        Per Orang/Hari
+                                        @elseif ($ruangDetail->layanan->satuan == 'per_kamar_hari')
+                                        Per Ruangan/Hari
+                                        @elseif ($ruangDetail->layanan->satuan == 'per_kegiatan_hari')
+                                        Per Kegiatan/Hari
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
@@ -237,12 +243,121 @@
                 </div>
                 <div class="modal-footer border-0">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    <a href="{{ route('bookingId', ['layanan_id' => $ruang->layanan->id]) }}" class="btn btn-primary">Booking
-                        Sekarang</a>
+                    @if ($selectedRuang)
+                        @php
+                            $ruangDetail = $ruangList->find($selectedRuang);
+                        @endphp
+                        @if ($ruangDetail)
+                            <a href="{{ route('bookingId', ['layanan_id' => $ruangDetail->layanan->id]) }}" class="btn btn-primary">Booking
+                                Sekarang</a>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal Cart -->
+    @if($showCartModal)
+    <div class="modal fade show" style="display: block;" tabindex="-1" wire:ignore.self>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Tambah ke Keranjang</h5>
+                    <button type="button" class="btn-close" wire:click="$set('showCartModal', false)"></button>
+                </div>
+                <div class="modal-body">
+                    @if($selectedRuangForCart)
+                        @php
+                            $selectedRuang = $ruangList->find($selectedRuangForCart);
+                        @endphp
+                        @if($selectedRuang)
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    @if($selectedRuang->layanan->gambar->count() > 0)
+                                        <img src="{{ asset('storage/' . $selectedRuang->layanan->gambar->first()->path) }}"
+                                            class="img-fluid rounded" alt="{{ $selectedRuang->layanan->nama_layanan }}">
+                                    @else
+                                        <div class="bg-light d-flex align-items-center justify-content-center rounded"
+                                            style="height: 150px;">
+                                            <i class="fas fa-image fa-3x text-muted"></i>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="col-md-8">
+                                    <h5 class="fw-bold">{{ $selectedRuang->layanan->nama_layanan }}</h5>
+                                    <p class="text-muted">Ruangan: {{ $selectedRuang->kode_ruang }}</p>
+                                    <p class="mb-1"><strong>Kapasitas:</strong> {{ $selectedRuang->layanan->kapasitas }} orang</p>
+                                    <p class="mb-1"><strong>Tarif:</strong> Rp {{ number_format($selectedRuang->layanan->tarif, 0, ',', '.') }} {{ $selectedRuang->layanan->satuan_label }}</p>
+                                </div>
+                            </div>
+
+                            <form wire:submit="addToCart">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Nama Kegiatan <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" wire:model="namaKegiatan" placeholder="Masukkan nama kegiatan">
+                                        @error('namaKegiatan') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Jumlah Orang <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" wire:model="jumlahOrang" min="1" max="{{ $selectedRuang->layanan->kapasitas }}">
+                                        @error('jumlahOrang') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+
+                                @if($selectedRuang->layanan->requiresDateRange())
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Tanggal Check-in <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
+                                        @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Tanggal Check-out <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" wire:model="tanggalCheckout" min="{{ $tanggalCheckin ?: date('Y-m-d') }}">
+                                        @error('tanggalCheckout') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+                                @elseif($selectedRuang->layanan->requiresSingleDate())
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tanggal <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" wire:model="tanggalCheckin" min="{{ date('Y-m-d') }}">
+                                    @error('tanggalCheckin') <div class="text-danger small">{{ $message }}</div> @enderror
+                                </div>
+                                @endif
+
+                                @if($selectedRuang->layanan->requiresTimeSelection())
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Jam Mulai <span class="text-danger">*</span></label>
+                                        <input type="time" class="form-control" wire:model="jamMulai">
+                                        @error('jamMulai') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Jam Selesai <span class="text-danger">*</span></label>
+                                        <input type="time" class="form-control" wire:model="jamSelesai">
+                                        @error('jamSelesai') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+                                @endif
+                            </form>
+                        @endif
+                    @endif
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" wire:click="$set('showCartModal', false)">Batal</button>
+                    <button type="button" class="btn btn-success" wire:click="addToCart">
+                        <i class="fas fa-cart-plus me-1"></i>
+                        Tambah ke Keranjang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+    @endif
+
     <!-- Custom CSS -->
     <style>
         .card {
