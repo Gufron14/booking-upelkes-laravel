@@ -243,9 +243,9 @@ class Ruangan extends Component
 
     public function mount()
     {
-        if (\Illuminate\Support\Facades\Auth::check()) {
-            $userId = \Illuminate\Support\Facades\Auth::id();
-            $cart = \App\Models\Cart::where('user_id', $userId)->latest()->first();
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $cart = Cart::where('user_id', $userId)->latest()->first();
             if ($cart && $cart->nama_kegiatan) {
                 $this->namaKegiatan = $cart->nama_kegiatan;
             }

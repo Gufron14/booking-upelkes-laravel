@@ -46,7 +46,7 @@
                     <td>Foto KTP</td>
                     <td>Instansi</td>
                     <td>Tanggal Daftar</td>
-                    <td>Aksi</td>
+                    {{-- <td>Aksi</td> --}}
                 </tr>
             </thead>
             <tbody>
@@ -75,13 +75,13 @@
                         </td>
                         <td>{{ $user->nama_instansi }}</td>
                         <td>{{ $user->created_at->format('d/m/Y') }}</td>
-                        <td>
+                        {{-- <td>
                             <button class="btn btn-danger rounded-pill" wire:click="delete({{ $user->id }})"
                                 wire:confirm="Apakah Anda yakin ingin menghapus customer ini?">
                                 <i class="fas fa-trash me-1"></i>
                                 Hapus
                             </button>
-                        </td>
+                        </td> --}}
                     @empty
                         <td colspan="8" class="text-center text-muted">
                             Belum ada Customer.

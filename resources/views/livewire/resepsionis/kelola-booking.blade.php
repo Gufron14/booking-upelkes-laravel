@@ -131,6 +131,12 @@
                                                 <i class="fas fa-times me-1"></i>Batal
                                             </button>
                                         @endif
+
+                                        @if ($booking->status === 'booked')
+                                            <a href="{{ route('receipt', $booking->id) }}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-eye"></i> Receipt
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
