@@ -17,7 +17,7 @@ class Ruangan extends Component
 
     public $search = '';
     public $selectedRuang;
-    
+
     // Cart form properties
     public $showCartModal = false;
     public $selectedRuangForCart = null;
@@ -27,7 +27,7 @@ class Ruangan extends Component
     public $jamMulai = '';
     public $jamSelesai = '';
     public $jumlahOrang = 1;
-    
+
     // User/Instansi data untuk cart
     public $nama = '';
     public $email = '';
@@ -48,6 +48,11 @@ class Ruangan extends Component
         $this->selectedRuangForCart = $ruangId;
         $this->resetCartForm();
         $this->loadUserData();
+        // Ambil value lama nama_kegiatan dari Cart
+        $cart = Cart::where('user_id', Auth::id())->latest()->first();
+        if ($cart && $cart->nama_kegiatan) {
+            $this->namaKegiatan = $cart->nama_kegiatan;
+        }
         $this->showCartModal = true;
     }
 
@@ -60,7 +65,7 @@ class Ruangan extends Component
         $this->jamSelesai = '';
         $this->jumlahOrang = 1;
     }
-    
+
     public function loadUserData()
     {
         if (Auth::check()) {
@@ -81,6 +86,13 @@ class Ruangan extends Component
             session()->flash('error', 'Silakan login terlebih dahulu');
             return;
         }
+
+        // Update user instansi fields
+        $user = Auth::user();
+        $user->nama_instansi = $this->nama_instansi;
+        $user->alamat_instansi = $this->alamat_instansi;
+        $user->jabatan_instansi = $this->jabatan_instansi;
+        $user->save();
 
         $ruang = Ruang::with('layanan')->find($this->selectedRuangForCart);
         if (!$ruang) {
@@ -165,7 +177,7 @@ class Ruangan extends Component
     private function calculateTotalBiaya($layanan)
     {
         $tarif = $layanan->tarif;
-        
+
         switch ($layanan->satuan) {
             case Layanan::UNIT_PER_JAM:
                 if ($this->jamMulai && $this->jamSelesai) {
@@ -227,5 +239,16 @@ class Ruangan extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function mount()
+    {
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $userId = \Illuminate\Support\Facades\Auth::id();
+            $cart = \App\Models\Cart::where('user_id', $userId)->latest()->first();
+            if ($cart && $cart->nama_kegiatan) {
+                $this->namaKegiatan = $cart->nama_kegiatan;
+            }
+        }
     }
 }

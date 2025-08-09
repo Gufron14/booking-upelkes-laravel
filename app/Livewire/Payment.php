@@ -84,8 +84,8 @@ class Payment extends Component
             } else {
                 // Jika metode cash, langsung approve
                 $paymentData['status'] = 'terverifikasi';
-                $bookingStatus = 'booked'; // Langsung approved untuk cash
-                $successMessage = 'Pembayaran cash berhasil dikonfirmasi! Booking Anda telah disetujui.';
+                $bookingStatus = 'pending'; // Langsung approved untuk cash
+                $successMessage = 'Pembayaran cash berhasil dikonfirmasi!';
             }
 
             $payment = PaymentModel::updateOrCreate(

@@ -15,7 +15,7 @@ class Kamar extends Component
     public $search = '';
     public $kategori = '';
     public $selectedkamar = null;
-    
+
     // Cart form properties
     public $showCartModal = false;
     public $selectedKamarForCart = null;
@@ -25,7 +25,7 @@ class Kamar extends Component
     public $jamMulai = '';
     public $jamSelesai = '';
     public $jumlahOrang = 1;
-    
+
     // User/Instansi data untuk cart
     public $nama = '';
     public $email = '';
@@ -51,6 +51,11 @@ class Kamar extends Component
         $this->selectedKamarForCart = $kamarId;
         $this->resetCartForm();
         $this->loadUserData();
+        // Ambil value lama nama_kegiatan dari Cart
+        $cart = Cart::where('user_id', Auth::id())->latest()->first();
+        if ($cart && $cart->nama_kegiatan) {
+            $this->namaKegiatan = $cart->nama_kegiatan;
+        }
         $this->showCartModal = true;
     }
 
@@ -63,7 +68,7 @@ class Kamar extends Component
         $this->jamSelesai = '';
         $this->jumlahOrang = 1;
     }
-    
+
     public function loadUserData()
     {
         if (Auth::check()) {
@@ -84,6 +89,13 @@ class Kamar extends Component
             session()->flash('error', 'Silakan login terlebih dahulu');
             return;
         }
+
+        // Update user instansi fields
+        $user = Auth::user();
+        $user->nama_instansi = $this->nama_instansi;
+        $user->alamat_instansi = $this->alamat_instansi;
+        $user->jabatan_instansi = $this->jabatan_instansi;
+        $user->save();
 
         $kamar = ModelsKamar::with('layanan')->find($this->selectedKamarForCart);
         if (!$kamar) {
@@ -170,7 +182,7 @@ class Kamar extends Component
     private function calculateTotalBiaya($layanan)
     {
         $tarif = $layanan->tarif;
-        
+
         switch ($layanan->satuan) {
             case Layanan::UNIT_PER_JAM:
                 if ($this->jamMulai && $this->jamSelesai) {
@@ -209,7 +221,7 @@ class Kamar extends Component
         }
     }
 
-    
+
     public function render()
     {
         $query = ModelsKamar::with(['layanan.gambar', 'layanan.fasilitas'])
@@ -232,5 +244,16 @@ class Kamar extends Component
         return view('livewire.kamar', [
             'kamarList' => $kamarList
         ]);
+    }
+
+    public function mount()
+    {
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $userId = \Illuminate\Support\Facades\Auth::id();
+            $cart = \App\Models\Cart::where('user_id', $userId)->latest()->first();
+            if ($cart && $cart->nama_kegiatan) {
+                $this->namaKegiatan = $cart->nama_kegiatan;
+            }
+        }
     }
 }

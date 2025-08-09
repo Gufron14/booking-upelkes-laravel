@@ -302,7 +302,7 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label">Nama Kegiatan <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" wire:model="namaKegiatan" placeholder="Masukkan nama kegiatan">
+                                                <input type="text" id="namaKegiatan" wire:model="namaKegiatan" class="form-control" placeholder="Nama Kegiatan" />
                                                 @error('namaKegiatan') <div class="text-danger small">{{ $message }}</div> @enderror
                                             </div>
                                             <div class="col-md-6 mb-3">
