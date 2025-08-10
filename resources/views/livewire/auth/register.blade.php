@@ -43,6 +43,19 @@
                                     @enderror
                                 </div>
 
+                                {{-- NIP input --}}
+                                <div class="form-floating mb-3">
+                                    <input type="number" id="nip"
+                                        class="form-control form-control-lg @error('nip') is-invalid @enderror"
+                                        wire:model="nip" placeholder="Masukkan NIP" />
+                                    <label class="form-label" for="nip">NIP</label>
+                                    @error('nip')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
                                 <!-- No HP input -->
                                 <div class="form-floating mb-3">
                                     <input type="number" id="no_hp"

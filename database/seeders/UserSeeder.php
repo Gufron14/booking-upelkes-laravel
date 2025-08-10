@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
                     'nama' => 'Admin Upelkes',
                     'email' => 'admin@upelkes.com',
                     'password' => Hash::make('password'),
+                    'nip' => '123456789000',
                 ]);
                 $admin->assignRole('admin');
         
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
                     'nama' => 'Kepala UPTD',
                     'email' => 'kepalauptd@upelkes.com',
                     'password' => Hash::make('password'),
+                    'nip' => '123456789001',
                 ]);
                 $resepsionis->assignRole('resepsionis');
         
@@ -35,6 +37,7 @@ class UserSeeder extends Seeder
                     'nama' => 'Pelanggan Pertama',
                     'email' => 'customer@example.com',
                     'password' => Hash::make('password'),
+                    'nip' => '123456789002',
                 ]);
                 $customer->assignRole('customer');
     }

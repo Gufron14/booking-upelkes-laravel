@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('alamat_instansi')->nullable(); // Optional field for institution address
             $table->string('jabatan_instansi')->nullable(); // Optional field for position in the institution
             $table->string('foto_id_card')->nullable(); // Optional field for ID card picture
+            $table->string('nip')->unique();
 
             $table->rememberToken();
             $table->timestamps();
