@@ -158,7 +158,7 @@
                                 <td>
                                     <div>
                                         <strong>{{ $booking->user->nama }}</strong><br>
-                                        <small class="text-muted">{{ $booking->user->email }}</small>
+                                        <small class="text-muted">NIP. {{ $booking->user->nip }}</small>
                                     </div>
                                 </td>
                                 <td>{{ $booking->layanan->nama_layanan }}</td>

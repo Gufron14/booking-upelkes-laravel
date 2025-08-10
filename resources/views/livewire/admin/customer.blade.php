@@ -56,7 +56,7 @@
                         <td>
                             <div class="d-flex flex-column">
                                 <span class="fw-semibold">{{ $user->nama }}</span>
-                                <small class="text-muted">{{ $user->email }}</small>
+                                <small class="text-muted">NIP. {{ $user->nip }}</small>
                             </div>
                         </td>
                         <td>{{ $user->no_hp }}</td>
