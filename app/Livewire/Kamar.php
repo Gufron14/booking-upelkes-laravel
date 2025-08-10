@@ -165,8 +165,8 @@ class Kamar extends Component
             'nama_kegiatan' => $this->namaKegiatan,
             'tanggal_checkin' => $this->tanggalCheckin,
             'tanggal_checkout' => $this->tanggalCheckout ?: $this->tanggalCheckin,
-            'jam_mulai' => $this->jamMulai,
-            'jam_selesai' => $this->jamSelesai,
+            'jam_mulai' => $this->jamMulai ?: null,
+            'jam_selesai' => $this->jamSelesai ?: null, 
             'jumlah_orang' => $this->jumlahOrang,
             'total_biaya' => $totalBiaya,
             'status' => 'pending'
@@ -248,9 +248,9 @@ class Kamar extends Component
 
     public function mount()
     {
-        if (\Illuminate\Support\Facades\Auth::check()) {
-            $userId = \Illuminate\Support\Facades\Auth::id();
-            $cart = \App\Models\Cart::where('user_id', $userId)->latest()->first();
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $cart = Cart::where('user_id', $userId)->latest()->first();
             if ($cart && $cart->nama_kegiatan) {
                 $this->namaKegiatan = $cart->nama_kegiatan;
             }

@@ -235,7 +235,7 @@
                                                     {{-- Payment Button --}}
                                                     @if ($booking->status == 'waiting_payment' && (!$booking->payment || $booking->payment->status != 'terverifikasi'))
                                                         <a href="{{ route('payment', $booking->id) }}"
-                                                            class="btn btn-success btn-lg fw-semibold d-flex align-items-center justify-content-center position-relative"
+                                                            class="btn btn-success fw-semibold d-flex align-items-center justify-content-center position-relative"
                                                             id="btn-bayar-{{ $booking->id }}">
                                                             <i class="fas fa-credit-card me-2"></i>
                                                             Bayar Sekarang&nbsp;
@@ -278,7 +278,7 @@
                                                     {{-- Status Booked --}}
                                                     @if ($booking->status == 'booked')
                                                         <a href="{{ route('receipt', $booking->id) }}"
-                                                            class="btn btn-primary btn-lg">
+                                                            class="btn btn-primary">
                                                             <i class="fas fa-receipt me-2"></i>
                                                             Lihat Receipt
                                                         </a>

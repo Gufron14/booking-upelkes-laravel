@@ -162,8 +162,8 @@ class Ruangan extends Component
             'nama_kegiatan' => $this->namaKegiatan,
             'tanggal_checkin' => $this->tanggalCheckin,
             'tanggal_checkout' => $this->tanggalCheckout ?: $this->tanggalCheckin,
-            'jam_mulai' => $this->jamMulai,
-            'jam_selesai' => $this->jamSelesai,
+            'jam_mulai' => $this->jamMulai ?: null,
+            'jam_selesai' => $this->jamSelesai ?: null,
             'jumlah_orang' => $this->jumlahOrang,
             'total_biaya' => $totalBiaya,
             'status' => 'pending'

@@ -75,18 +75,19 @@ class Payment extends Component
             ];
 
             // Jika metode transfer, upload bukti dan set status waiting verification
+// ... existing code ...
             if ($this->metode_pembayaran === 'transfer') {
                 $buktiPath = $this->bukti_transfer->store('bukti-transfer', 'public');
                 $paymentData['bukti_transfer'] = $buktiPath;
-                $paymentData['status'] = 'pending'; // Menunggu verifikasi admin
+                $paymentData['status'] = 'terverifikasi'; // Use allowed ENUM value
                 $bookingStatus = 'pending';
                 $successMessage = 'Bukti pembayaran berhasil diupload! Menunggu verifikasi admin.';
             } else {
-                // Jika metode cash, langsung approve
-                $paymentData['status'] = 'terverifikasi';
-                $bookingStatus = 'pending'; // Langsung approved untuk cash
+                $paymentData['status'] = 'belum_bayar';
+                $bookingStatus = 'pending';
                 $successMessage = 'Pembayaran cash berhasil dikonfirmasi!';
             }
+            // ... existing code ...
 
             $payment = PaymentModel::updateOrCreate(
                 ['booking_id' => $this->booking->id],
