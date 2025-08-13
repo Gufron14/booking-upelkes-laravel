@@ -22,7 +22,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h2 class="fw-bold text-primary mb-1">
-                            <i class="fa-solid fa-clock-rotate-left"></i>Riwayat Reservasi
+                            <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Reservasi
                         </h2>
                         <p class="text-muted mb-0">Kelola dan pantau semua reservasi Anda</p>
                     </div>
@@ -41,9 +41,7 @@
                         <div class="card shadow-sm border-0 h-100">
                             <div class="card-body p-4">
                                 <div class="row align-items-center">
-                                    {{-- Booking Info --}}
                                     <div class="row align-items-center">
-                                        {{-- Room/Service Image --}}
                                         <div class="col-md-4">
                                             <div class="position-relative">
                                                 @if ($booking->kamar)
@@ -51,40 +49,34 @@
                                                         alt="{{ $booking->kamar->nama_kamar }}"
                                                         class="img-fluid rounded-3 w-100"
                                                         style="height: 200px; object-fit: cover;">
-                                                @elseif($booking->ruang && $booking->ruang->gambarRuang)
+                                                @elseif($booking->ruang)
                                                     <img src="{{ asset('storage/' . $booking->ruang->gambarRuangs->first()->path) }}"
                                                         alt="{{ $booking->ruang->nama_ruang }}"
                                                         class="img-fluid rounded-3 w-100"
-                                                        style="height: 120px; object-fit: cover;">
+                                                        style="height: 200px; object-fit: cover;">
                                                 @else
                                                     <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
                                                         style="height: 120px;">
                                                         <i class="fas fa-image text-muted fa-2x"></i>
                                                     </div>
                                                 @endif
-
-                                                {{-- Status Badge --}}
                                                 <span
-                                                    class="position-absolute top-0 start-0 m-2 badge 
-                                                        @if ($booking->status == 'confirmed') bg-success
-                                                        @elseif($booking->status == 'pending') bg-warning
-                                                        @elseif($booking->status == 'cancelled') bg-danger
-                                                        @else bg-secondary @endif">
-                                                    {{ ucfirst($booking->status) }}
+                                                    class="position-absolute top-0 start-0 m-2 badge @if ($booking->status == 'confirmed') bg-success @elseif($booking->status == 'pending') bg-warning @elseif($booking->status == 'cancelled') bg-danger @elseif($booking->status == 'booked') bg-success @elseif($booking->status == 'waiting_payment') bg-info @else bg-secondary @endif">
+                                                    @if ($booking->status == 'waiting_payment')
+                                                        Menunggu Pembayaran
+                                                    @else
+                                                        {{ ucfirst($booking->status) }}
+                                                    @endif
                                                 </span>
                                             </div>
                                         </div>
-
-                                        {{-- Booking Details --}}
                                         <div class="col-md-5">
                                             <div class="ms-md-3">
-                                                {{-- Service & Room Name --}}
                                                 <h5 class="fw-bold text-dark mb-2">
                                                     {{ $booking->layanan->nama_layanan ?? 'Layanan Tidak Tersedia' }}
                                                     <span
                                                         class="badge bg-primary ms-2 fs-6">{{ $booking->layanan->satuan_label ?? '' }}</span>
                                                 </h5>
-
                                                 <div class="row g-3">
                                                     @if ($booking->kamar || $booking->ruang)
                                                         <div class="col-sm-6">
@@ -102,7 +94,6 @@
                                                             </p>
                                                         </div>
                                                     @endif
-
                                                     <div class="col-sm-6">
                                                         <div class="d-flex align-items-center mb-2">
                                                             <i class="fas fa-calendar text-primary me-2"></i>
@@ -145,8 +136,6 @@
                                                             </small>
                                                         @endif
                                                     </div>
-
-                                                    {{-- Person Count for applicable satuan types --}}
                                                     @if ($booking->layanan->requiresPersonCount() && $booking->jumlah_orang)
                                                         <div class="col-sm-6">
                                                             <div class="d-flex align-items-center mb-2">
@@ -154,10 +143,10 @@
                                                                 <small class="text-muted">Jumlah Orang:</small>
                                                             </div>
                                                             <p class="fw-semibold mb-0">
-                                                                {{ $booking->jumlah_orang }} orang</p>
+                                                                {{ $booking->jumlah_orang }} orang
+                                                            </p>
                                                         </div>
                                                     @endif
-
                                                     <div class="col-sm-6">
                                                         <div class="d-flex align-items-center mb-2">
                                                             <i class="fas fa-money-bill text-primary me-2"></i>
@@ -170,7 +159,6 @@
                                                         <small
                                                             class="text-muted">{{ $booking->layanan->satuan_label ?? '' }}</small>
                                                     </div>
-
                                                     <div class="col-sm-6">
                                                         <div class="d-flex align-items-center mb-2">
                                                             <i class="fas fa-credit-card text-primary me-2"></i>
@@ -178,19 +166,17 @@
                                                         </div>
                                                         @if ($booking->payment)
                                                             <span
-                                                                class="badge 
-                                                                    @if ($booking->payment->status == 'terverifikasi') bg-success
-                                                                    @elseif($booking->payment->status == 'pending') bg-warning
-                                                                    @else bg-danger @endif">
-                                                                {{ ucfirst($booking->payment->status) }}
+                                                                class="badge @if ($booking->payment->status == 'terverifikasi') bg-success @elseif($booking->payment->status == 'pending') bg-warning @else bg-secondary @endif">
+                                                                @if ($booking->payment->status == 'belum_bayar')
+                                                                    Belum Bayar
+                                                                @endif
+                                                                {{-- {{ ucfirst($booking->payment->status) }} --}}
                                                             </span>
                                                         @else
                                                             <span class="badge bg-secondary">Belum Bayar</span>
                                                         @endif
                                                     </div>
                                                 </div>
-
-                                                {{-- Catatan --}}
                                                 @if ($booking->catatan)
                                                     <div class="mt-3">
                                                         <div class="d-flex align-items-center mb-2">
@@ -198,27 +184,39 @@
                                                             <small class="text-muted">Catatan:</small>
                                                         </div>
                                                         <p class="text-muted mb-0 fst-italic">
-                                                            {{ $booking->catatan }}</p>
+                                                            {{ $booking->catatan }}
+                                                        </p>
                                                     </div>
                                                 @endif
                                             </div>
                                         </div>
-
-                                        {{-- Action Buttons --}}
                                         <div class="col-md-3">
                                             <div class="text-lg-end mt-3 mt-lg-0">
-                                                <div class="d-flex flex-column gap-2">
 
-                                                    {{-- Payment Button --}}
+                                                <div class="d-flex flex-column gap-2">
+                                                    @if ($booking->status == 'pending')
+                                                        {{-- <a href="#"
+                                                            class="btn btn-danger fw-semibold d-flex align-items-center justify-content-center mt-2"
+                                                            wire:click="cancelBooking({{ $booking->id }})"
+                                                            wire:confirm="Yakin ingin membatalkan reservasi ini?">
+                                                            <i class="fas fa-times me-2"></i>
+                                                            Batalkan Reservasi
+                                                        </a> --}}
+                                                        <button type="button"
+                                                            class="btn btn-warning fw-semibold align-items-center justify-content-center mt-2"
+                                                            wire:click="openRescheduleModal({{ $booking->id }})">
+                                                            <i class="fas fa-calendar-alt me-2"></i>
+                                                            Reschedule
+                                                        </button>
+                                                    @endif
                                                     @if ($booking->status == 'waiting_payment' && (!$booking->payment || $booking->payment->status != 'terverifikasi'))
                                                         <a href="{{ route('payment', $booking->id) }}"
                                                             class="btn btn-success fw-semibold d-flex align-items-center justify-content-center position-relative"
                                                             id="btn-bayar-{{ $booking->id }}">
                                                             <i class="fas fa-credit-card me-2"></i>
-                                                            Bayar Sekarang&nbsp;
-                                                            (<span id="countdown-{{ $booking->id }}"></span>)
+                                                            Bayar Sekarang&nbsp;(<span
+                                                                id="countdown-{{ $booking->id }}"></span>)
                                                         </a>
-                                                        {{-- Button Batalkan --}}
                                                         <a href="#"
                                                             class="btn btn-danger fw-semibold d-flex align-items-center justify-content-center mt-2"
                                                             wire:click="cancelBooking({{ $booking->id }})"
@@ -226,57 +224,53 @@
                                                             <i class="fas fa-times me-2"></i>
                                                             Batalkan Reservasi
                                                         </a>
-                                                        {{-- <a href="{{ route('receipt', $booking->id) }}"
-                                                                                                    class="btn btn-info btn-lg fw-semibold d-flex align-items-center justify-content-center mt-2">
-                                                                                                    <i class="fas fa-receipt me-2"></i>
-                                                                                                    Lihat Receipt
-                                                                                                </a> --}}
-                                                        <script>
-                                                            document.addEventListener('DOMContentLoaded', function() {
-                                                                @if ($booking->payment_deadline)
-                                                                    let deadline{{ $booking->id }} = @json(\Carbon\Carbon::parse($booking->payment_deadline)->format('Y-m-d H:i:s'));
-                                                                    let countDownDate{{ $booking->id }} = new Date(deadline{{ $booking->id }}.replace(/-/g, '/'))
-                                                                        .getTime();
-                                                                    let btnBayar{{ $booking->id }} = document.getElementById('btn-bayar-{{ $booking->id }}');
-                                                                    let timer{{ $booking->id }} = document.getElementById('countdown-{{ $booking->id }}');
-                                                                    let x{{ $booking->id }} = setInterval(function() {
-                                                                        let now = new Date().getTime();
-                                                                        let distance = countDownDate{{ $booking->id }} - now;
-                                                                        if (distance > 0) {
-                                                                            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                                                                            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                                                                            timer{{ $booking->id }}.innerHTML = minutes + 'm ' + seconds + 's';
-                                                                            btnBayar{{ $booking->id }}.classList.remove('disabled');
-                                                                        } else {
-                                                                            timer{{ $booking->id }}.innerHTML = 'Expired';
-                                                                            btnBayar{{ $booking->id }}.classList.add('disabled');
-                                                                            btnBayar{{ $booking->id }}.setAttribute('tabindex', '-1');
-                                                                            btnBayar{{ $booking->id }}.setAttribute('aria-disabled', 'true');
-                                                                            clearInterval(x{{ $booking->id }});
-                                                                        }
-                                                                    }, 1000);
-                                                                @endif
-                                                            });
-                                                        </script>
+                                                        <button type="button"
+                                                            class="btn btn-warning fw-semibold d-flex align-items-center justify-content-center mt-2"
+                                                            wire:click="openRescheduleModal({{ $booking->id }})">
+                                                            <i class="fas fa-calendar-alt me-2"></i>
+                                                            Reschedule
+                                                        </button>
                                                     @endif
-
-                                                    {{-- Status Booked --}}
-                                                    @if ($booking->status == 'booked')
-                                                        <a href="{{ route('receipt', $booking->id) }}"
-                                                            class="btn btn-primary">
-                                                            <i class="fas fa-receipt me-2"></i>
-                                                            Lihat Receipt
-                                                        </a>
-                                                    @endif
-
-                                                    {{-- Booking Date Info --}}
-                                                    <div class="mt-2">
-                                                        <small class="text-muted">
-                                                            <i class="fas fa-clock me-1"></i>
-                                                            Dibuat:
-                                                            {{ $booking->created_at->format('d M Y, H:i') }}
-                                                        </small>
-                                                    </div>
+                                                    <script>
+                                                        document.addEventListener('DOMContentLoaded', function() {
+                                                            @if ($booking->payment_deadline)
+                                                                let deadline{{ $booking->id }} = @json(\Carbon\Carbon::parse($booking->payment_deadline)->format('Y-m-d H:i:s'));
+                                                                let countDownDate{{ $booking->id }} = new Date(deadline{{ $booking->id }}.replace(/-/g, '/'))
+                                                                    .getTime();
+                                                                let btnBayar{{ $booking->id }} = document.getElementById('btn-bayar-{{ $booking->id }}');
+                                                                let timer{{ $booking->id }} = document.getElementById('countdown-{{ $booking->id }}');
+                                                                let x{{ $booking->id }} = setInterval(function() {
+                                                                    let now = new Date().getTime();
+                                                                    let distance = countDownDate{{ $booking->id }} - now;
+                                                                    if (distance > 0) {
+                                                                        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                                                        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                                                                        timer{{ $booking->id }}.innerHTML = minutes + 'm ' + seconds + 's';
+                                                                        btnBayar{{ $booking->id }}.classList.remove('disabled');
+                                                                    } else {
+                                                                        timer{{ $booking->id }}.innerHTML = 'Expired';
+                                                                        btnBayar{{ $booking->id }}.classList.add('disabled');
+                                                                        btnBayar{{ $booking->id }}.setAttribute('tabindex', '-1');
+                                                                        btnBayar{{ $booking->id }}.setAttribute('aria-disabled', 'true');
+                                                                        clearInterval(x{{ $booking->id }});
+                                                                    }
+                                                                }, 1000);
+                                                            @endif
+                                                        });
+                                                    </script>
+                                                @if ($booking->status == 'booked')
+                                                    <a href="{{ route('receipt', $booking->id) }}"
+                                                        class="btn btn-primary">
+                                                        <i class="fas fa-receipt me-2"></i>
+                                                        Lihat Receipt
+                                                    </a>
+                                                @endif
+                                                </div>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-clock me-1"></i>
+                                                        Dibuat: {{ $booking->created_at->format('d M Y, H:i') }}
+                                                    </small>
                                                 </div>
                                             </div>
                                         </div>
@@ -287,14 +281,53 @@
                     </div>
                 @endforeach
             </div>
-
-            {{-- Summary Stats --}}
+            {{-- Modal Reschedule --}}
+            <div wire:ignore.self class="modal fade" id="rescheduleModal" tabindex="-1"
+                aria-labelledby="rescheduleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="rescheduleModalLabel">Reschedule Booking</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Tanggal Check-in</label>
+                                <input type="date" class="form-control" wire:model="reschedule_checkin">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Tanggal Check-out</label>
+                                <input type="date" class="form-control" wire:model="reschedule_checkout">
+                            </div>
+                            @php
+                                $bookingModal = $bookings->where('id', $rescheduleBookingId)->first();
+                            @endphp
+                            @if ($bookingModal && $bookingModal->layanan->satuan === 'per_jam')
+                                <div class="mb-3">
+                                    <label class="form-label">Jam Mulai</label>
+                                    <input type="time" class="form-control" wire:model="reschedule_jam_mulai">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jam Selesai</label>
+                                    <input type="time" class="form-control" wire:model="reschedule_jam_selesai">
+                                </div>
+                            @endif
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="button" class="btn btn-primary" wire:click="rescheduleBooking">Simpan
+                                Perubahan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row mt-5">
                 <div class="col-12">
                     <div class="card bg-light border-0">
                         <div class="card-body p-4">
                             <h5 class="fw-bold mb-3">
-                                <i class="fas fa-chart-bar me-2"></i>Ringkasan Reservasi
+                                <i class="fas fa-chart-bar me-2"></i> Ringkasan Reservasi
                             </h5>
                             <div class="row text-center">
                                 <div class="col">
@@ -318,19 +351,12 @@
                                         <p class="text-muted mb-0">Cancelled</p>
                                     </div>
                                 </div>
-                                {{-- <div class="col-md-3">
-                                    <div class="p-3">
-                                        <h3 class="fw-bold text-primary">Rp {{ number_format($bookings->where('status', '!=', 'cancelled')->sum($booking->calculateTotal()), 0, ',', '.') }}</h3>
-                                        <p class="text-muted mb-0">Total Biaya</p>
-                                    </div>
-                                </div> --}}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         @else
-            {{-- Empty State --}}
             <div class="row">
                 <div class="col-12">
                     <div class="text-center py-5">
@@ -339,17 +365,11 @@
                         </div>
                         <h4 class="fw-bold text-muted mb-3">Belum Ada Riwayat Reservasi</h4>
                         <p class="text-muted mb-4">Anda belum memiliki riwayat reservasi.</p>
-                        {{-- <a href="{{ route('/') }}" class="btn btn-primary btn-lg px-4">
-                            <i class="fas fa-plus me-2"></i>
-                            Buat Booking Pertama
-                        </a> --}}
                     </div>
                 </div>
             </div>
         @endif
     </div>
-
-    {{-- Custom Styles --}}
     <style>
         .card {
             transition: all 0.3s ease;
@@ -363,5 +383,100 @@
 
         .badge {
             font-size: 0.75rem;
+        }
     </style>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM loaded, setting up reschedule modal...');
+
+                // Pastikan Bootstrap tersedia
+                if (typeof bootstrap === 'undefined') {
+                    console.error('Bootstrap not loaded!');
+                    return;
+                }
+
+                // Function untuk membuka modal
+                function openModal() {
+                    console.log('openModal called');
+                    var modalEl = document.getElementById('rescheduleModal');
+                    console.log('Modal element:', modalEl);
+
+                    if (modalEl) {
+                        var myModal = new bootstrap.Modal(modalEl, {
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                        myModal.show();
+                        console.log('Modal should be visible now');
+                    } else {
+                        console.error('Modal element rescheduleModal not found');
+                    }
+                }
+
+                // Function untuk menutup modal
+                function closeModal() {
+                    console.log('closeModal called');
+                    var modalEl = document.getElementById('rescheduleModal');
+                    var modal = bootstrap.Modal.getInstance(modalEl);
+                    if (modal) {
+                        modal.hide();
+                    }
+                }
+
+                // Event listener untuk Livewire v3
+                if (typeof Livewire !== 'undefined') {
+                    console.log('Setting up Livewire event listeners...');
+
+                    // Untuk Livewire v3
+                    document.addEventListener('livewire:initialized', () => {
+                        console.log('Livewire initialized');
+
+                        Livewire.on('openRescheduleModal', (event) => {
+                            console.log('Livewire event openRescheduleModal received:', event);
+                            openModal();
+                        });
+
+                        Livewire.on('closeRescheduleModal', (event) => {
+                            console.log('Livewire event closeRescheduleModal received:', event);
+                            closeModal();
+                        });
+                    });
+
+                    // Untuk Livewire v2 (fallback)
+                    document.addEventListener('livewire:load', function() {
+                        console.log('Livewire v2 loaded');
+
+                        Livewire.on('openRescheduleModal', function() {
+                            console.log('Livewire v2 event openRescheduleModal received');
+                            openModal();
+                        });
+
+                        Livewire.on('closeRescheduleModal', function() {
+                            console.log('Livewire v2 event closeRescheduleModal received');
+                            closeModal();
+                        });
+                    });
+                } else {
+                    console.error('Livewire not found! Modal may not work properly.');
+                }
+
+                // Alternative: Direct event binding jika Livewire gagal
+                setTimeout(function() {
+                    var rescheduleButtons = document.querySelectorAll('[wire\\:click*="openRescheduleModal"]');
+                    console.log('Found reschedule buttons:', rescheduleButtons.length);
+
+                    rescheduleButtons.forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            console.log('Direct button click detected');
+                            // Tunggu sebentar untuk Livewire response, lalu buka modal
+                            setTimeout(openModal, 100);
+                        });
+                    });
+                }, 1000);
+            });
+        </script>
+    @endpush
+
 </div>
