@@ -172,6 +172,8 @@ class Ruangan extends Component
         $this->showCartModal = false;
         $this->resetCartForm();
         session()->flash('success', 'Layanan berhasil ditambahkan ke keranjang');
+        // return ke halaman keranjang
+        return redirect()->route('cart');
     }
 
     private function calculateTotalBiaya($layanan)

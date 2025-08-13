@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 #[Title('Riwayat Booking | Upelkes Jabar')]
 
 class Riwayat extends Component
-{   
+{
     public $layanan;
     public function cancelBooking($bookingId)
     {
@@ -25,7 +25,16 @@ class Riwayat extends Component
                 return;
             }
 
-            if (!$booking->canBeCancelled()) {
+            // Hanya bisa cancel jika status waiting_payment
+            // atau status pending dan metode pembayaran cash
+            $canCancel = false;
+            if ($booking->status === 'waiting_payment') {
+                $canCancel = true;
+            } elseif ($booking->status === 'pending' && $booking->payment && $booking->payment->metode_pembayaran === 'cash') {
+                $canCancel = true;
+            }
+
+            if (!$canCancel) {
                 session()->flash('error', 'Booking tidak dapat dibatalkan.');
                 return;
             }

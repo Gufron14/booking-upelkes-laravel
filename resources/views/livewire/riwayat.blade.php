@@ -121,10 +121,11 @@
                                                                 {{ $booking->formatted_checkin }}
                                                             </p>
                                                             @if ($booking->jam_mulai && $booking->jam_selesai)
-                                                            <small class="text-muted">
-                                                            {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}
-                                                            ({{ $booking->duration }} jam)
-                                                            </small>
+                                                                <small class="text-muted">
+                                                                    {{ $booking->jam_mulai }} -
+                                                                    {{ $booking->jam_selesai }}
+                                                                    ({{ $booking->duration }} jam)
+                                                                </small>
                                                             @endif
                                                         @elseif($booking->layanan->satuan === 'per_orang_kunjungan')
                                                             <p class="fw-semibold mb-0">
@@ -136,7 +137,12 @@
                                                                 {{ $booking->formatted_checkout }}
                                                             </p>
                                                             <small class="text-muted">({{ $booking->duration }}
-                                                            @if($booking->layanan->satuan === 'per_bulan') bulan @else hari @endif)</small>
+                                                                @if ($booking->layanan->satuan === 'per_bulan')
+                                                                    bulan
+                                                                @else
+                                                                    hari
+                                                                @endif)
+                                                            </small>
                                                         @endif
                                                     </div>
 
@@ -158,8 +164,8 @@
                                                             <small class="text-muted">Total Biaya:</small>
                                                         </div>
                                                         <p class="fw-bold text-success mb-0 fs-5">
-                                                        Rp
-                                                        {{ number_format($booking->total_biaya ?: $booking->calculateTotal(), 0, ',', '.') }}
+                                                            Rp
+                                                            {{ number_format($booking->total_biaya ?: $booking->calculateTotal(), 0, ',', '.') }}
                                                         </p>
                                                         <small
                                                             class="text-muted">{{ $booking->layanan->satuan_label ?? '' }}</small>
@@ -202,6 +208,7 @@
                                         <div class="col-md-3">
                                             <div class="text-lg-end mt-3 mt-lg-0">
                                                 <div class="d-flex flex-column gap-2">
+
                                                     {{-- Payment Button --}}
                                                     @if ($booking->status == 'waiting_payment' && (!$booking->payment || $booking->payment->status != 'terverifikasi'))
                                                         <a href="{{ route('payment', $booking->id) }}"
@@ -210,6 +217,14 @@
                                                             <i class="fas fa-credit-card me-2"></i>
                                                             Bayar Sekarang&nbsp;
                                                             (<span id="countdown-{{ $booking->id }}"></span>)
+                                                        </a>
+                                                        {{-- Button Batalkan --}}
+                                                        <a href="#"
+                                                            class="btn btn-danger fw-semibold d-flex align-items-center justify-content-center mt-2"
+                                                            wire:click="cancelBooking({{ $booking->id }})"
+                                                            wire:confirm="Yakin ingin membatalkan reservasi ini?">
+                                                            <i class="fas fa-times me-2"></i>
+                                                            Batalkan Reservasi
                                                         </a>
                                                         {{-- <a href="{{ route('receipt', $booking->id) }}"
                                                                                                     class="btn btn-info btn-lg fw-semibold d-flex align-items-center justify-content-center mt-2">

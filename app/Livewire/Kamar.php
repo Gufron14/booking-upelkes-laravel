@@ -176,7 +176,7 @@ class Kamar extends Component
         $this->resetCartForm();
         session()->flash('success', 'Layanan berhasil ditambahkan ke keranjang');
         // return ke halaman keranjang
-        return route('cart');
+        return redirect()->route('cart');
     }
 
     private function calculateTotalBiaya($layanan)
