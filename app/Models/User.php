@@ -18,7 +18,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['nama', 'email', 'no_hp', 'alamat', 'password', 'nip', 'nama_instansi', 'alamat_instansi', 'jabatan_instansi', 'foto_id_card'];
+    protected $fillable = ['nama', 'email', 'no_hp', 'alamat', 'password', 'avatar', 'nip', 'nama_instansi', 'alamat_instansi', 'jabatan_instansi', 'foto_id_card'];
 
     public function bookings()
     {

@@ -42,7 +42,7 @@
         {{ $slot }}
     </div>
 
-        <a href="https://wa.me/6283829253885?text=Hallo%20Taman%20Baca%20Balarea" target="_blank" class="whatsapp-button">
+        <a href="https://wa.me/6287825328177" target="_blank" class="whatsapp-button">
         <i class="bi bi-whatsapp"></i> Hubungi Kami
     </a>
 

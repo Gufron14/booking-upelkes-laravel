@@ -11,7 +11,7 @@ z-index: 9999;
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
                 <x-nav-link :active="request()->routeIs('/')" href="{{ route('/') }}">Beranda</x-nav-link>
                 <x-nav-link :active="request()->routeIs('kamarShow')" href="{{ route('kamarShow') }}">Kamar</x-nav-link>
                 <x-nav-link :active="request()->routeIs('ruanganShow')" href="{{ route('ruanganShow') }}">Ruangan</x-nav-link>
@@ -36,7 +36,7 @@ z-index: 9999;
                     <a href="{{ route('cart') }}" class="position-relative text-decoration-none">
                         <i class="fa-solid fa-cart-shopping text-light fs-5"></i>
                         <!-- Tambahkan badge kalau perlu -->
-                        @if ($countCart > 0)                            
+                        @if ($countCart > 0)
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                 {{ $countCart }}
                             </span>
@@ -48,7 +48,12 @@ z-index: 9999;
                         <button class="btn d-flex align-items-center justify-content-center rounded-circle" type="button"
                             id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"
                             style="width: 40px; height: 40px; background-color: #495057; color: white; font-weight: 600;">
-                            {{ $inisial }}
+                            @if (Auth::user()->avatar)
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Avatar"
+                                    style="width: 36px; height: 36px; object-fit: cover; border-radius: 50%;">
+                            @else
+                                {{ $inisial }}
+                            @endif
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">

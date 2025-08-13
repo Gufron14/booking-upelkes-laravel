@@ -47,15 +47,16 @@
                             </div>
                             <div class="col">
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Surat Tugas</label>
-                                    <input type="file" wire:model="foto_id_card" class="form-control">
-                                    @error('foto_id_card')
+                                    <label class="form-label fw-semibold">Foto Profil</label>
+                                    <input type="file" wire:model="avatar" class="form-control">
+                                    @error('avatar')
                                         <div class="text-danger small">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label fw-semibold">Surat Tugas Saat ini</label>
-                                    <img src="{{ asset('storage/' . $user->foto_id_card) }}" alt="Foto KTP" class="img-fluid rounded">
+                                    <label class="form-label fw-semibold">Foto Profil Saat ini</label>
+                                    <br>
+                                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="avatar" class="img-fluid rounded w-50">
                                 </div>
                             </div>
                         </div>

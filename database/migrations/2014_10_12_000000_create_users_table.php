@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('no_hp')->nullable()->unique();
             $table->text('alamat')->nullable();
+            // $table->string('avatar')->nullable();
 
             // Instansi
             $table->string('nama_instansi')->nullable(); // Optional field for institution name

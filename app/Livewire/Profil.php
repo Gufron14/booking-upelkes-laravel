@@ -11,7 +11,7 @@ class Profil extends Component
 {
     use WithFileUploads;
 
-    public $nama, $email, $no_hp, $alamat, $foto_id_card, $nip;
+    public $nama, $email, $no_hp, $alamat, $foto_id_card, $nip, $avatar;
 
     public function mount()
     {
@@ -22,18 +22,19 @@ class Profil extends Component
         $this->no_hp = $user->no_hp;
         $this->alamat = $user->alamat;
         $this->foto_id_card = $user->foto_id_card;
+        $this->avatar = $user->avatar;
     }
 
     public function updateProfil()
     {
         $user = Auth::user();
 
-        if ($this->foto_id_card) {
+        if ($this->avatar) {
             $this->validate([
-                'foto_id_card' => 'nullable|mimes:jpeg,png,jpg|max:2048',
+                'avatar' => 'nullable|mimes:jpeg,png,jpg|max:2048',
             ]);
             $user->update([
-                'foto_id_card' => $this->foto_id_card->store('foto_id_card', 'public'),
+                'avatar' => $this->avatar->store('avatar', 'public'),
             ]);
         }
 
