@@ -83,7 +83,7 @@
 
                                 <!-- Foto ID Card input -->
                                 <div class="mb-4">
-                                    <label for="foto_id_card" class="form-label">Foto KTP/Tanda Pengenal</label>
+                                    <label for="foto_id_card" class="form-label">Surat Tugas</label>
                                     <input type="file" id="foto_id_card"
                                         class="form-control @error('foto_id_card') is-invalid @enderror"
                                         wire:model="foto_id_card" accept="image/*" />

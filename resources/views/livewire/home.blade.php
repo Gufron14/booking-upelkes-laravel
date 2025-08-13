@@ -1,25 +1,30 @@
 <div>
     <!-- Hero Section -->
-    <section class="hero-section position-relative overflow-hidden" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
-        <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: url('assets/img/k101.png'); background-size: cover; background-position: center; opacity: 0.1;"></div>
-        
+    <section class="hero-section position-relative overflow-hidden"
+        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+        <div class="position-absolute top-0 start-0 w-100 h-100"
+            style="background-image: url('assets/img/k101.png'); background-size: cover; background-position: center; opacity: 0.1;">
+        </div>
+
         <div class="container position-relative z-2 d-flex align-items-center" style="min-height: 100vh;">
             <div class="row w-100 align-items-center">
                 <div class="col-lg-8">
                     <div class="hero-content text-white">
                         <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInUp">
                             Selamat Datang di Sistem<br>
-                            <span class="text-warning">Booking UPELKES Jabar</span>
+                            <span class="text-warning">Reservasi UPELKES Jabar</span>
                         </h1>
                         <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">
-                           Nikmati kemudahan pemesanan kamar dan ruangan untuk kebutuhan pelatihan, penginapan, dan kegiatan lainnya di Upelkes Jawa Barat.
+                            Nikmati kemudahan pemesanan kamar dan ruangan untuk kebutuhan pelatihan, penginapan, dan
+                            kegiatan lainnya di Upelkes Jawa Barat.
                         </p>
                         <div class="d-flex gap-3 animate__animated animate__fadeInUp animate__delay-2s">
                             <a href="#layanan" class="btn btn-warning btn-lg px-4 py-3 rounded-pill fw-semibold">
                                 <i class="fas fa-search me-2"></i>
                                 Jelajahi
                             </a>
-                            <a href="{{ route('sk') }}" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                            <a href="{{ route('sk') }}"
+                                class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold">
                                 <i class="fas fa-info-circle me-2"></i>
                                 Syarat & Ketentuan
                             </a>
@@ -39,7 +44,7 @@
                 </div> --}}
             </div>
         </div>
-        
+
         <!-- Scroll Indicator -->
         <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4">
             <div class="scroll-indicator animate__animated animate__bounce animate__infinite">
@@ -84,7 +89,8 @@
                         <div class="stat-icon mb-3">
                             <i class="fas fa-users fa-3x text-info"></i>
                         </div>
-                        <h3 class="fw-bold text-info mb-1">{{ $kategoriStats['umum'] + $kategoriStats['pemerintah'] }}</h3>
+                        <h3 class="fw-bold text-info mb-1">{{ $kategoriStats['umum'] + $kategoriStats['pemerintah'] }}
+                        </h3>
                         <p class="text-muted mb-0">Total Layanan</p>
                     </div>
                 </div>
@@ -102,125 +108,125 @@
                     <div class="divider mx-auto bg-primary" style="width: 80px; height: 4px; border-radius: 2px;"></div>
                 </div>
             </div>
-            
+
             <div class="row g-4">
-                @foreach($featuredLayanan as $layanan)
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                        <div class="position-relative">
-                            @if($layanan->gambar->count() > 0)
-                                <img src="{{ asset('storage/' . $layanan->gambar->first()->path) }}" 
-                                     class="card-img-top" 
-                                     alt="{{ $layanan->nama_layanan }}"
-                                     style="height: 250px; object-fit: cover;">
-                            @else
-                                <div class="bg-gradient-primary d-flex align-items-center justify-content-center text-white" 
-                                     style="height: 250px;">
-                                    <div class="text-center">
-                                        <i class="fas fa-image fa-4x mb-3 opacity-50"></i>
-                                        <p class="mb-0">{{ $layanan->nama_layanan }}</p>
+                @foreach ($featuredLayanan as $layanan)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="service-card card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                            <div class="position-relative">
+                                @if ($layanan->gambar->count() > 0)
+                                    <img src="{{ asset('storage/' . $layanan->gambar->first()->path) }}"
+                                        class="card-img-top" alt="{{ $layanan->nama_layanan }}"
+                                        style="height: 250px; object-fit: cover;">
+                                @else
+                                    <div class="bg-gradient-primary d-flex align-items-center justify-content-center text-white"
+                                        style="height: 250px;">
+                                        <div class="text-center">
+                                            <i class="fas fa-image fa-4x mb-3 opacity-50"></i>
+                                            <p class="mb-0">{{ $layanan->nama_layanan }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
-                            
-                            <!-- Category Badge -->
-                            <div class="position-absolute top-0 start-0 m-3">
-                                <span class="badge {{ $layanan->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }} px-3 py-2 rounded-pill">
-                                    {{ ucfirst($layanan->kategori) }}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="card-body p-4">
-                            <h5 class="card-title fw-bold mb-3">{{ $layanan->nama_layanan }}</h5>
-                            <p class="card-text text-muted mb-3">
-                                {{ Str::limit($layanan->deskripsi, 100) }}
-                            </p>
-                            
-                            <!-- Service Info -->
-                            <div class="row g-2 mb-3">
-                                <div class="col-6">
-                                    <small class="text-muted d-flex align-items-center">
-                                        <i class="fas fa-users text-primary me-2"></i>
-                                        {{ $layanan->kapasitas ?? 'N/A' }} orang
-                                    </small>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted d-flex align-items-center">
-                                        <i class="fas fa-clock text-warning me-2"></i>
-                                                                            @if ($layanan->satuan == 'per_hari')
-                                        Per Hari
-                                    @elseif ($layanan->satuan == 'per_jam')
-                                        Per Jam
-                                    @elseif ($layanan->satuan == 'per_orang_kunjungan')
-                                        Per Orang/Kunjungan
-                                    @elseif ($layanan->satuan == 'per_bulan')
-                                        Per Bulan
-                                    @elseif ($layanan->satuan == 'per_orang_hari')
-                                        Per Orang/Hari
-                                    @elseif ($layanan->satuan == 'per_kamar_hari')
-                                        Per Kamar/Hari
-                                    @elseif ($layanan->satuan == 'per_kegiatan_hari')
-                                        Per Kegiatan/Hari
-                                    @endif
-                                    </small>
+                                @endif
+
+                                <!-- Category Badge -->
+                                <div class="position-absolute top-0 start-0 m-3">
+                                    <span
+                                        class="badge {{ $layanan->kategori == 'pemerintah' ? 'bg-success' : 'bg-primary' }} px-3 py-2 rounded-pill">
+                                        {{ ucfirst($layanan->kategori) }}
+                                    </span>
                                 </div>
                             </div>
-                            
-                            <!-- Facilities -->
-                            @if($layanan->fasilitas->count() > 0)
-                                <div class="mb-3">
-                                    <small class="text-muted fw-semibold">Fasilitas:</small>
-                                    <div class="d-flex flex-wrap gap-1 mt-1">
-                                        @foreach($layanan->fasilitas->take(3) as $fasilitas)
-                                            <span class="badge bg-light text-dark border">
-                                                {{ $fasilitas->nama }}
-                                            </span>
-                                        @endforeach
-                                        @if($layanan->fasilitas->count() > 3)
-                                            <span class="badge bg-secondary">
-                                                +{{ $layanan->fasilitas->count() - 3 }}
-                                            </span>
-                                        @endif
+
+                            <div class="card-body p-4">
+                                <h5 class="card-title fw-bold mb-3">{{ $layanan->nama_layanan }}</h5>
+                                <p class="card-text text-muted mb-3">
+                                    {{ Str::limit($layanan->deskripsi, 100) }}
+                                </p>
+
+                                <!-- Service Info -->
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <small class="text-muted d-flex align-items-center">
+                                            <i class="fas fa-users text-primary me-2"></i>
+                                            {{ $layanan->kapasitas ?? 'N/A' }} orang
+                                        </small>
+                                    </div>
+                                    <div class="col-6">
+                                        <small class="text-muted d-flex align-items-center">
+                                            <i class="fas fa-clock text-warning me-2"></i>
+                                            @if ($layanan->satuan == 'per_hari')
+                                                Per Hari
+                                            @elseif ($layanan->satuan == 'per_jam')
+                                                Per Jam
+                                            @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                                Per Orang/Kunjungan
+                                            @elseif ($layanan->satuan == 'per_bulan')
+                                                Per Bulan
+                                            @elseif ($layanan->satuan == 'per_orang_hari')
+                                                Per Orang/Hari
+                                            @elseif ($layanan->satuan == 'per_kamar_hari')
+                                                Per Kamar/Hari
+                                            @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                                Per Kegiatan/Hari
+                                            @endif
+                                        </small>
                                     </div>
                                 </div>
-                            @endif
-                            
-                            <!-- Price and Action -->
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="text-primary fw-bold mb-0">
-                                        Rp {{ number_format($layanan->tarif, 0, ',', '.') }}
-                                    </h5>
-                                                                    <small class="text-muted">
-                                    @if ($layanan->satuan == 'per_hari')
-                                        Per Hari
-                                    @elseif ($layanan->satuan == 'per_jam')
-                                        Per Jam
-                                    @elseif ($layanan->satuan == 'per_orang_kunjungan')
-                                        Per Orang/Kunjungan
-                                    @elseif ($layanan->satuan == 'per_bulan')
-                                        Per Bulan
-                                    @elseif ($layanan->satuan == 'per_orang_hari')
-                                        Per Orang/Hari
-                                    @elseif ($layanan->satuan == 'per_kamar_hari')
-                                        Per Kamar/Hari
-                                    @elseif ($layanan->satuan == 'per_kegiatan_hari')
-                                        Per Kegiatan/Hari
-                                    @endif
-                                </small>
-                                </div>
-                                {{-- <a href="{{ route('layanan') }}" class="btn btn-primary rounded-pill px-4">
+
+                                <!-- Facilities -->
+                                @if ($layanan->fasilitas->count() > 0)
+                                    <div class="mb-3">
+                                        <small class="text-muted fw-semibold">Fasilitas:</small>
+                                        <div class="d-flex flex-wrap gap-1 mt-1">
+                                            @foreach ($layanan->fasilitas->take(3) as $fasilitas)
+                                                <span class="badge bg-light text-dark border">
+                                                    {{ $fasilitas->nama }}
+                                                </span>
+                                            @endforeach
+                                            @if ($layanan->fasilitas->count() > 3)
+                                                <span class="badge bg-secondary">
+                                                    +{{ $layanan->fasilitas->count() - 3 }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <!-- Price and Action -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="text-primary fw-bold mb-0">
+                                            Rp {{ number_format($layanan->tarif, 0, ',', '.') }}
+                                        </h5>
+                                        <small class="text-muted">
+                                            @if ($layanan->satuan == 'per_hari')
+                                                Per Hari
+                                            @elseif ($layanan->satuan == 'per_jam')
+                                                Per Jam
+                                            @elseif ($layanan->satuan == 'per_orang_kunjungan')
+                                                Per Orang/Kunjungan
+                                            @elseif ($layanan->satuan == 'per_bulan')
+                                                Per Bulan
+                                            @elseif ($layanan->satuan == 'per_orang_hari')
+                                                Per Orang/Hari
+                                            @elseif ($layanan->satuan == 'per_kamar_hari')
+                                                Per Kamar/Hari
+                                            @elseif ($layanan->satuan == 'per_kegiatan_hari')
+                                                Per Kegiatan/Hari
+                                            @endif
+                                        </small>
+                                    </div>
+                                    {{-- <a href="{{ route('layanan') }}" class="btn btn-primary rounded-pill px-4">
                                     <i class="fas fa-arrow-right me-1"></i>
                                     Lihat Detail
                                 </a> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             </div>
-            
+
             <div class="text-center mt-5">
                 <a href="{{ route('kamarShow') }}" class="btn btn-outline-primary px-5 py-3 rounded-pill">
                     <i class="fas fa-th-large me-2"></i>
@@ -242,9 +248,11 @@
                     <div class="about-content">
                         <h2 class="display-5 fw-bold text-dark mb-4">Tentang UPELKES</h2>
                         <p class="lead text-muted mb-4">
-                            UPTD Pelatihan Kesehatan Dinas Kesehatan Provinsi Jawa Barat (Upelkes Jabar) berfokus pada peningkatan kompetensi tenaga kesehatan berbasis tradisional komplementer yang telah Terakreditasi A oleh Kemenkes RI dan BPOM RI, berpredikat WBK, serta ramah untuk disabilitas
+                            UPTD Pelatihan Kesehatan Dinas Kesehatan Provinsi Jawa Barat (Upelkes Jabar) berfokus pada
+                            peningkatan kompetensi tenaga kesehatan berbasis tradisional komplementer yang telah
+                            Terakreditasi A oleh Kemenkes RI dan BPOM RI, berpredikat WBK, serta ramah untuk disabilitas
                         </p>
-                        
+
                         {{-- <div class="row g-4">
                             <div class="col-md-6">
                                 <div class="feature-item d-flex">
@@ -296,8 +304,9 @@
                 <div class="col-lg-6">
                     <div class="about-image text-center">
                         <div class="position-relative">
-                                <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noH1HMyhLtdgUH6Q10vHJmkZcDaj2LXgVnAhUzpzwrbLcPWp3uTEO9WK9LEkx3bDi9eIcUmBG8b3hCauawXAme9xesLhDuJ625WhoAz-6VGqgLC6ysrYi4De0bThO9HtPvlNA2o=s1360-w1360-h1020-rw" alt="" width="100%" class="img-fluid rounded-4">
-                       </div>
+                            <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noH1HMyhLtdgUH6Q10vHJmkZcDaj2LXgVnAhUzpzwrbLcPWp3uTEO9WK9LEkx3bDi9eIcUmBG8b3hCauawXAme9xesLhDuJ625WhoAz-6VGqgLC6ysrYi4De0bThO9HtPvlNA2o=s1360-w1360-h1020-rw"
+                                alt="" width="100%" class="img-fluid rounded-4">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -395,15 +404,17 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-8">
-                    <h2 class="display-6 fw-bold mb-3">Siap untuk Booking?</h2>
-                    <p class="lead mb-0">Temukan berbagai fasilitas pendukung untuk kenyamanan dan kelancaran kegiatan Anda.</p>
+                    <h2 class="display-6 fw-bold mb-3">Siap untuk Reservasi?</h2>
+                    <p class="lead mb-0">Temukan berbagai fasilitas pendukung untuk kenyamanan dan kelancaran kegiatan
+                        Anda.</p>
                 </div>
-                {{-- <div class="col-lg-4 text-lg-end">
-                    <a href="{{ route('booking') }}" class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-semibold">
-                        <i class="fas fa-calendar-plus me-2"></i>
-                        Booking Sekarang
+                <div class="col-lg-4 text-lg-end">
+                    <a href="{{ route('sk') }}"
+                        class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Syarat & Ketentuan
                     </a>
-                </div> --}}
+                </div>
             </div>
         </div>
     </section>
@@ -411,34 +422,34 @@
 
 
 
-<!-- CDN Links -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- CDN Links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-<!-- Smooth Scroll Script -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+    <!-- Smooth Scroll Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Scroll indicator click
+            document.querySelector('.scroll-indicator')?.addEventListener('click', function() {
+                document.querySelector('#layanan').scrollIntoView({
+                    behavior: 'smooth'
+                });
             });
         });
-        
-        // Scroll indicator click
-        document.querySelector('.scroll-indicator')?.addEventListener('click', function() {
-            document.querySelector('#layanan').scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-</script>
+    </script>
 
 </div>

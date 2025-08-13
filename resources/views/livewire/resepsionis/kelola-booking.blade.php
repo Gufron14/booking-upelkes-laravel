@@ -1,6 +1,6 @@
 <div>
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Daftar Booking</h2>
+        <h2 class="fw-bold">Daftar Reservasi</h2>
         <a href="{{ route('dashboard') }}" class="btn btn-primary rounded-pill px-4">
             <i class="fas fa-arrow-left me-1"></i>
             Kembali
@@ -145,7 +145,7 @@
                                 <td colspan="8" class="text-center py-4">
                                     <div class="text-muted">
                                         <i class="fas fa-inbox fa-3x mb-3"></i>
-                                        <p>Tidak ada booking yang ditemukan.</p>
+                                        <p>Tidak ada reservasi yang ditemukan.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -160,7 +160,7 @@
                     <div class="pagination-info">
                         <span class="text-muted">
                             Menampilkan {{ $bookings->firstItem() }} sampai {{ $bookings->lastItem() }}
-                            dari {{ $bookings->total() }} booking
+                            dari {{ $bookings->total() }} reservasi
                         </span>
                     </div>
                     <div class="pagination-controls">
@@ -231,7 +231,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabel">Detail Booking</h5>
+                        <h5 class="modal-title" id="detailModalLabel">Detail Reservasi</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             wire:click="closeDetailModal"></button>
                     </div>
@@ -279,7 +279,7 @@
 
                                 {{-- Informasi Booking --}}
                                 <div class="mb-4">
-                                    <h6 class="fw-bold mb-3">Informasi Booking</h6>
+                                    <h6 class="fw-bold mb-3">Informasi Reservasi</h6>
                                     <table class="table table-sm table-borderless">
                                         <tr>
                                             <td class="fw-semibold">Layanan</td>
@@ -305,6 +305,7 @@
                                             <td class="fw-semibold">Jumlah Orang</td>
                                             <td>: {{ $selectedBooking->jumlah_orang ?? '-' }}</td>
                                         </tr>
+                                        @if($selectedBooking->layanan && $selectedBooking->layanan->satuan === 'per_jam')
                                         <tr>
                                             <td class="fw-semibold">Jam Mulai</td>
                                             <td>:
@@ -317,6 +318,7 @@
                                                 {{ $selectedBooking->jam_selesai ? Carbon\Carbon::parse($selectedBooking->jam_selesai)->format('H:i') : '-' }}
                                             </td>
                                         </tr>
+                                        @endif
                                         <tr>
                                             <td class="fw-semibold">Tanggal Checkin</td>
                                             <td>: {{ $selectedBooking->formatted_checkin }}</td>
@@ -391,14 +393,14 @@
                                 wire:click="confirmBooking({{ $selectedBooking->id }})"
                                 wire:confirm="Apakah Anda yakin ingin mengkonfirmasi booking ini?"
                                 data-bs-dismiss="modal">
-                                <i class="fas fa-check me-1"></i> Konfirmasi Booking
+                                <i class="fas fa-check me-1"></i> Konfirmasi Reservasi
                             </button>
 
                             <button type="button" class="btn btn-danger"
                                 wire:click="cancelBooking({{ $selectedBooking->id }})"
                                 wire:confirm="Apakah Anda yakin ingin membatalkan booking ini?"
                                 data-bs-dismiss="modal">
-                                <i class="fas fa-times me-1"></i> Batalkan Booking
+                                <i class="fas fa-times me-1"></i> Batalkan Reservasi
                             </button>
                         @endif
 

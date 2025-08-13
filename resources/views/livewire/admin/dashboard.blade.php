@@ -23,7 +23,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Bookings
+                                Reservasi
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalBookings) }}</div>
                         </div>
@@ -100,7 +100,7 @@
         <div class="mb-4">
             <div class="card shadow h-100">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Kalender Booking</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Kalender Reservasi</h6>
                 </div>
                 <div class="card-body">
                     <div id='calendar'></div>
@@ -162,17 +162,17 @@
         <div class="col-xl-4 col-lg-12 mb-4">
             <div class="card shadow h-100">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Booking Periode</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Reservasi Periode</h6>
                 </div>
                 <div class="card-body">
                     <div class="text-center mb-3">
                         <h3 class="font-weight-bold text-success">{{ $bookingHariIni }}</h3>
-                        <small class="text-muted">Booking Hari Ini</small>
+                        <small class="text-muted">Reservasi Hari Ini</small>
                     </div>
                     <hr>
                     <div class="text-center">
                         <h3 class="font-weight-bold text-info">{{ $bookingBulanIni }}</h3>
-                        <small class="text-muted">Booking Bulan Ini</small>
+                        <small class="text-muted">Reservasi Bulan Ini</small>
                     </div>
                 </div>
             </div>
@@ -186,7 +186,7 @@
         <div class="col-md-12 mb-4">
             <div class="card shadow">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Booking Terbaru</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Reservasi Terbaru</h6>
                     <a href="{{ route('kelola.booking') }}" class="btn btn-sm btn-primary">Lihat Semua</a>
                 </div>
                 <div class="card-body">

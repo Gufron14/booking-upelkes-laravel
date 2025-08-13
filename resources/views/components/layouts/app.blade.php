@@ -25,6 +25,9 @@
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-8xTebc2drw9ZD0oHaKpQUw5mLuEOXeaGQ0xZLqZrLZFr04VKaYyoQpD6LRzjH0eF1LsHZCPjPbdrs4YrXGME2w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 
 
 
@@ -38,6 +41,10 @@
     <div class="min-h-screen">
         {{ $slot }}
     </div>
+
+        <a href="https://wa.me/6283829253885?text=Hallo%20Taman%20Baca%20Balarea" target="_blank" class="whatsapp-button">
+        <i class="bi bi-whatsapp"></i> Hubungi Kami
+    </a>
 
     @include('components.footer')
 

@@ -150,8 +150,8 @@
                                 </button>
                                 <button class="btn btn-success btn-sm"
                                     wire:click="openCartModal({{ $kamar->id }})">
-                                    <i class="fas fa-cart-plus me-1"></i>
-                                    Keranjang
+                                    {{-- <i class="fas fa-cart-plus me-1"></i> --}}
+                                   Pilih
                                 </button>
 
 {{-- 

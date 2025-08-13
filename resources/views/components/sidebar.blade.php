@@ -40,7 +40,7 @@
                                 <span class="d-flex">
                                     <i class="ti ti-shopping-cart"></i>
                                 </span>
-                                <span class="hide-menu">Booking</span>
+                                <span class="hide-menu">Reservasi</span>
                             </div>
                             {{-- Jika Count Booking > 0 --}}
 

@@ -95,3 +95,30 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+  .whatsapp-button {
+      position: fixed;
+      bottom: 50px;
+      right: 50px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      background-color: #25d366;
+      color: white;
+      padding: 7px 15px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease-in-out;
+  }
+
+  .whatsapp-button:hover {
+      background-color: #1ebe5d;
+      color: white;
+  }
+
+  .whatsapp-button i {
+      font-size: 24px;
+      margin-right: 10px;
+  }
+

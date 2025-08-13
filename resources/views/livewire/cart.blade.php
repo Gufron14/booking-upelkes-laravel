@@ -3,7 +3,7 @@
         <div class="col-lg-8">
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Keranjang Booking</h5>
+                    <h5 class="mb-0">Keranjang Reservasi</h5>
                 </div>
                 <div class="card-body">
                     @if (session()->has('message'))
@@ -76,7 +76,7 @@
                                             {{ \Carbon\Carbon::parse($cart->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($cart->jam_selesai)->format('H:i') }}
                                         </p>
                                     @else
-                                        -
+                                        
                                     @endif
                                     
                                     <p class="mb-1">

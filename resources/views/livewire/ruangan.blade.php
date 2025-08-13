@@ -139,8 +139,8 @@
                                 </button>
                                 <button class="btn btn-success btn-sm"
                                     wire:click="openCartModal({{ $ruang->id }})">
-                                    <i class="fas fa-cart-plus me-1"></i>
-                                    Keranjang
+                                    {{-- <i class="fas fa-cart-plus me-1"></i> --}}
+                                    Pilih
                                 </button>
                                 
                             </div>

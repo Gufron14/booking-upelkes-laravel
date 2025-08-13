@@ -85,7 +85,7 @@ Route::middleware(['auth', 'role:admin|resepsionis'])->group(function () {
         Route::get('fasilitas', Fasilitas::class)->name('fasilitas');
 
         // RESEPSIONIS
-        Route::get('booking', KelolaBooking::class)->name('kelola.booking');
+        Route::get('reservasi', KelolaBooking::class)->name('kelola.booking');
         Route::get('transaksi', Transaksi::class)->name('transaksi');
 
         // Tambahkan route ini

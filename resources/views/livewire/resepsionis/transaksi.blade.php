@@ -5,7 +5,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h2 class="mb-1">Laporan Transaksi</h2>
-                    <p class="text-muted mb-0">Laporan transaksi booking dengan status confirmed</p>
+                    <p class="text-muted mb-0">Laporan transaksi reservasi dengan status confirmed</p>
                 </div>
                 <div class="text-end">
                     <small class="text-muted">{{ now()->format('d F Y, H:i') }} WIB</small>
@@ -66,7 +66,7 @@
                            class="form-control" 
                            id="search"
                            wire:model.live.debounce.300ms="search" 
-                           placeholder="Cari nama customer, email, atau ID booking...">
+                           placeholder="Cari nama customer, email, atau ID reservasi...">
                 </div>
                 
                 <!-- Date Range -->
