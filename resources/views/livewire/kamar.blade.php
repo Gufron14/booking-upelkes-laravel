@@ -428,7 +428,7 @@
                                                     @error('nama_instansi') <div class="text-danger small">{{ $message }}</div> @enderror
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label">Jabatan di Instansi <span class="text-danger">*</span></label>
+                                                    <label class="form-label">Role <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" wire:model="jabatan_instansi" placeholder="Masukkan jabatan di instansi">
                                                     @error('jabatan_instansi') <div class="text-danger small">{{ $message }}</div> @enderror
                                                 </div>

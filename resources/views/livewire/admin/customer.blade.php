@@ -43,8 +43,9 @@
                     <td>Customer</td>
                     <td>No. Telepon</td>
                     <td>Alamat</td>
-                    <td>Foto KTP</td>
                     <td>Instansi</td>
+                    <td>Role</td>
+                    <td>Surat Tugas</td>
                     <td>Tanggal Daftar</td>
                     {{-- <td>Aksi</td> --}}
                 </tr>
@@ -61,6 +62,9 @@
                         </td>
                         <td>{{ $user->no_hp }}</td>
                         <td>{{ $user->alamat }}</td>
+                        <td>{{ $user->nama_instansi }}</td>
+                        <td>{{ $user->jabatan_instansi }}</td>
+
                         <td>
                             @if($user->foto_id_card)
                                 <img src="{{ asset('storage/' . $user->foto_id_card) }}" 
@@ -73,7 +77,6 @@
                                 <span class="text-muted">Tidak ada foto</span>
                             @endif
                         </td>
-                        <td>{{ $user->nama_instansi }}</td>
                         <td>{{ $user->created_at->format('d/m/Y') }}</td>
                         {{-- <td>
                             <button class="btn btn-danger rounded-pill" wire:click="delete({{ $user->id }})"

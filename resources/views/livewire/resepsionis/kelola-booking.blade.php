@@ -271,7 +271,7 @@
                                             <td>: {{ $selectedBooking->user->nama_instansi ?? '-' }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="fw-semibold">Jabatan</td>
+                                            <td class="fw-semibold">Role</td>
                                             <td>: {{ $selectedBooking->user->jabatan_instansi ?? '-' }}</td>
                                         </tr>
                                     </table>

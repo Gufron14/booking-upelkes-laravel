@@ -23,6 +23,7 @@ class Register extends Component
     public $no_hp = '';
     public $alamat = '';
     public $foto_id_card;
+    public $jabatan_instansi = '';
 
     protected $rules = [
         'nama' => 'required|string|max:255',
@@ -33,6 +34,7 @@ class Register extends Component
         'nip' => 'required|unique:users,nip|digits:12',
         'alamat' => 'required|string',
         'foto_id_card' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        'jabatan_instansi' => 'required',
     ];
 
     protected $messages = [
@@ -55,6 +57,7 @@ class Register extends Component
         'foto_id_card.image' => 'File harus berupa gambar.',
         'foto_id_card.mimes' => 'Foto harus berformat jpeg, png, atau jpg.',
         'foto_id_card.max' => 'Ukuran foto maksimal 2MB.',
+        'jabatan_instansi.required' => 'Jabatan instansi wajib diisi.',
     ];
 
     public function updated($propertyName)
@@ -80,6 +83,7 @@ class Register extends Component
                 'alamat' => $this->alamat,
                 'foto_id_card' => $fotoIdCardPath,
                 'nip' => $this->nip,
+                'jabatan_instansi' => $this->jabatan_instansi,
             ]);
 
             $user->assignRole('customer');
