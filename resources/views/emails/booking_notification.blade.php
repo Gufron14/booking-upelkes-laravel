@@ -35,7 +35,7 @@
             {{-- <p><strong>Tanggal:</strong> {{ $details['booking_date'] }}</p> --}}
             
             <p>Silahkan klik tombol di bawah ini untuk melihat detail booking:</p>
-            <a href="{{ route('login') }}" class="button">Lihat di Website</a>
+            <a href="{{ route('kelola.booking') }}" class="button">Lihat di Website</a>
         </div>
         
         <div class="footer">
