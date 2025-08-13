@@ -47,6 +47,9 @@ class Riwayat extends Component
             }
 
             $booking->update(['status' => 'cancelled']);
+            if ($booking->kamar) {
+                $booking->kamar->update(['status' => 'tersedia']);
+            }
             session()->flash('success', 'Booking berhasil dibatalkan.');
 
         } catch (\Exception $e) {
@@ -89,7 +92,7 @@ class Riwayat extends Component
 
         // Dispatch event untuk membuka modal
         $this->dispatch('openRescheduleModal', bookingId: $bookingId);
-        
+
         // Alternative: gunakan JavaScript event juga
         $this->js('window.dispatchEvent(new CustomEvent("openRescheduleModal", { detail: { bookingId: ' . $bookingId . ' } }));');
     }
