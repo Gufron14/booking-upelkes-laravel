@@ -13,8 +13,8 @@ class Booking extends Model
     protected $fillable = ['user_id', 'layanan_id', 'kamar_id', 'ruang_id', 'nama_kegiatan', 'tanggal_checkin', 'tanggal_checkout', 'jam_mulai', 'jam_selesai', 'jumlah_orang', 'status', 'total_biaya', 'catatan', 'payment_deadline'];
 
     protected $casts = [
-        'tanggal_checkin' => 'date',
-        'tanggal_checkout' => 'date',
+        'tanggal_checkin' => 'datetime',
+        'tanggal_checkout' => 'datetime',
         'jam_mulai' => 'datetime:H:i',
         'jam_selesai' => 'datetime:H:i',
         'total_biaya' => 'decimal:2',
@@ -71,14 +71,11 @@ class Booking extends Model
 
         switch ($this->layanan->satuan) {
             case \App\Models\Layanan::UNIT_PER_JAM:
-                if ($this->jam_mulai && $this->jam_selesai && $this->tanggal_checkin) {
+                if ($this->jam_mulai && $this->jam_selesai) {
                     try {
-                        $start = Carbon::parse("{$this->tanggal_checkin} {$this->jam_mulai}");
-                        $end = Carbon::parse("{$this->tanggal_checkin} {$this->jam_selesai}");
-                        if ($end->lessThanOrEqualTo($start)) {
-                            $end->addDay();
-                        }
-                        return $start->diffInHours($end);
+                        $start = Carbon::parse($this->jam_mulai);
+                        $end = Carbon::parse($this->jam_selesai);
+                        return $end->diffInHours($start);
                     } catch (\Exception $e) {
                         return 0;
                     }
@@ -91,6 +88,12 @@ class Booking extends Model
             case \App\Models\Layanan::UNIT_PER_KEGIATAN_HARI:
                 if ($this->tanggal_checkin && $this->tanggal_checkout) {
                     return max(1, $this->tanggal_checkin->diffInDays($this->tanggal_checkout));
+                }
+                return 0;
+
+            case \App\Models\Layanan::UNIT_PER_BULAN:
+                if ($this->tanggal_checkin && $this->tanggal_checkout) {
+                    return max(1, $this->tanggal_checkin->diffInMonths($this->tanggal_checkout));
                 }
                 return 0;
 

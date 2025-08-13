@@ -22,12 +22,12 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h2 class="fw-bold text-primary mb-1">
-                            <i class="fa-solid fa-clock-rotate-left"></i>Riwayat Booking
+                            <i class="fa-solid fa-clock-rotate-left"></i>Riwayat Reservasi
                         </h2>
-                        <p class="text-muted mb-0">Kelola dan pantau semua booking Anda</p>
+                        <p class="text-muted mb-0">Kelola dan pantau semua reservasi Anda</p>
                     </div>
                     <div class="text-end">
-                        <span class="badge bg-info fs-6">Total: {{ $bookings->count() }} Booking</span>
+                        <span class="badge bg-info fs-6">Total: {{ $bookings->count() }} Reservasi</span>
                     </div>
                 </div>
             </div>
@@ -121,40 +121,10 @@
                                                                 {{ $booking->formatted_checkin }}
                                                             </p>
                                                             @if ($booking->jam_mulai && $booking->jam_selesai)
-                                                                <small class="text-muted">
-                                                                    {{ $booking->jam_mulai }} -
-                                                                    {{ $booking->jam_selesai }}
-                                                                    @php
-                                                                        try {
-                                                                            $jamMulaiStr = is_object(
-                                                                                $booking->jam_mulai,
-                                                                            )
-                                                                                ? $booking->jam_mulai->format('H:i')
-                                                                                : $booking->jam_mulai;
-                                                                            $jamSelesaiStr = is_object(
-                                                                                $booking->jam_selesai,
-                                                                            )
-                                                                                ? $booking->jam_selesai->format('H:i')
-                                                                                : $booking->jam_selesai;
-                                                                            $jamMulai = \Carbon\Carbon::parse(
-                                                                                $booking->tanggal_checkin .
-                                                                                    ' ' .
-                                                                                    $jamMulaiStr,
-                                                                            );
-                                                                            $jamSelesai = \Carbon\Carbon::parse(
-                                                                                $booking->tanggal_checkin .
-                                                                                    ' ' .
-                                                                                    $jamSelesaiStr,
-                                                                            );
-                                                                            $totalJam = $jamMulai->diffInHours(
-                                                                                $jamSelesai,
-                                                                            );
-                                                                            echo "({$totalJam} jam)";
-                                                                        } catch (\Exception $e) {
-                                                                            echo '';
-                                                                        }
-                                                                    @endphp
-                                                                </small>
+                                                            <small class="text-muted">
+                                                            {{ $booking->jam_mulai }} - {{ $booking->jam_selesai }}
+                                                            ({{ $booking->duration }} jam)
+                                                            </small>
                                                             @endif
                                                         @elseif($booking->layanan->satuan === 'per_orang_kunjungan')
                                                             <p class="fw-semibold mb-0">
@@ -166,7 +136,7 @@
                                                                 {{ $booking->formatted_checkout }}
                                                             </p>
                                                             <small class="text-muted">({{ $booking->duration }}
-                                                                hari)</small>
+                                                            @if($booking->layanan->satuan === 'per_bulan') bulan @else hari @endif)</small>
                                                         @endif
                                                     </div>
 
@@ -188,8 +158,8 @@
                                                             <small class="text-muted">Total Biaya:</small>
                                                         </div>
                                                         <p class="fw-bold text-success mb-0 fs-5">
-                                                            Rp
-                                                            {{ number_format($booking->total_biaya, 0, ',', '.') }}
+                                                        Rp
+                                                        {{ number_format($booking->total_biaya ?: $booking->calculateTotal(), 0, ',', '.') }}
                                                         </p>
                                                         <small
                                                             class="text-muted">{{ $booking->layanan->satuan_label ?? '' }}</small>
@@ -309,7 +279,7 @@
                     <div class="card bg-light border-0">
                         <div class="card-body p-4">
                             <h5 class="fw-bold mb-3">
-                                <i class="fas fa-chart-bar me-2"></i>Ringkasan Booking
+                                <i class="fas fa-chart-bar me-2"></i>Ringkasan Reservasi
                             </h5>
                             <div class="row text-center">
                                 <div class="col">
@@ -352,8 +322,8 @@
                         <div class="mb-4">
                             <i class="fas fa-calendar-times text-muted" style="font-size: 4rem;"></i>
                         </div>
-                        <h4 class="fw-bold text-muted mb-3">Belum Ada Riwayat Booking</h4>
-                        <p class="text-muted mb-4">Anda belum memiliki riwayat booking.</p>
+                        <h4 class="fw-bold text-muted mb-3">Belum Ada Riwayat Reservasi</h4>
+                        <p class="text-muted mb-4">Anda belum memiliki riwayat reservasi.</p>
                         {{-- <a href="{{ route('/') }}" class="btn btn-primary btn-lg px-4">
                             <i class="fas fa-plus me-2"></i>
                             Buat Booking Pertama

@@ -85,7 +85,7 @@
         @if ($booking->layanan->requiresDateRange())
             <tr><th>Check-in</th><td>{{ $booking->formatted_checkin }}</td></tr>
             <tr><th>Check-out</th><td>{{ $booking->formatted_checkout }}</td></tr>
-            <tr><th>Duration</th><td>{{ $booking->duration }} days</td></tr>
+            <tr><th>Duration</th><td>{{ $booking->duration }} @if($booking->layanan->satuan === 'per_bulan') months @else days @endif</td></tr>
         @elseif($booking->layanan->requiresSingleDate())
             <tr><th>Date</th><td>{{ $booking->formatted_checkin }}</td></tr>
             @if ($booking->layanan->requiresTimeSelection())
@@ -125,7 +125,7 @@
     {{-- Payment Summary --}}
     <h6 class="fw-bold mt-4">💳 Payment Summary</h6>
     <table class="table table-bordered">
-        <tr><th>Total Cost</th><td><strong class="text-success">Rp {{ number_format($booking->calculateTotal(), 0, ',', '.') }}</strong></td></tr>
+        <tr><th>Total Cost</th><td><strong class="text-success">Rp {{ number_format($booking->total_biaya ?: $booking->calculateTotal(), 0, ',', '.') }}</strong></td></tr>
         <tr><th>Payment Deadline</th><td>{{ $booking->payment_deadline->format('d M Y H:i') }}</td></tr>
     </table>
 

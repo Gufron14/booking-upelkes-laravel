@@ -66,7 +66,7 @@ class Cart extends Component
                     'jam_mulai' => $cart->jam_mulai,
                     'jam_selesai' => $cart->jam_selesai,
                     'jumlah_orang' => $cart->jumlah_orang,
-                    // 'total_biaya' => $cart->total_biaya,
+                    'total_biaya' => $cart->total_biaya,
                     'status' => 'waiting_payment',
                     'payment_deadline' => now()->addHours(24)
                 ]);
